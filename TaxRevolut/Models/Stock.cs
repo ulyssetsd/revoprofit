@@ -2,21 +2,13 @@
 
 public class Stock
 {
-    public double Quantity { get; internal set; }
-    public double AveragePrice { get; internal set; }
-    public double ValueInserted { get; internal set; }
-
-    public void AddTransaction(StockTransaction transaction)
+    public string Ticker { get; set; }
+    public double Quantity { get; set; }
+    public double AveragePrice { get; set; }
+    public double ValueInserted { get; set; }
+    public double TotalDividend { get; set; }
+    public override string ToString()
     {
-        if (transaction.Quantity < 0)
-        {
-            //TODO
-        }
-        else
-        {
-            ValueInserted += transaction.Quantity * transaction.PricePerShare;
-            Quantity += transaction.Quantity;
-            AveragePrice = Quantity / ValueInserted;
-        }
+        return $"{Ticker}, Quantity: {Math.Round(Quantity, 14, MidpointRounding.ToEven)}, AveragePrice: ${Math.Round(AveragePrice, 2, MidpointRounding.ToEven)}, ValueInserted: ${Math.Round(ValueInserted, 2, MidpointRounding.ToEven)}, TotalDividend: {TotalDividend}";
     }
 }

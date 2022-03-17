@@ -11,9 +11,15 @@ public static class MapperFactory
         var config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<string, TransactionType>().ConvertUsing(MappingFunction);
+            cfg.CreateMap<string, double>().ConvertUsing(MappingFunction);
             cfg.CreateMap<CsvLine, Transaction>();
         });
         return new Mapper(config);
+    }
+
+    private static double MappingFunction(string arg1, double arg2)
+    {
+        return !double.TryParse(arg1, out var result) ? 0 : result;
     }
 
     private static TransactionType MappingFunction(string arg1, TransactionType arg2)

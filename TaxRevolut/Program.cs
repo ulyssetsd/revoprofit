@@ -1,8 +1,13 @@
 ﻿using TaxRevolut.Services;
 
 var crmService = new CsvService();
-var transactions = crmService.ReadCsv("./input.csv");
+var transactionService = new TransactionService();
+var transactions = crmService.ReadCsv("C:/repo/TaxRevolut/input.csv");
 foreach (var transaction in transactions)
 {
-    Console.WriteLine(transaction);
+    transactionService.AddTransaction(transaction);
 }
+
+transactionService.GetCurrentStocks().ToList().ForEach(Console.WriteLine);
+transactionService.GetSellOrders().ToList().ForEach(Console.WriteLine);
+transactionService.GetAnnualGainsReports().ToList().ForEach(Console.WriteLine);

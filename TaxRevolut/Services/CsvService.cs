@@ -19,6 +19,6 @@ public class CsvService
         using var reader = new StreamReader(path);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-        return csv.GetRecords<CsvLine>().Select(_mapper.Map<Transaction>);
+        return csv.GetRecords<CsvLine>().Select(_mapper.Map<Transaction>).ToList();
     }
 }

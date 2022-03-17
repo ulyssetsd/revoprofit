@@ -48,6 +48,27 @@ namespace TaxRevolut.Test
             });
         }
 
+        [Test]
+        public void TestEmptyMapping()
+        {
+            var csvLine = new CsvLine
+            {
+                Type = "CASH TOP-UP",
+                Quantity = "",
+                PricePerShare = "",
+                TotalAmount = "",
+            };
+
+            var transaction = _mapper.Map<Transaction>(csvLine);
+
+            transaction.Should().BeEquivalentTo(new Transaction
+            {
+                Type = TransactionType.CashTopUp,
+                Quantity = 0,
+                PricePerShare = 0,
+                TotalAmount = 0,
+            });
+        }
 
         [Test]
         public void TestEnumMapping()

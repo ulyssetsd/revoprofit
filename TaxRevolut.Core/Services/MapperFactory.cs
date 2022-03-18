@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using AutoMapper;
-using TaxRevolut.Models;
+using TaxRevolut.Core.Models;
 
-namespace TaxRevolut.Services;
+namespace TaxRevolut.Core.Services;
 
 public static class MapperFactory
 {

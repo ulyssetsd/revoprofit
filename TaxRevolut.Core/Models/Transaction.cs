@@ -1,4 +1,4 @@
-﻿namespace TaxRevolut.Models;
+﻿namespace TaxRevolut.Core.Models;
 
 public class Transaction
 {

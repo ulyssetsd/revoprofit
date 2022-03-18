@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using TaxRevolut.Models;
+using TaxRevolut.Core.Models;
 
-namespace TaxRevolut.Services;
+namespace TaxRevolut.Core.Services;
 
 public class TransactionService
 {

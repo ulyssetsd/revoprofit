@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
-using TaxRevolut.Models;
-using TaxRevolut.Services;
+using TaxRevolut.Core.Models;
+using TaxRevolut.Core.Services;
 
 namespace TaxRevolut.Test
 {

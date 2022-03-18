@@ -1,4 +1,4 @@
-﻿using TaxRevolut.Services;
+﻿using TaxRevolut.Core.Services;
 
 var crmService = new CsvService();
 var transactionService = new TransactionService();

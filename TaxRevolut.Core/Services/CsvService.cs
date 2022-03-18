@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using AutoMapper;
 using CsvHelper;
-using TaxRevolut.Models;
+using TaxRevolut.Core.Models;
 
-namespace TaxRevolut.Services;
+namespace TaxRevolut.Core.Services;
 
 public class CsvService
 {

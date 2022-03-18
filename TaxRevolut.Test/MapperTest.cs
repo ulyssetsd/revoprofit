@@ -19,6 +19,7 @@ namespace TaxRevolut.Test
         }
 
         [Test]
+        [SetCulture("en-GB")]
         public void TestMapping()
         {
             var csvLine = new CsvLine

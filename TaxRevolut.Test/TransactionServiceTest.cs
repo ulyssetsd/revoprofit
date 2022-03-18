@@ -20,7 +20,7 @@ namespace TaxRevolut.Test
             _dateIncrement = 0;
         }
 
-        private Transaction Tesla(TransactionType transactionType, double price, double quantity = 1, int yearIncrement = 0)
+        private Transaction Tesla(TransactionType transactionType, double price, double quantity = 1, int yearIncrement = 0, double fxRate = 1)
         {
             return new Transaction
             {
@@ -31,7 +31,7 @@ namespace TaxRevolut.Test
                 PricePerShare = price,
                 TotalAmount = price * quantity,
                 Currency = Currency.Usd,
-                FxRate = 1,
+                FxRate = fxRate,
             };
         }
 
@@ -162,6 +162,32 @@ namespace TaxRevolut.Test
                 ValueInserted = 0,
                 AveragePrice = 0,
             });
+        }
+
+        [Test]
+        public void TestFxRateGainsCalculation()
+        {
+            _transactionService.ProcessTransactions(new List<Transaction>
+            {
+                Tesla(TransactionType.Buy, 10, quantity: 3),
+                Tesla(TransactionType.Sell, 20, fxRate: 2),
+            });
+
+            _transactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(5);
+
+            _transactionService.ProcessTransactions(new List<Transaction>
+            {
+                Tesla(TransactionType.Sell, 20, fxRate: 1),
+            });
+
+            _transactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(15);
+
+            _transactionService.ProcessTransactions(new List<Transaction>
+            {
+                Tesla(TransactionType.Sell, 20, fxRate: 0.5),
+            });
+
+            _transactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(35);
         }
     }
 }

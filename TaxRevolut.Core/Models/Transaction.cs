@@ -9,5 +9,5 @@ public class Transaction
     public double PricePerShare { get; set; }
     public double TotalAmount { get; set; }
     public Currency Currency { get; set; }
-    public double FXRate { get; set; }
+    public double FxRate { get; set; }
 }

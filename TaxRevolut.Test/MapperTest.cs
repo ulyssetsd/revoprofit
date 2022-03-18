@@ -30,7 +30,7 @@ namespace TaxRevolut.Test
                 PricePerShare = "445.32",
                 TotalAmount = "10.00",
                 Currency = "USD",
-                FXRate = "1.1324878383"
+                FxRate = "1.1324878383"
             };
 
             var transaction = _mapper.Map<Transaction>(csvLine);
@@ -44,7 +44,7 @@ namespace TaxRevolut.Test
                 PricePerShare = 445.32,
                 TotalAmount = 10.00,
                 Currency = Currency.Usd,
-                FXRate = 1.1324878383
+                FxRate = 1.1324878383
             });
         }
 

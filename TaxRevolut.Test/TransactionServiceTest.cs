@@ -31,7 +31,7 @@ namespace TaxRevolut.Test
                 PricePerShare = price,
                 TotalAmount = price * quantity,
                 Currency = Currency.Usd,
-                FXRate = 1,
+                FxRate = 1,
             };
         }
 
@@ -137,7 +137,7 @@ namespace TaxRevolut.Test
                     Type = TransactionType.StockSplit,
                     Quantity = 9,
                     Currency = Currency.Usd,
-                    FXRate = 1,
+                    FxRate = 1,
                 },
             });
 

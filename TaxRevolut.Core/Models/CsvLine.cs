@@ -11,5 +11,5 @@ public class CsvLine
     [Name("Price per share")] public string PricePerShare { get; set; }
     [Name("Total Amount")] public string TotalAmount { get; set; }
     [Name("Currency")] public string Currency { get; set; }
-    [Name("FX Rate")] public string FXRate { get; set; }
+    [Name("FX Rate")] public string FxRate { get; set; }
 }

@@ -16,11 +16,11 @@ public class TransactionService
     {
         foreach (var transaction in transactions.OrderBy(transaction => transaction.Date))
         {
-            AddTransaction(transaction);
+            ProcessTransaction(transaction);
         }
     }
 
-    private void AddTransaction(Transaction transaction)
+    private void ProcessTransaction(Transaction transaction)
     {
         Years.Add(transaction.Date.Year);
         if (transaction.Type == TransactionType.Buy)
@@ -43,6 +43,7 @@ public class TransactionService
                 Ticker = transaction.Ticker,
                 Amount = transaction.TotalAmount,
                 Gains = transaction.TotalAmount * gainsRatio,
+                FxRate = transaction.FxRate,
             });
             
             stock.Quantity -= transaction.Quantity;
@@ -125,6 +126,9 @@ public class TransactionService
                 var totalGains = SellOrders
                     .Where(order => order.Date.Year == year)
                     .Sum(order => order.Gains);
+                var totalGainsInEuro = SellOrders
+                    .Where(order => order.Date.Year == year)
+                    .Sum(order => order.GainsInEuro);
                 var totalDividends = Dividends
                     .Where(transaction => transaction.Date.Year == year)
                     .Sum(transaction => transaction.TotalAmount);
@@ -138,6 +142,7 @@ public class TransactionService
                 {
                     Year = year,
                     Gains = totalGains,
+                    GainsInEuro = totalGainsInEuro,
                     Dividends = totalDividends,
                     CashTopUp = totalCashTopUp,
                     CustodyFee = totalCustodyFee,

@@ -1,6 +1,6 @@
 ﻿namespace TaxRevolut.Core.Models;
 
-public class AnnualGainsReport
+public class AnnualReport
 {
     public int Year { get; set; }
     public double Gains { get; set; }

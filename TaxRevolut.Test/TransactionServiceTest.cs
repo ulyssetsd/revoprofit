@@ -215,7 +215,7 @@ namespace TaxRevolut.Test
                 },
             });
 
-            _transactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualGainsReport
+            _transactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
             {
                 Year = DateTime.Today.Year,
                 Gains = 30,

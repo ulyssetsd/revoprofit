@@ -1,9 +1,10 @@
 ﻿using System.Data;
 using TaxRevolut.Core.Models;
+using TaxRevolut.Core.Services.Interfaces;
 
 namespace TaxRevolut.Core.Services;
 
-public class TransactionService
+public class TransactionService : ITransactionService
 {
     private List<Stock> Stocks { get; } = new();
     private List<SellOrder> SellOrders { get; } = new();
@@ -11,6 +12,23 @@ public class TransactionService
     private List<Transaction> CashTopUps { get; } = new();
     private List<Transaction> CustodyFees { get; } = new();
     private List<int> Years { get; } = new();
+
+    public IEnumerable<AnnualReport> GetAnnualReports(IEnumerable<Transaction> transactions)
+    {
+        ClearData();
+        ProcessTransactions(transactions);
+        return GetAnnualGainsReports();
+    }
+
+    private void ClearData()
+    {
+        Stocks.Clear();
+        SellOrders.Clear();
+        Dividends.Clear();
+        CashTopUps.Clear();
+        CustodyFees.Clear();
+        Years.Clear();
+    }
 
     public void ProcessTransactions(IEnumerable<Transaction> transactions)
     {
@@ -45,7 +63,7 @@ public class TransactionService
                 Gains = transaction.TotalAmount * gainsRatio,
                 FxRate = transaction.FxRate,
             });
-            
+
             stock.Quantity -= transaction.Quantity;
             stock.ValueInserted -= transaction.TotalAmount * insertedRatio;
 
@@ -117,7 +135,7 @@ public class TransactionService
         return SellOrders;
     }
 
-    public IEnumerable<AnnualGainsReport> GetAnnualGainsReports()
+    public IEnumerable<AnnualReport> GetAnnualGainsReports()
     {
         return Years
             .Distinct()
@@ -150,7 +168,7 @@ public class TransactionService
                     .Where(transaction => transaction.Date.Year == year)
                     .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
 
-                return new AnnualGainsReport
+                return new AnnualReport
                 {
                     Year = year,
                     Gains = totalGains,

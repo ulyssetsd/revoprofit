@@ -126,9 +126,6 @@ public class TransactionService
                 var totalGains = SellOrders
                     .Where(order => order.Date.Year == year)
                     .Sum(order => order.Gains);
-                var totalGainsInEuro = SellOrders
-                    .Where(order => order.Date.Year == year)
-                    .Sum(order => order.GainsInEuro);
                 var totalDividends = Dividends
                     .Where(transaction => transaction.Date.Year == year)
                     .Sum(transaction => transaction.TotalAmount);
@@ -138,15 +135,39 @@ public class TransactionService
                 var totalCustodyFee = CustodyFees
                     .Where(transaction => transaction.Date.Year == year)
                     .Sum(transaction => transaction.TotalAmount);
+
+
+                var totalGainsInEuro = SellOrders
+                    .Where(order => order.Date.Year == year)
+                    .Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate));
+                var totalDividendsInEuro = Dividends
+                    .Where(transaction => transaction.Date.Year == year)
+                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
+                var totalCashTopUpInEuro = CashTopUps
+                    .Where(transaction => transaction.Date.Year == year)
+                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
+                var totalCustodyFeeInEuro = CustodyFees
+                    .Where(transaction => transaction.Date.Year == year)
+                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
+
                 return new AnnualGainsReport
                 {
                     Year = year,
                     Gains = totalGains,
-                    GainsInEuro = totalGainsInEuro,
                     Dividends = totalDividends,
                     CashTopUp = totalCashTopUp,
                     CustodyFee = totalCustodyFee,
+
+                    GainsInEuro = totalGainsInEuro,
+                    DividendsInEuro = totalDividendsInEuro,
+                    CashTopUpInEuro = totalCashTopUpInEuro,
+                    CustodyFeeInEuro = totalCustodyFeeInEuro,
                 };
             });
+    }
+
+    private static double ConvertUsingFxRate(double value, double fxRate)
+    {
+        return value * (1 / fxRate);
     }
 }

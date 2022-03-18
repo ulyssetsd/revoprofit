@@ -188,6 +188,45 @@ namespace TaxRevolut.Test
             });
 
             _transactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(35);
+
+            _transactionService.ProcessTransactions(new List<Transaction>
+            {
+                new()
+                {
+                    Date = DateTime.Today,
+                    Type = TransactionType.CustodyFee,
+                    TotalAmount = 100,
+                    FxRate = 0.5,
+                },
+                new()
+                {
+                    Date = DateTime.Today,
+                    Type = TransactionType.CashTopUp,
+                    TotalAmount = 100,
+                    FxRate = 2,
+                },
+                new()
+                {
+                    Date = DateTime.Today,
+                    Type = TransactionType.Dividend,
+                    Ticker = "TSLA",
+                    TotalAmount = 100,
+                    FxRate = 1,
+                },
+            });
+
+            _transactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualGainsReport
+            {
+                Year = DateTime.Today.Year,
+                Gains = 30,
+                GainsInEuro = 35,
+                CustodyFee = 100,
+                CustodyFeeInEuro = 200,
+                CashTopUp = 100,
+                CashTopUpInEuro = 50,
+                Dividends = 100,
+                DividendsInEuro = 100,
+            });
         }
     }
 }

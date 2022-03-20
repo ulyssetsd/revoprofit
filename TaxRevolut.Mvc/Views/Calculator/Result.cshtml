@@ -75,5 +75,13 @@
     }
 </table>
 
-<p class="mt-5">Did I save you time? You can thank me by donating below.</p>
-<button type="submit" class="btn btn-primary mb-5" asp-action="Donate" onclick="window.open('https://buymeacoffee.com/ulyssetassidis', '_blank')">☕ Buy me a coffee</button>
+<p class="m-5 lead text-center">Do you wish to get your gains for @(DateTime.Today.Year - 1), the current fiscal year? Then, you can use the form below and support me by donating.</p>
+
+@using (Html.BeginForm("Donate", "Calculator", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Your Revolut export file (.csv)</label>
+        <input class="form-control" type="file" name="formFile" id="formFile" required>
+    </div>
+    <button type="submit" class="btn btn-lg btn-primary" onclick="window.open('https://buymeacoffee.com/ulyssetassidis', '_blank')">☕ Buy me a coffee and 💸 see results</button>
+}

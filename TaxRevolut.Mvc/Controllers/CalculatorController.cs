@@ -62,10 +62,31 @@ namespace TaxRevolut.Mvc.Controllers
             return View();
         }
 
+        [HttpPost]
         public IActionResult Donate()
         {
-            _logger.LogInformation(LogEvents.DonateButtonClicked, "Donate button was clicked");
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var file = Request.Form.Files["formFile"];
+                    var transactions = _csvService.ReadCsv(file.OpenReadStream());
+                    var annualReports = _transactionService.GetAnnualReports(transactions);
+                    _logger.LogInformation(LogEvents.GenerateAnnualReportsWithDonation, "Generate annual reports with donation");
+
+                    return View(new ResultViewModel
+                    {
+                        AnnualReports = annualReports.ToList(),
+                    });
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogError(exception, "Issue while generating the annual reports with donation");
+                    throw;
+                }
+            }
+
+            return View();
         }
     }
 }

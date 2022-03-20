@@ -77,7 +77,7 @@
 
 <p class="m-5 lead text-center">Do you wish to get your gains for @(DateTime.Today.Year - 1), the current fiscal year? Then, you can use the form below and support me by donating.</p>
 
-@using (Html.BeginForm("Donate", "Calculator", FormMethod.Post, new { enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Donate", "Calculator", FormMethod.Post, new { enctype = "multipart/form-data", @class = "mb-5" }))
 {
     <div class="mb-3">
         <label for="formFile" class="form-label">Your Revolut export file (.csv)</label>

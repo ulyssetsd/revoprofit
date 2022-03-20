@@ -6,13 +6,13 @@ using TaxRevolut.Mvc.Models;
 
 namespace TaxRevolut.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class CalculatorController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<CalculatorController> _logger;
         private readonly ICsvService _csvService;
         private readonly ITransactionService _transactionService;
 
-        public HomeController(ILogger<HomeController> logger, ICsvService csvService, ITransactionService transactionService)
+        public CalculatorController(ILogger<CalculatorController> logger, ICsvService csvService, ITransactionService transactionService)
         {
             _logger = logger;
             _csvService = csvService;
@@ -36,7 +36,7 @@ namespace TaxRevolut.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Result()
+        public IActionResult Result()
         {
             if (ModelState.IsValid)
             {
@@ -60,6 +60,12 @@ namespace TaxRevolut.Mvc.Controllers
             }
 
             return View();
+        }
+
+        public IActionResult Donate()
+        {
+            _logger.LogInformation(LogEvents.DonateButtonClicked, "Donate button was clicked");
+            return Ok();
         }
     }
 }

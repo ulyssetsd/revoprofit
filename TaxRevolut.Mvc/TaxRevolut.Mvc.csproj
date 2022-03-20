@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Home\Result.cshtml" />
+    <UpToDateCheckInput Remove="Views\Calculator\Result.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Home\Result.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Calculator\Result.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Core", "RevoProf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Mvc", "RevoProfit.Mvc\RevoProfit.Mvc.csproj", "{55CFDBD7-15FF-4B5F-814C-E992F12A3420}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevoProfit.Api", "RevoProfit.Api\RevoProfit.Api.csproj", "{76BD4481-CAE0-47F3-B7FE-FA7A8113B81A}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "revo-profit-web", "revo-profit-web\revo-profit-web.esproj", "{3B02B21F-BF1B-492C-B588-92489C5B346E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,16 @@ Global
 		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76BD4481-CAE0-47F3-B7FE-FA7A8113B81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BD4481-CAE0-47F3-B7FE-FA7A8113B81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BD4481-CAE0-47F3-B7FE-FA7A8113B81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BD4481-CAE0-47F3-B7FE-FA7A8113B81A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B02B21F-BF1B-492C-B588-92489C5B346E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

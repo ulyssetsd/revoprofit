@@ -1,0 +1,101 @@
+﻿@inject AppState _appState
+@implements IDisposable
+
+@if (_appState.AnnualReports.Count != 0)
+{
+    <h3 class="mt-5">📈 Results in $</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Gains</th>
+                <th scope="col">CashTopUp</th>
+                <th scope="col">Dividends</th>
+                <th scope="col">CustodyFee</th>
+            </tr>
+            @foreach (var annualReport in _appState.AnnualReports)
+            {
+                @if (annualReport.Year >= DateTime.Today.Year - 1)
+                {
+                    <tr>
+                        <td>@annualReport.Year</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@annualReport.Year</td>
+                        <td>@annualReport.Gains.ToString("C", _us)</td>
+                        <td>@annualReport.CashTopUp.ToString("C", _us)</td>
+                        <td>@annualReport.Dividends.ToString("C", _us)</td>
+                        <td>@annualReport.CustodyFee.ToString("C", _us)</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+
+    <h3 class="mt-5">📈 Results in €</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Gains</th>
+                <th scope="col">CashTopUp</th>
+                <th scope="col">Dividends</th>
+                <th scope="col">CustodyFee</th>
+            </tr>
+            @foreach (var annualReport in _appState.AnnualReports)
+            {
+                @if (annualReport.Year >= DateTime.Today.Year - 1)
+                {
+                    <tr>
+                        <td>@annualReport.Year</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
+                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@annualReport.Year</td>
+                        <td>@annualReport.GainsInEuro.ToString("C", _fr)</td>
+                        <td>@annualReport.CashTopUpInEuro.ToString("C", _fr)</td>
+                        <td>@annualReport.DividendsInEuro.ToString("C", _fr)</td>
+                        <td>@annualReport.CustodyFeeInEuro.ToString("C", _fr)</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+}
+else if (_appState.IsCalculatingAnnualReports)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>results</p>
+}
+
+@code {
+    readonly CultureInfo _us = new ("en-US");
+    readonly CultureInfo _fr = new ("fr-FR");
+    const double Dummy = 999.99d;
+
+    protected override void OnInitialized()
+    {
+        _appState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _appState.OnChange -= StateHasChanged;
+    }
+}

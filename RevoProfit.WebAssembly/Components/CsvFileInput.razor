@@ -1,0 +1,38 @@
+﻿@inject ICsvService _csvService
+@inject ITransactionService _transactionService
+@inject ILogger<CsvFileInput> _logger
+@inject AppState _appState
+
+<div class="mb-3">
+    <label class="form-label">Your Revolut export file (.csv)</label>
+    <InputFile class="form-control" OnChange="@LoadFiles" required />
+</div>
+<button class="btn btn-primary btn-lg" @onclick="SeeResults">💸 See Results</button>
+
+@code {
+    public Stream? CsvFileStream { get; set; }
+
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        CsvFileStream = e.File.OpenReadStream();
+    }
+
+    private async Task SeeResults()
+    {
+        try
+        {
+            if (CsvFileStream == null) return;
+            _appState.IsCalculatingAnnualReports = true;
+            var transactions = await _csvService.ReadCsv(CsvFileStream);
+            var annualReports = _transactionService.GetAnnualReports(transactions);
+            _logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
+            _appState.SetAnnualReports(annualReports);
+            _appState.IsCalculatingAnnualReports = false;
+            CsvFileStream = null;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "something went wrong while reading the stream");
+        }
+    }
+}

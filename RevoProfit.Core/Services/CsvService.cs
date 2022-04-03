@@ -15,19 +15,19 @@ public class CsvService : ICsvService
         _mapper = MapperFactory.GetMapper();
     }
 
-    public IEnumerable<Transaction> ReadCsv(string path)
+    public async Task<IEnumerable<Transaction>> ReadCsv(string path)
     {
         using var reader = new StreamReader(path);
-        return ReadCsv(reader);
+        return await ReadCsv(reader);
     }
 
-    public IEnumerable<Transaction> ReadCsv(Stream stream)
+    public async Task<IEnumerable<Transaction>> ReadCsv(Stream stream)
     {
         using var reader = new StreamReader(stream);
-        return ReadCsv(reader);
+        return await ReadCsv(reader);
     }
 
-    private IEnumerable<Transaction> ReadCsv(TextReader streamReader)
+    private async Task<IEnumerable<Transaction>> ReadCsv(TextReader streamReader)
     {
         using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
@@ -35,11 +35,26 @@ public class CsvService : ICsvService
         Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-GB");
         try
         {
-            return csv.GetRecords<CsvLine>().Select(_mapper.Map<Transaction>).ToList();
+            var csvLines = await csv.GetRecordsAsync<CsvLine>().ToEnumerableAsync();
+            return csvLines.Select(_mapper.Map<Transaction>).ToList();
         }
         finally
         {
             Thread.CurrentThread.CurrentCulture = lastCulture;
         }
+    }
+}
+
+public static class EnumerableAsyncExtensions
+{
+    public static async Task<IEnumerable<T>> ToEnumerableAsync<T>(this IAsyncEnumerable<T> asyncEnumerable)
+    {
+        var list = new List<T>();
+        await foreach (var item in asyncEnumerable)
+        {
+            list.Add(item);
+        }
+
+        return list;
     }
 }

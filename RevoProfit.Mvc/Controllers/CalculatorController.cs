@@ -36,14 +36,14 @@ namespace RevoProfit.Mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Result()
+        public async Task<IActionResult> Result()
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var file = Request.Form.Files["formFile"];
-                    var transactions = _csvService.ReadCsv(file.OpenReadStream());
+                    var transactions = await _csvService.ReadCsv(file.OpenReadStream());
                     var annualReports = _transactionService.GetAnnualReports(transactions);
                     _logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
 
@@ -63,14 +63,14 @@ namespace RevoProfit.Mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Donate()
+        public async Task<IActionResult> Donate()
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     var file = Request.Form.Files["formFile"];
-                    var transactions = _csvService.ReadCsv(file.OpenReadStream());
+                    var transactions = await _csvService.ReadCsv(file.OpenReadStream());
                     var annualReports = _transactionService.GetAnnualReports(transactions);
                     _logger.LogInformation(LogEvents.GenerateAnnualReportsWithDonation, "Generate annual reports with donation");
 

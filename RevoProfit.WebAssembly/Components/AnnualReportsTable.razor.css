@@ -1,0 +1,9 @@
+﻿.blurry-text {
+    color: transparent;
+    text-shadow: 0 0 5px #000000;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+td {
+    white-space: nowrap;
+}

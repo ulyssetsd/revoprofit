@@ -28,11 +28,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     
     - name: Publish
-      run: dotnet publish -c Release -o ${{ env.DOTNET_ROOT }}/dotnet-webapp -r linux-x64 --self-contained true /p:UseAppHost=true
+      run: dotnet publish -c Release -o '${{ env.DOTNET_ROOT }}/dotnet-app'
     
     - uses: azure/webapps-deploy@v2
       name: Deploy
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-        package: '${{ env.DOTNET_ROOT }}/dotnet-webapp'
+        package: '${{ env.DOTNET_ROOT }}/dotnet-app'

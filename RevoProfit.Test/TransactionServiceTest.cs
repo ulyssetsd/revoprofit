@@ -226,7 +226,7 @@ namespace RevoProfit.Test
                 CashTopUpInEuro = 50,
                 Dividends = 100,
                 DividendsInEuro = 100,
-            });
+            }, options => options.Excluding(o => o.SellOrders));
         }
     }
 }

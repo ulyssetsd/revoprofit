@@ -15,26 +15,13 @@
             </tr>
             @foreach (var annualReport in _appState.AnnualReports)
             {
-                @if (annualReport.Year >= DateTime.Today.Year - 1)
-                {
-                    <tr>
-                        <td>@annualReport.Year</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>@annualReport.Year</td>
-                        <td>@annualReport.Gains.ToString("C", _us)</td>
-                        <td>@annualReport.CashTopUp.ToString("C", _us)</td>
-                        <td>@annualReport.Dividends.ToString("C", _us)</td>
-                        <td>@annualReport.CustodyFee.ToString("C", _us)</td>
-                    </tr>
-                }
+                <tr>
+                    <td>@annualReport.Year</td>
+                    <td>@annualReport.Gains.ToString("C", _us)</td>
+                    <td>@annualReport.CashTopUp.ToString("C", _us)</td>
+                    <td>@annualReport.Dividends.ToString("C", _us)</td>
+                    <td>@annualReport.CustodyFee.ToString("C", _us)</td>
+                </tr>
             }
         </table>
     </div>
@@ -51,26 +38,13 @@
             </tr>
             @foreach (var annualReport in _appState.AnnualReports)
             {
-                @if (annualReport.Year >= DateTime.Today.Year - 1)
-                {
-                    <tr>
-                        <td>@annualReport.Year</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>@annualReport.Year</td>
-                        <td>@annualReport.GainsInEuro.ToString("C", _fr)</td>
-                        <td>@annualReport.CashTopUpInEuro.ToString("C", _fr)</td>
-                        <td>@annualReport.DividendsInEuro.ToString("C", _fr)</td>
-                        <td>@annualReport.CustodyFeeInEuro.ToString("C", _fr)</td>
-                    </tr>
-                }
+                <tr>
+                    <td>@annualReport.Year</td>
+                    <td>@annualReport.GainsInEuro.ToString("C", _fr)</td>
+                    <td>@annualReport.CashTopUpInEuro.ToString("C", _fr)</td>
+                    <td>@annualReport.DividendsInEuro.ToString("C", _fr)</td>
+                    <td>@annualReport.CustodyFeeInEuro.ToString("C", _fr)</td>
+                </tr>
             }
         </table>
     </div>
@@ -90,28 +64,15 @@
                     <th scope="col">Gains</th>
                     <th scope="col">Gains</th>
                 </tr>
-                @if (annualReport.Year >= DateTime.Today.Year - 1)
+                @foreach (var sellOrder in annualReport.SellOrders)
                 {
                     <tr>
-                        <td class="blurry-text">@DateTime.Now.ToString(_us)</td>
-                        <td class="blurry-text">FB</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _us)</td>
-                        <td class="blurry-text">@Dummy.ToString("C", _fr)</td>
+                        <td>@sellOrder.Date.ToString(_us)</td>
+                        <td>@sellOrder.Ticker</td>
+                        <td>@sellOrder.Amount.ToString("C", _us)</td>
+                        <td>@sellOrder.Gains.ToString("C", _us)</td>
+                        <td>@((sellOrder.Gains * sellOrder.FxRate).ToString("C", _fr))</td>
                     </tr>
-                }
-                else
-                {
-                    @foreach (var sellOrder in annualReport.SellOrders)
-                   {
-                        <tr>
-                            <td>@sellOrder.Date.ToString(_us)</td>
-                            <td>@sellOrder.Ticker</td>
-                            <td>@sellOrder.Amount.ToString("C", _us)</td>
-                            <td>@sellOrder.Gains.ToString("C", _us)</td>
-                            <td>@((sellOrder.Gains * sellOrder.FxRate).ToString("C", _fr))</td>
-                        </tr>
-                   }
                 }
             </table>
         </div>

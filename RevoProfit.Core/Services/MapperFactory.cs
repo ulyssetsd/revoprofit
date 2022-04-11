@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using AutoMapper;
+﻿using AutoMapper;
 using RevoProfit.Core.Models;
+using System.Text.RegularExpressions;
 
 namespace RevoProfit.Core.Services;
 

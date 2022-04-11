@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Models;
 using RevoProfit.Core.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RevoProfit.Test
 {
@@ -226,7 +226,7 @@ namespace RevoProfit.Test
                 CashTopUpInEuro = 50,
                 Dividends = 100,
                 DividendsInEuro = 100,
-            });
+            }, options => options.Excluding(o => o.SellOrders));
         }
     }
 }

@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
 using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Models;
 using RevoProfit.Core.Services;
+using System;
+using System.Collections.Generic;
 
 namespace RevoProfit.Test
 {

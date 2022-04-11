@@ -2,15 +2,32 @@
 @inject ITransactionService _transactionService
 @inject ILogger<CsvFileInput> _logger
 @inject AppState _appState
+@implements IDisposable
 
 <div class="mb-3">
     <label class="form-label">Your Revolut export file (.csv)</label>
     <InputFile class="form-control" OnChange="@LoadFiles" required />
 </div>
-<button class="btn btn-primary btn-lg" @onclick="SeeResults">💸 See Results</button>
+<button class="btn btn-primary btn-lg" @onclick="SeeResults">
+    💸 See Results
+    @if (_appState.IsCalculatingAnnualReports)
+    {
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    }
+</button>
 
 @code {
     public Stream? CsvFileStream { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        _appState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _appState.OnChange -= StateHasChanged;
+    }
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {

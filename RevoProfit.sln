@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Core", "RevoProf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Mvc", "RevoProfit.Mvc\RevoProfit.Mvc.csproj", "{55CFDBD7-15FF-4B5F-814C-E992F12A3420}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevoProfit.WebAssembly", "RevoProfit.WebAssembly\RevoProfit.WebAssembly.csproj", "{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.WebAssembly", "RevoProfit.WebAssembly\RevoProfit.WebAssembly.csproj", "{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,8 @@
-﻿using System.Globalization;
-using AutoMapper;
+﻿using AutoMapper;
 using CsvHelper;
 using RevoProfit.Core.Models;
 using RevoProfit.Core.Services.Interfaces;
+using System.Globalization;
 
 namespace RevoProfit.Core.Services;
 

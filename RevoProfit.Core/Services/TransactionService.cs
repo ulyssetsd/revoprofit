@@ -1,6 +1,6 @@
-﻿using System.Data;
-using RevoProfit.Core.Models;
+﻿using RevoProfit.Core.Models;
 using RevoProfit.Core.Services.Interfaces;
+using System.Data;
 
 namespace RevoProfit.Core.Services;
 
@@ -141,8 +141,11 @@ public class TransactionService : ITransactionService
             .Distinct()
             .Select(year =>
             {
-                var totalGains = SellOrders
+                var sellOrders = SellOrders
                     .Where(order => order.Date.Year == year)
+                    .ToList();
+
+                var totalGains = sellOrders
                     .Sum(order => order.Gains);
                 var totalDividends = Dividends
                     .Where(transaction => transaction.Date.Year == year)
@@ -155,8 +158,7 @@ public class TransactionService : ITransactionService
                     .Sum(transaction => transaction.TotalAmount);
 
 
-                var totalGainsInEuro = SellOrders
-                    .Where(order => order.Date.Year == year)
+                var totalGainsInEuro = sellOrders
                     .Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate));
                 var totalDividendsInEuro = Dividends
                     .Where(transaction => transaction.Date.Year == year)
@@ -180,6 +182,8 @@ public class TransactionService : ITransactionService
                     DividendsInEuro = totalDividendsInEuro,
                     CashTopUpInEuro = totalCashTopUpInEuro,
                     CustodyFeeInEuro = totalCustodyFeeInEuro,
+
+                    SellOrders = sellOrders,
                 };
             });
     }

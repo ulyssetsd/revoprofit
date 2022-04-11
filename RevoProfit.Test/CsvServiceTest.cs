@@ -1,12 +1,11 @@
+using FluentAssertions;
+using NUnit.Framework;
+using RevoProfit.Core.Services;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using FluentAssertions;
-using NUnit.Framework;
-using RevoProfit.Core.Models;
-using RevoProfit.Core.Services;
 
 namespace RevoProfit.Test
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using RevoProfit.Core.Globals;
 using RevoProfit.Core.Services.Interfaces;
 using RevoProfit.Mvc.Models;
+using System.Diagnostics;
 
 namespace RevoProfit.Mvc.Controllers
 {

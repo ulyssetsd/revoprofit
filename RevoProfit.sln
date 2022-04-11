@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Test", "RevoProf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Core", "RevoProfit.Core\RevoProfit.Core.csproj", "{A0CD03E4-9951-4D7E-A714-43BC2292039E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Mvc", "RevoProfit.Mvc\RevoProfit.Mvc.csproj", "{55CFDBD7-15FF-4B5F-814C-E992F12A3420}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.WebAssembly", "RevoProfit.WebAssembly\RevoProfit.WebAssembly.csproj", "{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DF891819-DB0D-48E7-AABE-9EF9C42CF5D3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet-publish.yml = .github\workflows\dotnet-publish.yml
+		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +29,6 @@ Global
 		{A0CD03E4-9951-4D7E-A714-43BC2292039E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0CD03E4-9951-4D7E-A714-43BC2292039E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0CD03E4-9951-4D7E-A714-43BC2292039E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55CFDBD7-15FF-4B5F-814C-E992F12A3420}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Release|Any CPU.ActiveCfg = Release|Any CPU

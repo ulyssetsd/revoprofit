@@ -2,14 +2,15 @@
 @inject ITransactionService _transactionService
 @inject ILogger<CsvFileInput> _logger
 @inject AppState _appState
+@inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
 <div class="mb-3">
-    <label class="form-label">Your Revolut export file (.csv)</label>
+    <label class="form-label">@Loc[nameof(Localization.RevolutFile)]</label>
     <InputFile class="form-control" OnChange="@LoadFiles" required />
 </div>
 <button class="btn btn-primary btn-lg" @onclick="SeeResults">
-    💸 See Results
+    @Loc[nameof(Localization.SeeResults)]
     @if (_appState.IsCalculatingAnnualReports)
     {
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

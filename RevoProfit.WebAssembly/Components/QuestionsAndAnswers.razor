@@ -1,21 +1,22 @@
-﻿@using System.Globalization
+﻿@inject IStringLocalizer<Localization> Loc
 
 <h3 class="mt-5">Q&A</h3>
 <p><strong>
-    How do we calculate realized gains?
+    @Loc[nameof(Localization.Question1)]
 </strong></p>
 <p>
-    We are using the Average Cost Basis Method. This is the method required by the <a href="https://www.impots.gouv.fr/particulier/les-cessions-mobilieres">French government</a> for realized gains calculation.
+    @Loc[nameof(Localization.Answer1)]
+    <a href="https://www.impots.gouv.fr/particulier/les-cessions-mobilieres">https://www.impots.gouv.fr/particulier/les-cessions-mobilieres</a>
 </p>
 <p><strong>
-    Do you store my trading data?
+    @Loc[nameof(Localization.Question2)]
 </strong></p>
 <p>
-    No, we do not store any personal data, trading data, and do not use cookies.
+    @Loc[nameof(Localization.Answer2)]
 </p>
 <p><strong>
-    How can I get my Revolut report in .csv format?
+    @Loc[nameof(Localization.Question3)]
 </strong></p>
 <p>
-    Open your Revolut app and go to the "Stocks" section. Click on the "..." button and select "Statement" > "Account Statement". Choose the Excel format, and choose the dates from June 2017 to @DateTime.Now.ToString("MMMM yyyy", new CultureInfo("en-GB")).
+    @string.Format(Loc[nameof(Localization.Answer3)], DateTime.Now.ToString("MMMM yyyy", CultureInfo.CurrentCulture))
 </p>

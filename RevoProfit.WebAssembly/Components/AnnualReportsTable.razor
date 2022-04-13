@@ -1,17 +1,18 @@
 ﻿@inject AppState _appState
+@inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
 @if (_appState.AnnualReports.Count != 0)
 {
-    <h3 class="mt-5">💵 Results in $</h3>
+    <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "$")</h3>
     <div class="table-responsive">
         <table class="table">
             <tr>
-                <th scope="col">Year</th>
-                <th scope="col">Gains</th>
-                <th scope="col">CashTopUp</th>
-                <th scope="col">Dividends</th>
-                <th scope="col">CustodyFee</th>
+                <th scope="col">@Loc[nameof(Localization.Year)]</th>
+                <th scope="col">@Loc[nameof(Localization.Gains)]</th>
+                <th scope="col">@Loc[nameof(Localization.CashTopUp)]</th>
+                <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
+                <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
             @foreach (var annualReport in _appState.AnnualReports)
             {
@@ -26,15 +27,15 @@
         </table>
     </div>
 
-    <h3 class="mt-5">💶 Results in €</h3>
+    <h3 class="mt-5">💶 @string.Format(Loc[nameof(Localization.ResultsIn)], "€")</h3>
     <div class="table-responsive">
         <table class="table">
             <tr>
-                <th scope="col">Year</th>
-                <th scope="col">Gains</th>
-                <th scope="col">CashTopUp</th>
-                <th scope="col">Dividends</th>
-                <th scope="col">CustodyFee</th>
+                <th scope="col">@Loc[nameof(Localization.Year)]</th>
+                <th scope="col">@Loc[nameof(Localization.Gains)]</th>
+                <th scope="col">@Loc[nameof(Localization.CashTopUp)]</th>
+                <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
+                <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
             @foreach (var annualReport in _appState.AnnualReports)
             {
@@ -49,7 +50,7 @@
         </table>
     </div>
 
-    <h3 class="mt-5">💰 Sell Order Details</h3>
+    <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
     @foreach (var annualReport in _appState.AnnualReports)
     {
         <div class="table-responsive">
@@ -58,11 +59,11 @@
                     <th scope="col" colspan="5">@annualReport.Year</th>
                 </tr>
                 <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Ticker</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Gains</th>
-                    <th scope="col">Gains</th>
+                    <th scope="col">@Loc[nameof(Localization.Date)]</th>
+                    <th scope="col">@Loc[nameof(Localization.Ticker)]</th>
+                    <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                    <th scope="col">@Loc[nameof(Localization.Gains)]</th>
+                    <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 </tr>
                 @foreach (var sellOrder in annualReport.SellOrders)
                 {

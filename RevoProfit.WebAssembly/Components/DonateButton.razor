@@ -1,2 +1,4 @@
-﻿<p class="mt-5">Did I save you time? You can thank me by donating below.</p>
-<button type="submit" class="btn btn-primary" onclick="window.open('https://buymeacoffee.com/ulyssetassidis', '_blank')">☕ Buy me a coffee</button>
+﻿@inject IStringLocalizer<Localization> Loc
+
+<p class="mt-5">@Loc[nameof(Localization.DonateBelow)]</p>
+<button type="submit" class="btn btn-primary" onclick="window.open('https://buymeacoffee.com/ulyssetassidis', '_blank')">@Loc[nameof(Localization.BuyMeACoffee)]</button>

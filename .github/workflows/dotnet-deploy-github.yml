@@ -12,8 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Publish app
-      run: dotnet publish -c Release -o netapp
+    - run: dotnet publish -c Release -o netapp
+    - run: touch netapp/wwwroot/.nojekyll
+    - run: echo "revoprofit.fr" > netapp/wwwroot/CNAME
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2

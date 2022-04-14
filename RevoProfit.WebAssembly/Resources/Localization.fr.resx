@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountStatement" xml:space="preserve">
+    <value>Relevé de compte</value>
+  </data>
   <data name="Amount" xml:space="preserve">
     <value>Montant</value>
   </data>
@@ -127,7 +130,7 @@
     <value>Non, nous ne stockons aucune donnée personnelle, aucune donnée commerciale et n'utilisons pas de cookies.</value>
   </data>
   <data name="Answer3" xml:space="preserve">
-    <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevé" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de juin 2017 à {0}.</value>
+    <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevés" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de juin 2017 à {0}.</value>
   </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>☕ Offrez-moi un café</value>
@@ -152,6 +155,9 @@
   </data>
   <data name="Gains" xml:space="preserve">
     <value>Gains</value>
+  </data>
+  <data name="ProfitAndLossStatement" xml:space="preserve">
+    <value>Relevé des profits et pertes réalisés</value>
   </data>
   <data name="Question1" xml:space="preserve">
     <value>Comment calcule-t-on les gains réalisés ?</value>

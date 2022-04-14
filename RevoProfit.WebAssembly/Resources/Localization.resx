@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountStatement" xml:space="preserve">
+    <value>Account Statement</value>
+  </data>
   <data name="Amount" xml:space="preserve">
     <value>Amount</value>
   </data>
@@ -152,6 +155,9 @@
   </data>
   <data name="Gains" xml:space="preserve">
     <value>Gains</value>
+  </data>
+  <data name="ProfitAndLossStatement" xml:space="preserve">
+    <value>Profit &amp; Loss statement</value>
   </data>
   <data name="Question1" xml:space="preserve">
     <value>How do we calculate realized gains?</value>

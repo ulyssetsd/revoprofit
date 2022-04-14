@@ -61,6 +61,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account Statement.
+        /// </summary>
+        public static string AccountStatement {
+            get {
+                return ResourceManager.GetString("AccountStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amount.
         /// </summary>
         public static string Amount {
@@ -165,6 +174,15 @@ namespace RevoProfit.WebAssembly.Resources {
         public static string Gains {
             get {
                 return ResourceManager.GetString("Gains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Profit &amp; Loss statement.
+        /// </summary>
+        public static string ProfitAndLossStatement {
+            get {
+                return ResourceManager.GetString("ProfitAndLossStatement", resourceCulture);
             }
         }
         

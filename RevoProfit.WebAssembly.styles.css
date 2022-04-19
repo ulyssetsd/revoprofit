@@ -1,0 +1,10 @@
+/* /Components/AnnualReportsTable.razor.rz.scp.css */
+.blurry-text[b-40z7rhf6sg] {
+    color: transparent;
+    text-shadow: 0 0 5px #000000;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+td[b-40z7rhf6sg] {
+    white-space: nowrap;
+}

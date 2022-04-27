@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CsvHelper;
+using RevoProfit.Core.Extensions;
+using RevoProfit.Core.Mapping;
 using RevoProfit.Core.Models;
 using RevoProfit.Core.Services.Interfaces;
 using System.Globalization;
@@ -42,19 +44,5 @@ public class CsvService : ICsvService
         {
             Thread.CurrentThread.CurrentCulture = lastCulture;
         }
-    }
-}
-
-public static class EnumerableAsyncExtensions
-{
-    public static async Task<IEnumerable<T>> ToEnumerableAsync<T>(this IAsyncEnumerable<T> asyncEnumerable)
-    {
-        var list = new List<T>();
-        await foreach (var item in asyncEnumerable)
-        {
-            list.Add(item);
-        }
-
-        return list;
     }
 }

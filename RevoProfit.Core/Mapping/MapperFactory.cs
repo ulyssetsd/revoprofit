@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using RevoProfit.Core.Crypto;
 using RevoProfit.Core.Models;
 using System.Text.RegularExpressions;
 
-namespace RevoProfit.Core.Services;
+namespace RevoProfit.Core.Mapping;
 
 public static class MapperFactory
 {
@@ -13,6 +14,7 @@ public static class MapperFactory
             cfg.CreateMap<string, TransactionType>().ConvertUsing(MappingFunction);
             cfg.CreateMap<string, double>().ConvertUsing(MappingFunction);
             cfg.CreateMap<CsvLine, Transaction>();
+            cfg.CreateMap<CryptoTransactionCsvLine, CryptoTransaction>();
         });
         return new Mapper(config);
     }

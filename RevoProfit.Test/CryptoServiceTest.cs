@@ -21,14 +21,10 @@ namespace RevoProfit.Test
             _dateIncrement = 0;
         }
 
-        private class TransactionConfig
-        {
-            public CryptoTransactionType CryptoTransactionType { get; set; }
-            public double Prix { get; set; }
-            public double Quantité { get; set; } = 1;
-            public int YearIncrement { get; set; } = 0;
-            public double PrixDestination { get; set; } = 1;
-        }
+        private bool Bitcoin(Retrait retrait) => retrait.Jeton == bitcoin;
+        private bool Bitcoin(CryptoAsset cryptoAsset) => cryptoAsset.Jeton == bitcoin;
+        private bool Ethereum(Retrait retrait) => retrait.Jeton == ethereum;
+        private bool Ethereum(CryptoAsset cryptoAsset) => cryptoAsset.Jeton == ethereum;
 
         private CryptoTransaction Ethereum(CryptoTransactionType cryptoTransactionType, double prix, double quantité = 1, int yearIncrement = 0, double prixBitcoin = 1) =>
             CryptoTransaction(cryptoTransactionType, prix, quantité, yearIncrement, prixBitcoin, ethereum, bitcoin);
@@ -84,21 +80,21 @@ namespace RevoProfit.Test
 
             var (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
 
-            retraits.First().Should().BeEquivalentTo(new Retrait
+            retraits.First(Bitcoin).Should().BeEquivalentTo(new Retrait
             {
                 Montant = 0.5,
-                MontantEnDollars = 100,
+                MontantEnEuros = 100,
                 Gains = 0.25,
-                GainsEnDollars = 50,
+                GainsEnEuros = 50,
                 Jeton = bitcoin,
                 PrixDuJetonDuMontant = 200,
             }, opt => opt.Excluding(x => x.Date));
 
-            cryptoAssets.First().Should().BeEquivalentTo(new CryptoAsset
+            cryptoAssets.First(Bitcoin).Should().BeEquivalentTo(new CryptoAsset
             {
                 Jeton = bitcoin,
                 Montant = 0.5,
-                MontantEnDollars = 50,
+                MontantEnEuros = 50,
             });
         }
 
@@ -115,20 +111,12 @@ namespace RevoProfit.Test
 
             var (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
 
-            retraits[0].GainsEnDollars.Should().Be(50);
-            retraits[1].GainsEnDollars.Should().Be(0);
-            cryptoAssets[0].Should().BeEquivalentTo(new CryptoAsset
-            {
-                Jeton = bitcoin,
-                Montant = 0,
-                MontantEnDollars = 0,
-            });
-            cryptoAssets[1].Should().BeEquivalentTo(new CryptoAsset
-            {
-                Jeton = ethereum,
-                Montant = 0,
-                MontantEnDollars = 0,
-            });
+            retraits.First(Bitcoin).GainsEnEuros.Should().Be(50);
+            retraits.First(Ethereum).GainsEnEuros.Should().Be(0);
+            cryptoAssets.First(Bitcoin).MontantEnEuros.Should().Be(0);
+            cryptoAssets.First(Bitcoin).Montant.Should().Be(0);
+            cryptoAssets.First(Ethereum).MontantEnEuros.Should().Be(0);
+            cryptoAssets.First(Ethereum).Montant.Should().Be(0);
         }
 
         [Test]
@@ -143,26 +131,47 @@ namespace RevoProfit.Test
 
             var (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
 
-            retraits[0].GainsEnDollars.Should().Be(150);
-            cryptoAssets[0].Should().BeEquivalentTo(new CryptoAsset
+            retraits.First(Ethereum).GainsEnEuros.Should().Be(150);
+            cryptoAssets.First(Bitcoin).Montant.Should().Be(0.5);
+            cryptoAssets.First(Bitcoin).MontantEnEuros.Should().Be(50);
+        }
+
+        [Test]
+        public void TestCalculDesGainsAvecPlusieursRetraitsEtEchangesEtPrixNonSimilaires()
+        {
+            var transactions = new List<CryptoTransaction>
             {
-                Jeton = bitcoin,
-                Montant = 0.5,
-                MontantEnDollars = 50,
-            });
+                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
+                Bitcoin(CryptoTransactionType.Échange, prix: 200, quantité: .5, prixEthereum: 100),
+                Ethereum(CryptoTransactionType.Retrait, prix: 200, quantité: 1),
+                Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantité: .5),
+            };
 
-            transactions.Add(Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantité: .5));
+            var (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
 
-            (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
+            retraits.First(Bitcoin).GainsEnEuros.Should().BeApproximately(100, 0.1);
+            retraits.First(Ethereum).GainsEnEuros.Should().Be(150);
+            cryptoAssets.First(Bitcoin).MontantEnEuros.Should().Be(0);
+        }
 
-            retraits[0].GainsEnDollars.Should().Be(150);
-            retraits[1].GainsEnDollars.Should().BeApproximately(100, 0.1);
-            cryptoAssets[0].Should().BeEquivalentTo(new CryptoAsset
+        [Test]
+        public void TestCalculDesGainsAvecPlusieursRetraitsEtEchangesEtPrixNonSimilaires2()
+        {
+            var transactions = new List<CryptoTransaction>
             {
-                Jeton = bitcoin,
-                Montant = 0,
-                MontantEnDollars = 0,
-            });
+                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
+                Bitcoin(CryptoTransactionType.Échange, prix: 200, quantité: .5, prixEthereum: 100),
+                Ethereum(CryptoTransactionType.Dépôt, prix: 200, quantité: 1),
+                Ethereum(CryptoTransactionType.Retrait, prix: 300, quantité: 2),
+                Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantité: .5),
+            };
+
+            var (cryptoAssets, retraits) = cryptoService.ProcessTransactions(transactions);
+
+            retraits.First(Bitcoin).GainsEnEuros.Should().BeApproximately(100, 0.1);
+            retraits.First(Ethereum).GainsEnEuros.Should().BeApproximately(350, 0.1);
+            cryptoAssets.First(Bitcoin).MontantEnEuros.Should().Be(0);
+            cryptoAssets.First(Ethereum).MontantEnEuros.Should().Be(0);
         }
     }
 }

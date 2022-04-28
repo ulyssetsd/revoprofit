@@ -17,4 +17,4 @@ foreach (var retrait in retraits2021)
 {
     Console.WriteLine(retrait);
 }
-Console.WriteLine($"Total gains en dollars: ${retraits2021.Sum(retrait => retrait.GainsEnDollars)}");
+Console.WriteLine($"Total gains en euros: {retraits2021.Sum(retrait => retrait.GainsEnEuros)}€");

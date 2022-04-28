@@ -87,7 +87,7 @@ public class CryptoService : ICryptoService
         if (Math.Round(crypto.Montant, 14, MidpointRounding.ToEven) == 0)
         {
             crypto.Montant = 0;
-            crypto.MontantEnDollars = 0;
+            crypto.MontantEnEuros = 0;
         }
     }
     
@@ -112,7 +112,7 @@ public class CryptoService : ICryptoService
                 transaction.PrixDuJetonDuMontantReçu.Should().NotBe(0);
 
                 var cryptoReçu = GetOrCreate(cryptos, transaction.MonnaieOuJetonReçu);
-                cryptoReçu.MontantEnDollars += transaction.PrixDuJetonDuMontantReçu * transaction.MontantReçu;
+                cryptoReçu.MontantEnEuros += transaction.PrixDuJetonDuMontantReçu * transaction.MontantReçu;
                 cryptoReçu.Montant += transaction.MontantReçu;
             }
 
@@ -130,19 +130,19 @@ public class CryptoService : ICryptoService
 
                 var cryptoEnvoyé = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoyé);
 
-                var prixDuJetonEnvoyéMoyen = cryptoEnvoyé.MontantEnDollars / cryptoEnvoyé.Montant;
+                var prixDuJetonEnvoyéMoyen = cryptoEnvoyé.MontantEnEuros / cryptoEnvoyé.Montant;
                 var ratioInséréEnvoyé = prixDuJetonEnvoyéMoyen / transaction.PrixDuJetonDuMontantEnvoyé;
                 var montantInséréEnvoyé = transaction.MontantEnvoyé * ratioInséréEnvoyé;
                 var montantInséréEnvoyéEnDollars = transaction.PrixDuJetonDuMontantEnvoyé * montantInséréEnvoyé;
 
                 cryptoEnvoyé.Montant -= transaction.MontantEnvoyé;
-                cryptoEnvoyé.MontantEnDollars -= montantInséréEnvoyéEnDollars;
+                cryptoEnvoyé.MontantEnEuros -= montantInséréEnvoyéEnDollars;
                 RéinitialiseSiNul(cryptoEnvoyé);
 
                 var cryptoReçu = GetOrCreate(cryptos, transaction.MonnaieOuJetonReçu);
 
                 cryptoReçu.Montant += transaction.MontantReçu;
-                cryptoReçu.MontantEnDollars += montantInséréEnvoyéEnDollars;
+                cryptoReçu.MontantEnEuros += montantInséréEnvoyéEnDollars;
             }
 
             if (transaction.Type == CryptoTransactionType.Retrait)
@@ -152,7 +152,7 @@ public class CryptoService : ICryptoService
                 transaction.PrixDuJetonDuMontantEnvoyé.Should().NotBe(0);
 
                 var cryptoEnvoyé = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoyé);
-                var prixDuJetonMoyen = cryptoEnvoyé.MontantEnDollars / cryptoEnvoyé.Montant;
+                var prixDuJetonMoyen = cryptoEnvoyé.MontantEnEuros / cryptoEnvoyé.Montant;
                 var ratioInséré = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoyé;
                 var ratioPlusValue = 1 - ratioInséré;
 
@@ -165,14 +165,14 @@ public class CryptoService : ICryptoService
                     Date = transaction.Date,
                     Jeton = transaction.MonnaieOuJetonEnvoyé,
                     Montant = transaction.MontantEnvoyé,
-                    MontantEnDollars = montantEnvoyéEnDollars,
+                    MontantEnEuros = montantEnvoyéEnDollars,
                     Gains = gains,
-                    GainsEnDollars = gainsEnDollars,
+                    GainsEnEuros = gainsEnDollars,
                     PrixDuJetonDuMontant = transaction.PrixDuJetonDuMontantEnvoyé,
                 });
 
                 cryptoEnvoyé.Montant -= transaction.MontantEnvoyé;
-                cryptoEnvoyé.MontantEnDollars -= montantEnvoyéEnDollars * ratioInséré;
+                cryptoEnvoyé.MontantEnEuros -= montantEnvoyéEnDollars * ratioInséré;
                 RéinitialiseSiNul(cryptoEnvoyé);
             }
         }

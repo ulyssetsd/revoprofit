@@ -92,13 +92,13 @@ public enum LabelPourRetrait
 public class CryptoAsset
 {
     public string Jeton { get; set; }
-    public double MontantEnDollars { get; set; }
+    public double MontantEnEuros { get; set; }
     public double Montant { get; set; }
     public double Frais { get; set; }
 
     public override string ToString()
     {
-        return $"{Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)}: ${Math.Round(MontantEnDollars, 2, MidpointRounding.ToEven)}, Frais: {Math.Round(Frais, 10, MidpointRounding.ToEven)}";
+        return $"{Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)}: {Math.Round(MontantEnEuros, 2, MidpointRounding.ToEven)}€, Frais: {Math.Round(Frais, 10, MidpointRounding.ToEven)}";
     }
 }
 
@@ -107,13 +107,13 @@ public class Retrait
     public DateTime Date { get; set; }
     public string Jeton { get; set; }
     public double Montant { get; set; }
-    public double MontantEnDollars { get; set; }
+    public double MontantEnEuros { get; set; }
     public double Gains { get; set; }
-    public double GainsEnDollars { get; set; }
+    public double GainsEnEuros { get; set; }
     public double PrixDuJetonDuMontant { get; set; }
 
     public override string ToString()
     {
-        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} ${Math.Round(MontantEnDollars, 2, MidpointRounding.ToEven)}, Gains: ${Math.Round(GainsEnDollars, 2, MidpointRounding.ToEven)}, Prix: {PrixDuJetonDuMontant}";
+        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} {Math.Round(MontantEnEuros, 2, MidpointRounding.ToEven)}€, Gains: {Math.Round(GainsEnEuros, 2, MidpointRounding.ToEven)}€, Prix: {PrixDuJetonDuMontant}";
     }
 }

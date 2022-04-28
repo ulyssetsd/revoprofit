@@ -109,10 +109,10 @@ public class CryptoService : ICryptoService
              
                 transaction.MontantReçu.Should().NotBe(0);
                 transaction.MonnaieOuJetonReçu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
+                transaction.PrixDuJetonDuMontantReçu.Should().NotBe(0);
 
                 var cryptoReçu = GetOrCreate(cryptos, transaction.MonnaieOuJetonReçu);
-                cryptoReçu.MontantEnDollars += transaction.PrixDuJetonDuMontantRecu * transaction.MontantReçu;
+                cryptoReçu.MontantEnDollars += transaction.PrixDuJetonDuMontantReçu * transaction.MontantReçu;
                 cryptoReçu.Montant += transaction.MontantReçu;
             }
 
@@ -122,7 +122,7 @@ public class CryptoService : ICryptoService
 
                 transaction.MontantReçu.Should().NotBe(0);
                 transaction.MonnaieOuJetonReçu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
+                transaction.PrixDuJetonDuMontantReçu.Should().NotBe(0);
 
                 transaction.MontantEnvoyé.Should().NotBe(0);
                 transaction.MonnaieOuJetonEnvoyé.Should().NotBeEmpty();
@@ -136,7 +136,7 @@ public class CryptoService : ICryptoService
                 var montantInséréEnvoyéEnDollars = transaction.PrixDuJetonDuMontantEnvoyé * montantInséréEnvoyé;
 
                 cryptoEnvoyé.Montant -= transaction.MontantEnvoyé;
-                cryptoEnvoyé.MontantEnDollars -= montantInséréEnvoyé;
+                cryptoEnvoyé.MontantEnDollars -= montantInséréEnvoyéEnDollars;
                 RéinitialiseSiNul(cryptoEnvoyé);
 
                 var cryptoReçu = GetOrCreate(cryptos, transaction.MonnaieOuJetonReçu);
@@ -172,7 +172,7 @@ public class CryptoService : ICryptoService
                 });
 
                 cryptoEnvoyé.Montant -= transaction.MontantEnvoyé;
-                cryptoEnvoyé.MontantEnDollars -= transaction.MontantEnvoyé * ratioInséré;
+                cryptoEnvoyé.MontantEnDollars -= montantEnvoyéEnDollars * ratioInséré;
                 RéinitialiseSiNul(cryptoEnvoyé);
             }
         }

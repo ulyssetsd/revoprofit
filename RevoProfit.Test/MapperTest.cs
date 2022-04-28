@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
+using RevoProfit.Core.Mapping;
 using RevoProfit.Core.Models;
 using RevoProfit.Core.Services;
 using System;

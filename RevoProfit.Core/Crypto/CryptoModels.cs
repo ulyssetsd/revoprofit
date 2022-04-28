@@ -16,7 +16,7 @@ public class CryptoTransactionCsvLine
     [Name("Description")] public string? Description { get; set; }
     [Name("Label")] public string? Label { get; set; }
     [Name("Prix du jeton du montant envoyé")] public string? PrixDuJetonDuMontantEnvoyé { get; set; }
-    [Name("Prix du jeton du montant recu")] public string? PrixDuJetonDuMontantRecu { get; set; }
+    [Name("Prix du jeton du montant recu")] public string? PrixDuJetonDuMontantReçu { get; set; }
     [Name("Prix du jeton des frais")] public string? PrixDuJetonDesFrais { get; set; }
 }
 
@@ -34,7 +34,7 @@ public class CryptoTransaction
     public string Description { get; set; }
     public Label Label { get; set; }
     public double PrixDuJetonDuMontantEnvoyé { get; set; }
-    public double PrixDuJetonDuMontantRecu { get; set; }
+    public double PrixDuJetonDuMontantReçu { get; set; }
     public double PrixDuJetonDesFrais { get; set; }
 }
 
@@ -114,6 +114,6 @@ public class Retrait
 
     public override string ToString()
     {
-        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} ${Math.Round(MontantEnDollars, 2, MidpointRounding.ToEven)}, Gains: {Math.Round(Gains, 10, MidpointRounding.ToEven)} ${Math.Round(GainsEnDollars, 2, MidpointRounding.ToEven)}, Prix: {PrixDuJetonDuMontant}";
+        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} ${Math.Round(MontantEnDollars, 2, MidpointRounding.ToEven)}, Gains: ${Math.Round(GainsEnDollars, 2, MidpointRounding.ToEven)}, Prix: {PrixDuJetonDuMontant}";
     }
 }

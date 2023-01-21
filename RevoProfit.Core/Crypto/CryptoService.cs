@@ -147,6 +147,8 @@ public class CryptoService : ICryptoService
 
             if (transaction.Type == CryptoTransactionType.Retrait)
             {
+                GèreLesFrais(transaction, cryptos);
+
                 transaction.MontantEnvoyé.Should().NotBe(0);
                 transaction.MonnaieOuJetonEnvoyé.Should().NotBeEmpty();
                 transaction.PrixDuJetonDuMontantEnvoyé.Should().NotBe(0);
@@ -169,6 +171,10 @@ public class CryptoService : ICryptoService
                     Gains = gains,
                     GainsEnEuros = gainsEnDollars,
                     PrixDuJetonDuMontant = transaction.PrixDuJetonDuMontantEnvoyé,
+                    Frais = transaction.Frais,
+                    FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,
+                    ValeurGlobale = cryptoEnvoyé.Montant * transaction.PrixDuJetonDuMontantEnvoyé,
+                    PrixAcquisition = cryptoEnvoyé.MontantEnEuros,
                 });
 
                 cryptoEnvoyé.Montant -= transaction.MontantEnvoyé;

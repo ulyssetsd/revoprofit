@@ -111,9 +111,13 @@ public class Retrait
     public double Gains { get; set; }
     public double GainsEnEuros { get; set; }
     public double PrixDuJetonDuMontant { get; set; }
+    public double Frais { get; set; }
+    public double FraisEnEuros { get; set; }
+    public double ValeurGlobale { get; set; }
+    public double PrixAcquisition { get; set; }
 
     public override string ToString()
     {
-        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} {Math.Round(MontantEnEuros, 2, MidpointRounding.ToEven)}€, Gains: {Math.Round(GainsEnEuros, 2, MidpointRounding.ToEven)}€, Prix: {PrixDuJetonDuMontant}";
+        return $"{Date} {Jeton}: {Math.Round(Montant, 10, MidpointRounding.ToEven)} {Math.Round(MontantEnEuros, 2, MidpointRounding.ToEven)}€, Gains: {Math.Round(GainsEnEuros, 2, MidpointRounding.ToEven)}€, Prix: {PrixDuJetonDuMontant}, Frais: {Math.Round(FraisEnEuros, 2, MidpointRounding.ToEven)}€, Valeur Global: {Math.Round(ValeurGlobale, 2, MidpointRounding.ToEven)}€, Prix d'acquisition: {Math.Round(PrixAcquisition, 2, MidpointRounding.ToEven)}€";
     }
 }

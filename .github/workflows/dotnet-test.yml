@@ -18,10 +18,4 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Test with dotnet
-      run: dotnet test --logger trx --results-directory "TestResults"
-    - name: Upload dotnet test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: dotnet-results
-        path: TestResults
-      if: always()
+      run: dotnet test --no-restore --verbosity normal

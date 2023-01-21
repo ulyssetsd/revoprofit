@@ -109,10 +109,10 @@ public class CryptoService : ICryptoService
              
                 transaction.MontantRecu.Should().NotBe(0);
                 transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantReçu.Should().NotBe(0);
+                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
 
                 var cryptoReçu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
-                cryptoReçu.MontantEnEuros += transaction.PrixDuJetonDuMontantReçu * transaction.MontantRecu;
+                cryptoReçu.MontantEnEuros += transaction.PrixDuJetonDuMontantRecu * transaction.MontantRecu;
                 cryptoReçu.Montant += transaction.MontantRecu;
             }
 
@@ -122,7 +122,7 @@ public class CryptoService : ICryptoService
 
                 transaction.MontantRecu.Should().NotBe(0);
                 transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantReçu.Should().NotBe(0);
+                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
 
                 transaction.MontantEnvoye.Should().NotBe(0);
                 transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();

@@ -34,7 +34,7 @@ public class CryptoTransaction
     public string Description { get; set; }
     public string Label { get; set; }
     public double PrixDuJetonDuMontantEnvoye { get; set; }
-    public double PrixDuJetonDuMontantReçu { get; set; }
+    public double PrixDuJetonDuMontantRecu { get; set; }
     public double PrixDuJetonDesFrais { get; set; }
 }
 

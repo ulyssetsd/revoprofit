@@ -4,38 +4,38 @@ namespace RevoProfit.Core.Crypto;
 
 public class CryptoTransactionCsvLine
 {
-    [Name("Type")] public string? Type { get; set; }
-    [Name("Date")] public string? Date { get; set; }
-    [Name("Montant reçu")] public string? MontantRecu { get; set; }
-    [Name("Monnaie ou jeton reçu")] public string? MonnaieOuJetonRecu { get; set; }
-    [Name("Montant envoyé")] public string? MontantEnvoye { get; set; }
-    [Name("Monnaie ou jeton envoyé")] public string? MonnaieOuJetonEnvoye { get; set; }
-    [Name("Frais")] public string? Frais { get; set; }
-    [Name("Monnaie ou jeton des frais")] public string? MonnaieOuJetonDesFrais { get; set; }
-    [Name("Exchange / Plateforme")] public string? ExchangePlateforme { get; set; }
-    [Name("Description")] public string? Description { get; set; }
-    [Name("Label")] public string? Label { get; set; }
-    [Name("Prix du jeton du montant envoyé")] public string? PrixDuJetonDuMontantEnvoye { get; set; }
-    [Name("Prix du jeton du montant recu")] public string? PrixDuJetonDuMontantRecu { get; set; }
-    [Name("Prix du jeton des frais")] public string? PrixDuJetonDesFrais { get; set; }
+    [Name("Type")] public string? Type { get; init; }
+    [Name("Date")] public string? Date { get; init; }
+    [Name("Montant reçu")] public string? MontantRecu { get; init; }
+    [Name("Monnaie ou jeton reçu")] public string? MonnaieOuJetonRecu { get; init; }
+    [Name("Montant envoyé")] public string? MontantEnvoye { get; init; }
+    [Name("Monnaie ou jeton envoyé")] public string? MonnaieOuJetonEnvoye { get; init; }
+    [Name("Frais")] public string? Frais { get; init; }
+    [Name("Monnaie ou jeton des frais")] public string? MonnaieOuJetonDesFrais { get; init; }
+    [Name("Exchange / Plateforme")] public string? ExchangePlateforme { get; init; }
+    [Name("Description")] public string? Description { get; init; }
+    [Name("Label")] public string? Label { get; init; }
+    [Name("Prix du jeton du montant envoyé")] public string? PrixDuJetonDuMontantEnvoye { get; init; }
+    [Name("Prix du jeton du montant recu")] public string? PrixDuJetonDuMontantRecu { get; init; }
+    [Name("Prix du jeton des frais")] public string? PrixDuJetonDesFrais { get; init; }
 }
 
 public class CryptoTransaction
 {
-    public CryptoTransactionType Type { get; set; }
-    public DateTime Date { get; set; }
-    public double MontantRecu { get; set; }
-    public string MonnaieOuJetonRecu { get; set; }
-    public double MontantEnvoye { get; set; }
-    public string MonnaieOuJetonEnvoye { get; set; }
-    public double Frais { get; set; }
-    public string MonnaieOuJetonDesFrais { get; set; }
-    public string ExchangePlateforme { get; set; }
-    public string Description { get; set; }
-    public string Label { get; set; }
-    public double PrixDuJetonDuMontantEnvoye { get; set; }
-    public double PrixDuJetonDuMontantRecu { get; set; }
-    public double PrixDuJetonDesFrais { get; set; }
+    public CryptoTransactionType Type { get; init; }
+    public DateTime Date { get; init; }
+    public double MontantRecu { get; init; }
+    public string MonnaieOuJetonRecu { get; init; }
+    public double MontantEnvoye { get; init; }
+    public string MonnaieOuJetonEnvoye { get; init; }
+    public double Frais { get; init; }
+    public string MonnaieOuJetonDesFrais { get; init; }
+    public string ExchangePlateforme { get; init; }
+    public string Description { get; init; }
+    public string Label { get; init; }
+    public double PrixDuJetonDuMontantEnvoye { get; init; }
+    public double PrixDuJetonDuMontantRecu { get; init; }
+    public double PrixDuJetonDesFrais { get; init; }
 }
 
 public enum CryptoTransactionType
@@ -47,7 +47,7 @@ public enum CryptoTransactionType
 
 public class CryptoAsset
 {
-    public string Jeton { get; set; }
+    public string Jeton { get; init; }
     public double MontantEnEuros { get; set; }
     public double Montant { get; set; }
     public double Frais { get; set; }
@@ -60,17 +60,17 @@ public class CryptoAsset
 
 public class Retrait
 {
-    public DateTime Date { get; set; }
-    public string Jeton { get; set; }
-    public double Montant { get; set; }
-    public double MontantEnEuros { get; set; }
-    public double Gains { get; set; }
-    public double GainsEnEuros { get; set; }
-    public double PrixDuJetonDuMontant { get; set; }
-    public double Frais { get; set; }
-    public double FraisEnEuros { get; set; }
-    public double ValeurGlobale { get; set; }
-    public double PrixAcquisition { get; set; }
+    public DateTime Date { get; init; }
+    public string Jeton { get; init; }
+    public double Montant { get; init; }
+    public double MontantEnEuros { get; init; }
+    public double Gains { get; init; }
+    public double GainsEnEuros { get; init; }
+    public double PrixDuJetonDuMontant { get; init; }
+    public double Frais { get; init; }
+    public double FraisEnEuros { get; init; }
+    public double ValeurGlobale { get; init; }
+    public double PrixAcquisition { get; init; }
 
     public override string ToString()
     {

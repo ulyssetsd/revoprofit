@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Extensions;
 
-public static class EnumerableAsyncExtensions
+public static class AsyncEnumerableExtensions
 {
     public static async Task<IEnumerable<T>> ToEnumerableAsync<T>(this IAsyncEnumerable<T> asyncEnumerable)
     {

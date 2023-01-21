@@ -18,9 +18,9 @@ public class CryptoMapperTest
         _mapper = MapperFactory.GetMapper();
     }
 
-    [TestCase("Dépôt", CryptoTransactionType.Depot)]
+    [TestCase("DÃ©pÃ´t", CryptoTransactionType.Depot)]
     [TestCase("Retrait", CryptoTransactionType.Retrait)]
-    [TestCase("Échange", CryptoTransactionType.Echange)]
+    [TestCase("Ã‰change", CryptoTransactionType.Echange)]
     public void TestCryptoTransactionTypeEnumMapping(string type, CryptoTransactionType expectedType)
     {
         var transaction = _mapper.Map<CryptoTransaction>(new CryptoTransactionCsvLine { Type = type });

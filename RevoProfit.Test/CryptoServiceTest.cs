@@ -45,28 +45,28 @@ namespace RevoProfit.Test
                 {
                     Date = date,
                     Type = cryptoTransactionType,
-                    MonnaieOuJetonReçu = source,
+                    MonnaieOuJetonRecu = source,
                     PrixDuJetonDuMontantReçu = prix,
-                    MontantReçu = quantité,
+                    MontantRecu = quantité,
                 },
                 CryptoTransactionType.Retrait => new CryptoTransaction
                 {
                     Date = date,
                     Type = cryptoTransactionType,
-                    MonnaieOuJetonEnvoyé = source,
-                    PrixDuJetonDuMontantEnvoyé = prix,
-                    MontantEnvoyé = quantité,
+                    MonnaieOuJetonEnvoye = source,
+                    PrixDuJetonDuMontantEnvoye = prix,
+                    MontantEnvoye = quantité,
                 },
                 CryptoTransactionType.Échange => new CryptoTransaction
                 {
                     Date = date,
                     Type = cryptoTransactionType,
-                    MonnaieOuJetonEnvoyé = source,
-                    PrixDuJetonDuMontantEnvoyé = prix,
-                    MontantEnvoyé = quantité,
-                    MonnaieOuJetonReçu = destination,
+                    MonnaieOuJetonEnvoye = source,
+                    PrixDuJetonDuMontantEnvoye = prix,
+                    MontantEnvoye = quantité,
+                    MonnaieOuJetonRecu = destination,
                     PrixDuJetonDuMontantReçu = prixDestination,
-                    MontantReçu = (quantité * prix) / prixDestination,
+                    MontantRecu = (quantité * prix) / prixDestination,
                 },
                 _ => throw new NotImplementedException()
             };
@@ -198,11 +198,11 @@ Retrait,19/08/2018 20:43:55,,,""0,008196"",BTC,,,Revolut,Exchanged to SOL,Paieme
             // Assert
             cryptoTransactions.Should().HaveCount(2);
             cryptoTransactions[0].Type.Should().Be(CryptoTransactionType.Dépôt);
-            cryptoTransactions[0].MonnaieOuJetonReçu.Should().Be(bitcoin);
-            cryptoTransactions[0].MontantReçu.Should().Be(0.01713112);
+            cryptoTransactions[0].MonnaieOuJetonRecu.Should().Be(bitcoin);
+            cryptoTransactions[0].MontantRecu.Should().Be(0.01713112);
             cryptoTransactions[1].Type.Should().Be(CryptoTransactionType.Retrait);
-            cryptoTransactions[1].MonnaieOuJetonEnvoyé.Should().Be(bitcoin);
-            cryptoTransactions[1].MontantEnvoyé.Should().Be(0.008196);
+            cryptoTransactions[1].MonnaieOuJetonEnvoye.Should().Be(bitcoin);
+            cryptoTransactions[1].MontantEnvoye.Should().Be(0.008196);
         }
     }
 }

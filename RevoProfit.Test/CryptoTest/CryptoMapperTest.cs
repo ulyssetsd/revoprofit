@@ -1,10 +1,9 @@
-using System.Collections.Generic;
+using System;
 using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto;
 using RevoProfit.Core.Mapping;
-using RevoProfit.Core.Models;
 
 namespace RevoProfit.Test.CryptoTest;
 
@@ -25,5 +24,12 @@ public class CryptoMapperTest
     {
         var transaction = _mapper.Map<CryptoTransaction>(new CryptoTransactionCsvLine { Type = type });
         transaction.Type.Should().Be(expectedType);
+    }
+
+    [Test]
+    public void TestCryptoTransactionTypeEnumMapping_ShouldThrowIfNotMatchingEnum()
+    {
+        var act = () => _mapper.Map<CryptoTransaction>(new CryptoTransactionCsvLine { Type = "wrongtype" });
+        act.Should().Throw<Exception>();
     }
 }

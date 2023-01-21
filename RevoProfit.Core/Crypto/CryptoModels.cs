@@ -32,7 +32,7 @@ public class CryptoTransaction
     public string MonnaieOuJetonDesFrais { get; set; }
     public string ExchangePlateforme { get; set; }
     public string Description { get; set; }
-    public Label Label { get; set; }
+    public string Label { get; set; }
     public double PrixDuJetonDuMontantEnvoye { get; set; }
     public double PrixDuJetonDuMontantReçu { get; set; }
     public double PrixDuJetonDesFrais { get; set; }
@@ -40,11 +40,12 @@ public class CryptoTransaction
 
 public enum CryptoTransactionType
 {
-    Dépôt,
-    Échange,
+    Depot,
+    Echange,
     Retrait,
 }
 
+/*
 public enum Label
 {
     Salaire,
@@ -88,6 +89,7 @@ public enum LabelPourRetrait
     OpérationInterne,
     OpérationExterne,
 }
+*/
 
 public class CryptoAsset
 {

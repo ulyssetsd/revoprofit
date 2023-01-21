@@ -14,7 +14,7 @@ public static class MapperFactory
             cfg.CreateMap<string, TransactionType>().ConvertUsing(MappingFunction);
             cfg.CreateMap<string, double>().ConvertUsing(MappingFunction);
             cfg.CreateMap<CsvLine, Transaction>();
-            cfg.CreateMap<CryptoTransactionCsvLine, CryptoTransaction>();
+            CryptoMapping.CreateMap(cfg);
         });
         return new Mapper(config);
     }

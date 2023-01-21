@@ -41,7 +41,7 @@ namespace RevoProfit.Test
 
             return cryptoTransactionType switch
             {
-                CryptoTransactionType.Dépôt => new CryptoTransaction
+                CryptoTransactionType.Depot => new CryptoTransaction
                 {
                     Date = date,
                     Type = cryptoTransactionType,
@@ -57,7 +57,7 @@ namespace RevoProfit.Test
                     PrixDuJetonDuMontantEnvoye = prix,
                     MontantEnvoye = quantité,
                 },
-                CryptoTransactionType.Échange => new CryptoTransaction
+                CryptoTransactionType.Echange => new CryptoTransaction
                 {
                     Date = date,
                     Type = cryptoTransactionType,
@@ -77,7 +77,7 @@ namespace RevoProfit.Test
         {
             var transactions = new List<CryptoTransaction>
             {
-                Bitcoin(CryptoTransactionType.Dépôt, prix: 100, quantité: 1),
+                Bitcoin(CryptoTransactionType.Depot, prix: 100, quantité: 1),
                 Bitcoin(CryptoTransactionType.Retrait, prix: 200, quantité: .5),
             };
 
@@ -110,8 +110,8 @@ namespace RevoProfit.Test
         {
             var transactions = new List<CryptoTransaction>
             {
-                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
-                Bitcoin(CryptoTransactionType.Échange, prix: 100, quantité: .5, prixEthereum: 100),
+                Bitcoin(CryptoTransactionType.Depot, prix: 100),
+                Bitcoin(CryptoTransactionType.Echange, prix: 100, quantité: .5, prixEthereum: 100),
                 Bitcoin(CryptoTransactionType.Retrait, prix: 200, quantité: .5),
                 Ethereum(CryptoTransactionType.Retrait, prix: 100, quantité: .5),
             };
@@ -131,8 +131,8 @@ namespace RevoProfit.Test
         {
             var transactions = new List<CryptoTransaction>
             {
-                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
-                Bitcoin(CryptoTransactionType.Échange, prix: 200, quantité: .5, prixEthereum: 100),
+                Bitcoin(CryptoTransactionType.Depot, prix: 100),
+                Bitcoin(CryptoTransactionType.Echange, prix: 200, quantité: .5, prixEthereum: 100),
                 Ethereum(CryptoTransactionType.Retrait, prix: 200, quantité: 1),
             };
 
@@ -148,8 +148,8 @@ namespace RevoProfit.Test
         {
             var transactions = new List<CryptoTransaction>
             {
-                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
-                Bitcoin(CryptoTransactionType.Échange, prix: 200, quantité: .5, prixEthereum: 100),
+                Bitcoin(CryptoTransactionType.Depot, prix: 100),
+                Bitcoin(CryptoTransactionType.Echange, prix: 200, quantité: .5, prixEthereum: 100),
                 Ethereum(CryptoTransactionType.Retrait, prix: 200, quantité: 1),
                 Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantité: .5),
             };
@@ -166,9 +166,9 @@ namespace RevoProfit.Test
         {
             var transactions = new List<CryptoTransaction>
             {
-                Bitcoin(CryptoTransactionType.Dépôt, prix: 100),
-                Bitcoin(CryptoTransactionType.Échange, prix: 200, quantité: .5, prixEthereum: 100),
-                Ethereum(CryptoTransactionType.Dépôt, prix: 200, quantité: 1),
+                Bitcoin(CryptoTransactionType.Depot, prix: 100),
+                Bitcoin(CryptoTransactionType.Echange, prix: 200, quantité: .5, prixEthereum: 100),
+                Ethereum(CryptoTransactionType.Depot, prix: 200, quantité: 1),
                 Ethereum(CryptoTransactionType.Retrait, prix: 300, quantité: 2),
                 Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantité: .5),
             };
@@ -197,7 +197,7 @@ Retrait,19/08/2018 20:43:55,,,""0,008196"",BTC,,,Revolut,Exchanged to SOL,Paieme
 
             // Assert
             cryptoTransactions.Should().HaveCount(2);
-            cryptoTransactions[0].Type.Should().Be(CryptoTransactionType.Dépôt);
+            cryptoTransactions[0].Type.Should().Be(CryptoTransactionType.Depot);
             cryptoTransactions[0].MonnaieOuJetonRecu.Should().Be(bitcoin);
             cryptoTransactions[0].MontantRecu.Should().Be(0.01713112);
             cryptoTransactions[1].Type.Should().Be(CryptoTransactionType.Retrait);

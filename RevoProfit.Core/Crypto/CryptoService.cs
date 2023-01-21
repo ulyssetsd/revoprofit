@@ -103,7 +103,7 @@ public class CryptoService : ICryptoService
                 return (new List<CryptoAsset>(), new List<Retrait>());
             }
 
-            if (transaction.Type == CryptoTransactionType.Dépôt)
+            if (transaction.Type == CryptoTransactionType.Depot)
             {
                 GèreLesFrais(transaction, cryptos);
              
@@ -116,7 +116,7 @@ public class CryptoService : ICryptoService
                 cryptoReçu.Montant += transaction.MontantRecu;
             }
 
-            if (transaction.Type == CryptoTransactionType.Échange)
+            if (transaction.Type == CryptoTransactionType.Echange)
             {
                 GèreLesFrais(transaction, cryptos);
 

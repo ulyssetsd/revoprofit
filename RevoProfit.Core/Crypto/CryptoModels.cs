@@ -45,52 +45,6 @@ public enum CryptoTransactionType
     Retrait,
 }
 
-/*
-public enum Label
-{
-    Salaire,
-    DépôtDExchangeAyantFermé,
-    DonPerçu,
-    AirdropFork,
-    GainAutreRevenu,
-    RevenusDeStackingMasternodesEtMining,
-    CFD,
-    Cashback,
-    OpérationInterne,
-    OpérationExterne,
-    Paiement,
-    HackPerte,
-    Donation,
-    PerteAutreFrais,
-}
-
-public enum LabelPourDépôt
-{
-    Salaire,
-    DépôtDExchangeAyantFermé,
-    DonPerçu,
-    AirdropFork,
-    GainAutreRevenu,
-    RevenusDeStackingMasternodesEtMining,
-    CFD,
-    Cashback,
-    OpérationInterne,
-    OpérationExterne,
-}
-
-public enum LabelPourRetrait
-{
-    Paiement,
-    HackPerte,
-    Donation,
-    PerteAutreFrais,
-    CFD,
-    Cashback,
-    OpérationInterne,
-    OpérationExterne,
-}
-*/
-
 public class CryptoAsset
 {
     public string Jeton { get; set; }

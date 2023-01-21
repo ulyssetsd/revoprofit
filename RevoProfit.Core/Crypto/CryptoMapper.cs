@@ -2,7 +2,7 @@
 
 namespace RevoProfit.Core.Crypto;
 
-public static class CryptoMapping
+public static class CryptoMapper
 {
     public static void CreateMap(IMapperConfigurationExpression cfg)
     {

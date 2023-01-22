@@ -223,7 +223,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Revolut export file (.csv).
+        ///   Looks up a localized string similar to Your Revolut Account Statement export file (.csv).
         /// </summary>
         public static string RevolutFile {
             get {

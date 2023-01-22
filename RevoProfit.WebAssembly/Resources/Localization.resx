@@ -172,7 +172,7 @@
     <value>Results in {0}</value>
   </data>
   <data name="RevolutFile" xml:space="preserve">
-    <value>Your Revolut export file (.csv)</value>
+    <value>Your Revolut Account Statement export file (.csv)</value>
   </data>
   <data name="SeeResults" xml:space="preserve">
     <value>💸 See Results</value>

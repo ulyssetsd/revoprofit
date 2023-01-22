@@ -3,7 +3,6 @@
 @inject ILogger<CsvFileInput> _logger
 @inject AppState _appState
 @inject IStringLocalizer<Localization> Loc
-@implements IDisposable
 
 <div class="mb-3">
     <label class="form-label">@Loc[nameof(Localization.RevolutFile)]</label>
@@ -13,22 +12,12 @@
     @Loc[nameof(Localization.SeeResults)]
     @if (_appState.IsCalculatingAnnualReports)
     {
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
     }
 </button>
 
 @code {
     public Stream? CsvFileStream { get; set; }
-    
-    protected override void OnInitialized()
-    {
-        _appState.OnChange += StateHasChanged;
-    }
-
-    public void Dispose()
-    {
-        _appState.OnChange -= StateHasChanged;
-    }
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using RevoProfit.Core.Crypto.Models;
 
-namespace RevoProfit.Core.Crypto;
+namespace RevoProfit.Core.Crypto.Mapping;
 
 public static class CryptoMapper
 {

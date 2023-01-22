@@ -1,8 +1,8 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace RevoProfit.Core.Models;
+namespace RevoProfit.Core.Stock.Models;
 
-public class CsvLine
+public class TransactionCsvLine
 {
     [Name("Date")] public string Date { get; set; }
     [Name("Ticker")] public string Ticker { get; set; }

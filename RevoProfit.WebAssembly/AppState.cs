@@ -1,4 +1,4 @@
-﻿using RevoProfit.Core.Models;
+﻿using RevoProfit.Core.Stock.Models;
 
 namespace RevoProfit.WebAssembly;
 

@@ -1,6 +1,6 @@
-﻿using RevoProfit.Core.Models;
+﻿using RevoProfit.Core.Stock.Models;
 
-namespace RevoProfit.Core.Services.Interfaces;
+namespace RevoProfit.Core.Stock.Services.Interfaces;
 
 public interface ITransactionService
 {

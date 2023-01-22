@@ -1,0 +1,66 @@
+﻿@inject AppState AppState
+@inject IStringLocalizer<Localization> Loc
+@implements IDisposable
+
+@if (AppState.CryptoAssets.Count != 0)
+{
+    <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "€")</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">Jeton</th>
+                <th scope="col">Montant</th>
+                <th scope="col">Montant en euros</th>
+                <th scope="col">Frais</th>
+            </tr>
+            @foreach (var cryptoAsset in AppState.CryptoAssets)
+            {
+                <tr>
+                    <td>@cryptoAsset.Jeton</td>
+                    <td>@cryptoAsset.Montant</td>
+                    <td>@cryptoAsset.MontantEnEuros.ToString("C", _fr)</td>
+                    <td>@cryptoAsset.Frais</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+@if (AppState.CryptoRetraits.Count != 0)
+{
+    <h3 class="mt-5">💶 Détails des retraits</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Jeton</th>
+                <th scope="col">Montant</th>
+                <th scope="col">Montant en euros</th>
+                <th scope="col">Gains en euros</th>
+            </tr>
+            @foreach (var cryptoRetrait in AppState.CryptoRetraits)
+            {
+                <tr>
+                    <td>@cryptoRetrait.Date</td>
+                    <td>@cryptoRetrait.Jeton</td>
+                    <td>@cryptoRetrait.Montant</td>
+                    <td>@cryptoRetrait.MontantEnEuros.ToString("C", _fr)</td>
+                    <td>@cryptoRetrait.GainsEnEuros.ToString("C", _fr)</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+@code {
+    readonly CultureInfo _fr = new ("fr-FR");
+
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+    }
+}

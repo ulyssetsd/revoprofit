@@ -138,6 +138,9 @@
   <data name="CashTopUp" xml:space="preserve">
     <value>Recharge en espèces</value>
   </data>
+  <data name="CryptoFile" xml:space="preserve">
+    <value>Votre fichier d'exportation "Relevé de compte" Waltio (.csv)</value>
+  </data>
   <data name="CustodyFee" xml:space="preserve">
     <value>Frais de garde</value>
   </data>

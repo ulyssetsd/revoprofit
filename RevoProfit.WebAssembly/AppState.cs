@@ -1,22 +1,33 @@
-﻿using RevoProfit.Core.Stock.Models;
+﻿using RevoProfit.Core.Crypto.Models;
+using RevoProfit.Core.Stock.Models;
 
 namespace RevoProfit.WebAssembly;
 
 public class AppState
 {
-    private bool _isCalculatingAnnualReports;
+    private bool _isCalculatingStock;
+    private bool _isCalculatingCrypto;
+    private bool _hasInsertEmail;
 
-    public bool IsCalculatingAnnualReports
+    public bool IsCalculatingStock
     {
-        get => _isCalculatingAnnualReports;
+        get => _isCalculatingStock;
         set
         {
-            _isCalculatingAnnualReports = value;
+            _isCalculatingStock = value;
             NotifyStateChanged();
         }
     }
 
-    private bool _hasInsertEmail;
+    public bool IsCalculatingCrypto
+    {
+        get => _isCalculatingCrypto;
+        set
+        {
+            _isCalculatingCrypto = value;
+            NotifyStateChanged();
+        }
+    }
 
     public bool HasInsertEmail
     {
@@ -29,6 +40,8 @@ public class AppState
     }
 
     public List<AnnualReport> AnnualReports { get; } = new();
+    public List<CryptoAsset> CryptoAssets { get; } = new();
+    public List<CryptoRetrait> CryptoRetraits { get; } = new();
 
     public event Action? OnChange;
 
@@ -40,4 +53,18 @@ public class AppState
     }
 
     private void NotifyStateChanged() => OnChange?.Invoke();
+
+    public void SetCryptoAssets(List<CryptoAsset>? cryptoAssets)
+    {
+        CryptoAssets.Clear();
+        if (cryptoAssets != null) CryptoAssets.AddRange(cryptoAssets);
+        NotifyStateChanged();
+    }
+
+    public void SetCryptoRetraits(List<CryptoRetrait>? cryptoRetraits)
+    {
+        CryptoRetraits.Clear();
+        if (cryptoRetraits != null) CryptoRetraits.AddRange(cryptoRetraits);
+        NotifyStateChanged();
+    }
 }

@@ -124,6 +124,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your Waltio Account Statement export file (.csv).
+        /// </summary>
+        public static string CryptoFile {
+            get {
+                return ResourceManager.GetString("CryptoFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custody Fee.
         /// </summary>
         public static string CustodyFee {

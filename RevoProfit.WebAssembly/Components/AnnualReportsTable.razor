@@ -1,8 +1,8 @@
-﻿@inject AppState _appState
+﻿@inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
-@if (_appState.AnnualReports.Count != 0)
+@if (AppState.AnnualReports.Count != 0)
 {
     <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "$")</h3>
     <div class="table-responsive">
@@ -14,7 +14,7 @@
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
-            @foreach (var annualReport in _appState.AnnualReports)
+            @foreach (var annualReport in AppState.AnnualReports)
             {
                 <tr>
                     <td>@annualReport.Year</td>
@@ -37,7 +37,7 @@
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
-            @foreach (var annualReport in _appState.AnnualReports)
+            @foreach (var annualReport in AppState.AnnualReports)
             {
                 <tr>
                     <td>@annualReport.Year</td>
@@ -51,7 +51,7 @@
     </div>
 
     <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
-    @foreach (var annualReport in _appState.AnnualReports)
+    @foreach (var annualReport in AppState.AnnualReports)
     {
         <div class="table-responsive">
             <table class="table">
@@ -87,11 +87,11 @@
 
     protected override void OnInitialized()
     {
-        _appState.OnChange += StateHasChanged;
+        AppState.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        _appState.OnChange -= StateHasChanged;
+        AppState.OnChange -= StateHasChanged;
     }
 }

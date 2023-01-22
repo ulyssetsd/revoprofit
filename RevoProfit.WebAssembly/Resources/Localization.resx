@@ -138,6 +138,9 @@
   <data name="CashTopUp" xml:space="preserve">
     <value>Cash Top Up</value>
   </data>
+  <data name="CryptoFile" xml:space="preserve">
+    <value>Your Waltio Account Statement export file (.csv)</value>
+  </data>
   <data name="CustodyFee" xml:space="preserve">
     <value>Custody Fee</value>
   </data>

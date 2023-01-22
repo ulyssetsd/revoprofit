@@ -1,4 +1,4 @@
-﻿namespace RevoProfit.Core.Models;
+﻿namespace RevoProfit.Core.Stock.Models;
 
 public enum Currency
 {

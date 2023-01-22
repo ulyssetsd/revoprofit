@@ -4,9 +4,9 @@ using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Mapping;
-using RevoProfit.Core.Models;
+using RevoProfit.Core.Stock.Models;
 
-namespace RevoProfit.Test.StockTest;
+namespace RevoProfit.Test.Stock;
 
 public class StockMapperTest
 {
@@ -22,7 +22,7 @@ public class StockMapperTest
     [SetCulture("en-GB")]
     public void TestMapping()
     {
-        var csvLine = new CsvLine
+        var csvLine = new TransactionCsvLine
         {
             Date = "10/03/2020 17:48:01",
             Ticker = "BLK",
@@ -52,7 +52,7 @@ public class StockMapperTest
     [Test]
     public void TestEmptyMapping()
     {
-        var csvLine = new CsvLine
+        var csvLine = new TransactionCsvLine
         {
             Type = "CASH TOP-UP",
             Quantity = "",
@@ -74,7 +74,7 @@ public class StockMapperTest
     [Test]
     public void TestEnumMapping()
     {
-        var csvLines = new List<CsvLine>
+        var csvLines = new List<TransactionCsvLine>
         {
             new() { Type = "BUY" },
             new() { Type = "CASH TOP-UP" },

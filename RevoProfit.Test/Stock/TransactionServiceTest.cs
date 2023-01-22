@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using RevoProfit.Core.Models;
-using RevoProfit.Core.Services;
+using RevoProfit.Core.Stock.Models;
+using RevoProfit.Core.Stock.Services;
 
-namespace RevoProfit.Test.StockTest;
+namespace RevoProfit.Test.Stock;
 
 public class TransactionServiceTest
 {
@@ -45,7 +45,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First().Gains.Should().Be(800);
-        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -60,7 +60,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().Be(0);
-        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 2,
@@ -74,7 +74,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(10, 0.01);
-        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -89,7 +89,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(25, 0.01);
-        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -103,7 +103,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(20, 0.01);
-        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -120,7 +120,7 @@ public class TransactionServiceTest
             Tesla(TransactionType.Buy, 10)
         });
 
-        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -141,7 +141,7 @@ public class TransactionServiceTest
             },
         });
 
-        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 10,
@@ -155,7 +155,7 @@ public class TransactionServiceTest
         });
 
         _transactionService.GetAnnualGainsReports().First().Gains.Should().Be(0);
-        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new Stock
+        _transactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,

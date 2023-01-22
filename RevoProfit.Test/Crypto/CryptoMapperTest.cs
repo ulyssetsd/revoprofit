@@ -2,10 +2,10 @@ using System;
 using AutoMapper;
 using FluentAssertions;
 using NUnit.Framework;
-using RevoProfit.Core.Crypto;
+using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Mapping;
 
-namespace RevoProfit.Test.CryptoTest;
+namespace RevoProfit.Test.Crypto;
 
 public class CryptoMapperTest
 {

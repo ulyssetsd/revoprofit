@@ -1,6 +1,6 @@
-﻿namespace RevoProfit.Core.Models;
+﻿namespace RevoProfit.Core.Stock.Models;
 
-public class Stock
+public class StockOwned
 {
     public string Ticker { get; set; }
     public double Quantity { get; set; }

@@ -1,12 +1,12 @@
-﻿using RevoProfit.Core.Models;
-using RevoProfit.Core.Services.Interfaces;
+﻿using RevoProfit.Core.Stock.Models;
+using RevoProfit.Core.Stock.Services.Interfaces;
 using System.Data;
 
-namespace RevoProfit.Core.Services;
+namespace RevoProfit.Core.Stock.Services;
 
 public class TransactionService : ITransactionService
 {
-    private List<Stock> Stocks { get; } = new();
+    private List<StockOwned> Stocks { get; } = new();
     private List<SellOrder> SellOrders { get; } = new();
     private List<Transaction> Dividends { get; } = new();
     private List<Transaction> CashTopUps { get; } = new();
@@ -106,25 +106,25 @@ public class TransactionService : ITransactionService
         }
     }
 
-    private Stock GetStockOrCreate(string ticker)
+    private StockOwned GetStockOrCreate(string ticker)
     {
         var stock = Stocks.FirstOrDefault(s => s.Ticker == ticker);
         if (stock == null)
         {
-            stock = new Stock { Ticker = ticker };
+            stock = new StockOwned { Ticker = ticker };
             Stocks.Add(stock);
         }
 
         return stock;
     }
 
-    public IEnumerable<Stock> GetCurrentStocks()
+    public IEnumerable<StockOwned> GetCurrentStocks()
     {
         return Stocks.OrderBy(stock => stock.Ticker)
             .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) != 0);
     }
 
-    public IEnumerable<Stock> GetOldStocks()
+    public IEnumerable<StockOwned> GetOldStocks()
     {
         return Stocks.OrderBy(stock => stock.Ticker)
             .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0);

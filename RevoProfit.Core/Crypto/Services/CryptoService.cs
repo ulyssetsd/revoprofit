@@ -1,57 +1,11 @@
-﻿using AutoMapper;
-using CsvHelper;
-using FluentAssertions;
-using RevoProfit.Core.Extensions;
-using RevoProfit.Core.Mapping;
-using System.Globalization;
+﻿using FluentAssertions;
+using RevoProfit.Core.Crypto.Models;
+using RevoProfit.Core.Crypto.Services.Interfaces;
 
-namespace RevoProfit.Core.Crypto;
-
-public interface ICryptoService
-{
-    Task<IEnumerable<CryptoTransaction>> ReadCsv(string path);
-    Task<IEnumerable<CryptoTransaction>> ReadCsv(Stream stream);
-    (List<CryptoAsset>, List<Retrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions);
-}
+namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
-    private readonly Mapper _mapper;
-
-    public CryptoService()
-    {
-        _mapper = MapperFactory.GetMapper();
-    }
-
-    public async Task<IEnumerable<CryptoTransaction>> ReadCsv(string path)
-    {
-        using var reader = new StreamReader(path);
-        return await ReadCsv(reader);
-    }
-
-    public async Task<IEnumerable<CryptoTransaction>> ReadCsv(Stream stream)
-    {
-        using var reader = new StreamReader(stream);
-        return await ReadCsv(reader);
-    }
-
-    private async Task<IEnumerable<CryptoTransaction>> ReadCsv(TextReader streamReader)
-    {
-        using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-
-        var lastCulture = Thread.CurrentThread.CurrentCulture;
-        Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
-        try
-        {
-            var csvLines = await csv.GetRecordsAsync<CryptoTransactionCsvLine>().ToEnumerableAsync();
-            return csvLines.Select(_mapper.Map<CryptoTransaction>).ToList();
-        }
-        finally
-        {
-            Thread.CurrentThread.CurrentCulture = lastCulture;
-        }
-    }
-
     private CryptoAsset GetOrCreate(List<CryptoAsset> cryptos, string jeton)
     {
         var crypto = cryptos.FirstOrDefault(crypto => crypto.Jeton == jeton);
@@ -90,23 +44,23 @@ public class CryptoService : ICryptoService
             crypto.MontantEnEuros = 0;
         }
     }
-    
-    public (List<CryptoAsset>, List<Retrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
+
+    public (List<CryptoAsset>, List<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();
-        var retraits = new List<Retrait>();
+        var retraits = new List<CryptoRetrait>();
 
         foreach (var transaction in transactions)
         {
             if (transaction == null)
             {
-                return (new List<CryptoAsset>(), new List<Retrait>());
+                return (new List<CryptoAsset>(), new List<CryptoRetrait>());
             }
 
             if (transaction.Type == CryptoTransactionType.Depot)
             {
                 GereLesFrais(transaction, cryptos);
-             
+
                 transaction.MontantRecu.Should().NotBe(0);
                 transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
                 transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
@@ -162,7 +116,7 @@ public class CryptoService : ICryptoService
                 var gainsEnDollars = gains * transaction.PrixDuJetonDuMontantEnvoye;
                 var montantEnvoyeEnDollars = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
 
-                retraits.Add(new Retrait
+                retraits.Add(new CryptoRetrait
                 {
                     Date = transaction.Date,
                     Jeton = transaction.MonnaieOuJetonEnvoye,

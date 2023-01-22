@@ -1,10 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using RevoProfit.Core.Crypto;
+using RevoProfit.Core.Crypto.Services;
 
 Console.WriteLine("Hello, World!");
 
+var cryptoCsvService = new CryptoCsvService();
 var cryptoService = new CryptoService();
-var transactions = await cryptoService.ReadCsv("C:/Users/utass/source/repos/ulyssetsd/revoprofit/crypto_input.csv");
+var transactions = await cryptoCsvService.ReadCsv("C:/Users/utass/source/repos/ulyssetsd/revoprofit/crypto_input.csv");
 var (cryptos, retraits) = cryptoService.ProcessTransactions(transactions);
 foreach (var crypto in cryptos)
 {

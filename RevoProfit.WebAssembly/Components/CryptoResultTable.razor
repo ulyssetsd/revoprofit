@@ -17,9 +17,9 @@
             {
                 <tr>
                     <td>@cryptoAsset.Jeton</td>
-                    <td>@cryptoAsset.Montant</td>
+                    <td>@Math.Round(cryptoAsset.Montant, 10, MidpointRounding.ToEven)</td>
                     <td>@cryptoAsset.MontantEnEuros.ToString("C", _fr)</td>
-                    <td>@cryptoAsset.Frais</td>
+                    <td>@Math.Round(cryptoAsset.Frais, 10, MidpointRounding.ToEven)</td>
                 </tr>
             }
         </table>
@@ -42,7 +42,7 @@
                 <tr>
                     <td>@cryptoRetrait.Date</td>
                     <td>@cryptoRetrait.Jeton</td>
-                    <td>@cryptoRetrait.Montant</td>
+                    <td>@Math.Round(cryptoRetrait.Montant, 10, MidpointRounding.ToEven)</td>
                     <td>@cryptoRetrait.MontantEnEuros.ToString("C", _fr)</td>
                     <td>@cryptoRetrait.GainsEnEuros.ToString("C", _fr)</td>
                 </tr>

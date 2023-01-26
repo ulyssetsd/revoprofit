@@ -1,17 +1,16 @@
-﻿@using RevoProfit.Core.Crypto.Services.Interfaces
-@inject ICryptoCsvService CryptoCsvService
-@inject ICryptoService CryptoService
-@inject ILogger<CryptoFileInput> Logger
+﻿@inject IStockCsvService CsvService
+@inject ITransactionService TransactionService
+@inject ILogger<StockFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
 
 <div class="mb-3">
-    <label class="form-label">@Loc[nameof(Localization.CryptoFile)]</label>
+    <label class="form-label">@Loc[nameof(Localization.RevolutFile)]</label>
     <InputFile class="form-control" OnChange="@LoadFiles" required />
 </div>
 <button class="btn btn-primary btn-lg" @onclick="SeeResults">
     @Loc[nameof(Localization.SeeResults)]
-    @if (AppState.IsCalculatingCrypto)
+    @if (AppState.IsCalculatingStock)
     {
         <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
     }
@@ -30,13 +29,12 @@
         try
         {
             if (CsvFileStream == null) return;
-            AppState.IsCalculatingCrypto = true;
-            var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
-            var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
-            Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
-            AppState.SetCryptoAssets(cryptoAssets);
-            AppState.SetCryptoRetraits(cryptoRetraits);
-            AppState.IsCalculatingCrypto = false;
+            AppState.IsCalculatingStock = true;
+            var transactions = await CsvService.ReadCsv(CsvFileStream);
+            var annualReports = TransactionService.GetAnnualReports(transactions);
+            Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
+            AppState.SetAnnualReports(annualReports);
+            AppState.IsCalculatingStock = false;
             CsvFileStream = null;
         }
         catch (Exception exception)

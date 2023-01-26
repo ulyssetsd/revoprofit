@@ -8,10 +8,10 @@
     <div class="table-responsive">
         <table class="table">
             <tr>
-                <th scope="col">Jeton</th>
-                <th scope="col">Montant</th>
-                <th scope="col">Montant en euros</th>
-                <th scope="col">Frais</th>
+                <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
+                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
+                <th scope="col">@Loc[nameof(Localization.Fees)]</th>
             </tr>
             @foreach (var cryptoAsset in AppState.CryptoAssets)
             {
@@ -31,11 +31,11 @@
     <div class="table-responsive">
         <table class="table">
             <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Jeton</th>
-                <th scope="col">Montant</th>
-                <th scope="col">Montant en euros</th>
-                <th scope="col">Gains en euros</th>
+                <th scope="col">@Loc[nameof(Localization.Date)]</th>
+                <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
+                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
+                <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
             </tr>
             @foreach (var cryptoRetrait in AppState.CryptoRetraits)
             {

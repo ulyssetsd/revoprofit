@@ -183,13 +183,34 @@
   <data name="SellOrderDetails" xml:space="preserve">
     <value>💰 Détails des ventes</value>
   </data>
-  <data name="Subtitle" xml:space="preserve">
+  <data name="RevoProfitSubtitle" xml:space="preserve">
     <value>Calculez vos gains ou pertes de trading sur votre compte de trading Revolut Stocks.</value>
   </data>
   <data name="Ticker" xml:space="preserve">
     <value>Symbole boursier</value>
   </data>
+  <data name="WaltProfit" xml:space="preserve">
+    <value>WaltProfit</value>
+  </data>
+  <data name="WaltProfitSubtitle" xml:space="preserve">
+    <value>Calculez vos gains ou pertes de trading crypto via votre export waltio.co</value>
+  </data>
   <data name="Year" xml:space="preserve">
     <value>Année</value>
+  </data>
+  <data name="AmountInEuros" xml:space="preserve">
+    <value>Montant en €</value>
+  </data>
+  <data name="CryptoSymbol" xml:space="preserve">
+    <value>Jeton</value>
+  </data>
+  <data name="Fees" xml:space="preserve">
+    <value>Frais</value>
+  </data>
+  <data name="GainsInEuros" xml:space="preserve">
+    <value>Gains en €</value>
+  </data>
+  <data name="RevoProfit" xml:space="preserve">
+    <value>RevoProfit</value>
   </data>
 </root>

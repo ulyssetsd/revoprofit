@@ -79,6 +79,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amout in €.
+        /// </summary>
+        public static string AmountInEuros {
+            get {
+                return ResourceManager.GetString("AmountInEuros", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We are using the Average Cost Basis Method. This is the method required by the French government for realized gains calculation..
         /// </summary>
         public static string Answer1 {
@@ -133,6 +142,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Jeton.
+        /// </summary>
+        public static string CryptoSymbol {
+            get {
+                return ResourceManager.GetString("CryptoSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custody Fee.
         /// </summary>
         public static string CustodyFee {
@@ -178,11 +196,29 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fees.
+        /// </summary>
+        public static string Fees {
+            get {
+                return ResourceManager.GetString("Fees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gains.
         /// </summary>
         public static string Gains {
             get {
                 return ResourceManager.GetString("Gains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gains in €.
+        /// </summary>
+        public static string GainsInEuros {
+            get {
+                return ResourceManager.GetString("GainsInEuros", resourceCulture);
             }
         }
         
@@ -241,6 +277,24 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RevoProfit.
+        /// </summary>
+        public static string RevoProfit {
+            get {
+                return ResourceManager.GetString("RevoProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate you trading gains or loss on your Revolut Stocks trading account..
+        /// </summary>
+        public static string RevoProfitSubtitle {
+            get {
+                return ResourceManager.GetString("RevoProfitSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 💸 See Results.
         /// </summary>
         public static string SeeResults {
@@ -259,20 +313,29 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculate you trading gains or loss on your Revolut Stocks trading account..
-        /// </summary>
-        public static string Subtitle {
-            get {
-                return ResourceManager.GetString("Subtitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Ticker.
         /// </summary>
         public static string Ticker {
             get {
                 return ResourceManager.GetString("Ticker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WaltProfit.
+        /// </summary>
+        public static string WaltProfit {
+            get {
+                return ResourceManager.GetString("WaltProfit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate you crypto gains or loss from your waltio.co export..
+        /// </summary>
+        public static string WaltProfitSubtitle {
+            get {
+                return ResourceManager.GetString("WaltProfitSubtitle", resourceCulture);
             }
         }
         

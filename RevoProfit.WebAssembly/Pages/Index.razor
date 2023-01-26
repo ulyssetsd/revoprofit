@@ -1,12 +1,12 @@
 ﻿@page "/"
 @inject IStringLocalizer<Localization> Loc
 
-<PageTitle>RevoProfit</PageTitle>
-<h3 class="mt-5 mb-3">@Loc[nameof(Localization.Subtitle)]</h3>
+<PageTitle>@Loc[nameof(Localization.RevoProfit)]</PageTitle>
+<h3 class="mt-5 mb-3">@Loc[nameof(Localization.RevoProfitSubtitle)]</h3>
 <StockFileInput />
 <StockResultTable />
-<h1 class="mt-5">WaltProfit</h1>
-<h3 class="mt-5 mb-3">Calculez vos gains ou pertes de trading crypto via votre export Waltio.</h3>
+<h1 class="mt-5">@Loc[nameof(Localization.WaltProfit)]</h1>
+<h3 class="mt-5 mb-3">@Loc[nameof(Localization.WaltProfitSubtitle)]</h3>
 <CryptoFileInput />
 <CryptoResultTable />
 <DonateButton />

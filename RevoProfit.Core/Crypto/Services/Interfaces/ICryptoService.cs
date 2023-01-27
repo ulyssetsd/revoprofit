@@ -4,5 +4,6 @@ namespace RevoProfit.Core.Crypto.Services.Interfaces;
 
 public interface ICryptoService
 {
-    (List<CryptoAsset>, List<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions);
+    (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions);
+    IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits);
 }

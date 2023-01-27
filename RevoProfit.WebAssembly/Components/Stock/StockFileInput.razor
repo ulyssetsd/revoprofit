@@ -1,7 +1,7 @@
-﻿@inject IStockCsvService _csvService
-@inject ITransactionService _transactionService
-@inject ILogger<CsvFileInput> _logger
-@inject AppState _appState
+﻿@inject IStockCsvService CsvService
+@inject ITransactionService TransactionService
+@inject ILogger<StockFileInput> Logger
+@inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
 
 <div class="mb-3">
@@ -10,7 +10,7 @@
 </div>
 <button class="btn btn-primary btn-lg" @onclick="SeeResults">
     @Loc[nameof(Localization.SeeResults)]
-    @if (_appState.IsCalculatingAnnualReports)
+    @if (AppState.IsCalculatingStock)
     {
         <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
     }
@@ -29,17 +29,17 @@
         try
         {
             if (CsvFileStream == null) return;
-            _appState.IsCalculatingAnnualReports = true;
-            var transactions = await _csvService.ReadCsv(CsvFileStream);
-            var annualReports = _transactionService.GetAnnualReports(transactions);
-            _logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
-            _appState.SetAnnualReports(annualReports);
-            _appState.IsCalculatingAnnualReports = false;
+            AppState.IsCalculatingStock = true;
+            var transactions = await CsvService.ReadCsv(CsvFileStream);
+            var annualReports = TransactionService.GetAnnualReports(transactions);
+            Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
+            AppState.AnnualReports = annualReports;
+            AppState.IsCalculatingStock = false;
             CsvFileStream = null;
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "something went wrong while reading the stream");
+            Logger.LogError(exception, "something went wrong while reading the stream");
         }
     }
 }

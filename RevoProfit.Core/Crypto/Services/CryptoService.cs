@@ -6,7 +6,7 @@ namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
-    private CryptoAsset GetOrCreate(List<CryptoAsset> cryptos, string jeton)
+    private CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string jeton)
     {
         var crypto = cryptos.FirstOrDefault(crypto => crypto.Jeton == jeton);
 
@@ -22,7 +22,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private void GereLesFrais(CryptoTransaction transaction, List<CryptoAsset> cryptos)
+    private void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos)
     {
         if (transaction.Frais == 0)
         {
@@ -45,7 +45,19 @@ public class CryptoService : ICryptoService
         }
     }
 
-    public (List<CryptoAsset>, List<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
+    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits)
+    {
+        return cryptoRetraits
+            .GroupBy(retrait => retrait.Date.Year)
+            .Select(retraits => new CryptoReport
+            {
+                Year = retraits.Key, 
+                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros), 
+                FraisEnEuros = retraits.Sum(retrait => retrait.FraisEnEuros),
+            });
+    }
+
+    public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();
         var retraits = new List<CryptoRetrait>();
@@ -54,7 +66,7 @@ public class CryptoService : ICryptoService
         {
             if (transaction == null)
             {
-                return (new List<CryptoAsset>(), new List<CryptoRetrait>());
+                continue;
             }
 
             if (transaction.Type == CryptoTransactionType.Depot)

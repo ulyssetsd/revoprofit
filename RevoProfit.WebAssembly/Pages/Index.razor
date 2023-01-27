@@ -1,10 +1,15 @@
 ﻿@page "/"
 @inject IStringLocalizer<Localization> Loc
 
-<PageTitle>RevoProfit</PageTitle>
-<h3 class="mt-5 mb-5">@Loc[nameof(Localization.Subtitle)]</h3>
-<CsvFileInput />
-<AnnualReportsTable />
+<PageTitle>@Loc[nameof(Localization.RevoProfit)]</PageTitle>
+<h1 class="mt-4">@Loc[nameof(Localization.RevoProfit)]</h1>
+<h3 class="mt-5 mb-3">@Loc[nameof(Localization.RevoProfitSubtitle)]</h3>
+<StockFileInput />
+<StockResultTable />
+<h1 class="mt-5">@Loc[nameof(Localization.WaltProfit)]</h1>
+<h3 class="mt-5 mb-3">@Loc[nameof(Localization.WaltProfitSubtitle)]</h3>
+<CryptoFileInput />
+<CryptoResultTable />
 <DonateButton />
 <QuestionsAndAnswers />
 <p class="text-center m-5">@Loc[nameof(Localization.Disclaimer)]</p>

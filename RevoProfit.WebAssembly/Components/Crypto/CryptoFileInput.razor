@@ -1,0 +1,46 @@
+﻿@inject ICryptoCsvService CryptoCsvService
+@inject ICryptoService CryptoService
+@inject ILogger<CryptoFileInput> Logger
+@inject AppState AppState
+@inject IStringLocalizer<Localization> Loc
+
+<div class="mb-3">
+    <label class="form-label">@Loc[nameof(Localization.CryptoFile)]</label>
+    <InputFile class="form-control" OnChange="@LoadFiles" required />
+</div>
+<button class="btn btn-primary btn-lg" @onclick="SeeResults">
+    @Loc[nameof(Localization.SeeResults)]
+    @if (AppState.IsCalculatingCrypto)
+    {
+        <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
+    }
+</button>
+
+@code {
+    public Stream? CsvFileStream { get; set; }
+
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        CsvFileStream = e.File.OpenReadStream();
+    }
+
+    private async Task SeeResults()
+    {
+        try
+        {
+            if (CsvFileStream == null) return;
+            AppState.IsCalculatingCrypto = true;
+            var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
+            var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
+            Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
+            AppState.CryptoAssets = cryptoAssets;
+            AppState.CryptoRetraits = cryptoRetraits;
+            AppState.IsCalculatingCrypto = false;
+            CsvFileStream = null;
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "something went wrong while reading the stream");
+        }
+    }
+}

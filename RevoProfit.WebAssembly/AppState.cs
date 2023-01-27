@@ -1,43 +1,67 @@
-﻿using RevoProfit.Core.Stock.Models;
+﻿using RevoProfit.Core.Crypto.Models;
+using RevoProfit.Core.Stock.Models;
 
 namespace RevoProfit.WebAssembly;
 
 public class AppState
 {
-    private bool _isCalculatingAnnualReports;
+    private bool _isCalculatingStock;
+    private bool _isCalculatingCrypto;
+    private IEnumerable<AnnualReport> _annualReports = new List<AnnualReport>();
+    private IEnumerable<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
+    private IEnumerable<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
 
-    public bool IsCalculatingAnnualReports
+    public bool IsCalculatingStock
     {
-        get => _isCalculatingAnnualReports;
+        get => _isCalculatingStock;
         set
         {
-            _isCalculatingAnnualReports = value;
+            _isCalculatingStock = value;
             NotifyStateChanged();
         }
     }
 
-    private bool _hasInsertEmail;
-
-    public bool HasInsertEmail
+    public bool IsCalculatingCrypto
     {
-        get => _hasInsertEmail;
+        get => _isCalculatingCrypto;
         set
         {
-            _hasInsertEmail = value;
+            _isCalculatingCrypto = value;
             NotifyStateChanged();
         }
     }
 
-    public List<AnnualReport> AnnualReports { get; } = new();
+    public IEnumerable<AnnualReport> AnnualReports
+    {
+        get => _annualReports;
+        set
+        {
+            _annualReports = value;
+            NotifyStateChanged();
+        }
+    }
+
+    public IEnumerable<CryptoAsset> CryptoAssets
+    {
+        get => _cryptoAssets;
+        set
+        {
+            _cryptoAssets = value;
+            NotifyStateChanged();
+        }
+    }
+
+    public IEnumerable<CryptoRetrait> CryptoRetraits
+    {
+        get => _cryptoRetraits;
+        set
+        {
+            _cryptoRetraits = value;
+            NotifyStateChanged();
+        }
+    }
 
     public event Action? OnChange;
-
-    public void SetAnnualReports(IEnumerable<AnnualReport>? annualReports)
-    {
-        AnnualReports.Clear();
-        if (annualReports != null) AnnualReports.AddRange(annualReports);
-        NotifyStateChanged();
-    }
 
     private void NotifyStateChanged() => OnChange?.Invoke();
 }

@@ -130,60 +130,27 @@ public class TransactionService : ITransactionService
             .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0);
     }
 
-    public IEnumerable<SellOrder> GetSellOrders()
-    {
-        return SellOrders;
-    }
-
     public IEnumerable<AnnualReport> GetAnnualGainsReports()
     {
         return Years
             .Distinct()
             .Select(year =>
             {
-                var sellOrders = SellOrders
-                    .Where(order => order.Date.Year == year)
-                    .ToList();
-
-                var totalGains = sellOrders
-                    .Sum(order => order.Gains);
-                var totalDividends = Dividends
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => transaction.TotalAmount);
-                var totalCashTopUp = CashTopUps
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => transaction.TotalAmount);
-                var totalCustodyFee = CustodyFees
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => transaction.TotalAmount);
-
-
-                var totalGainsInEuro = sellOrders
-                    .Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate));
-                var totalDividendsInEuro = Dividends
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
-                var totalCashTopUpInEuro = CashTopUps
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
-                var totalCustodyFeeInEuro = CustodyFees
-                    .Where(transaction => transaction.Date.Year == year)
-                    .Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate));
-
                 return new AnnualReport
                 {
                     Year = year,
-                    Gains = totalGains,
-                    Dividends = totalDividends,
-                    CashTopUp = totalCashTopUp,
-                    CustodyFee = totalCustodyFee,
 
-                    GainsInEuro = totalGainsInEuro,
-                    DividendsInEuro = totalDividendsInEuro,
-                    CashTopUpInEuro = totalCashTopUpInEuro,
-                    CustodyFeeInEuro = totalCustodyFeeInEuro,
+                    Gains = SellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains),
+                    Dividends = Dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+                    CashTopUp = CashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+                    CustodyFee = CustodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
 
-                    SellOrders = sellOrders,
+                    GainsInEuro = SellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)),
+                    DividendsInEuro = Dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+                    CashTopUpInEuro = CashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+                    CustodyFeeInEuro = CustodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+
+                    SellOrders = SellOrders.Where(order => order.Date.Year == year).ToList(),
                 };
             });
     }

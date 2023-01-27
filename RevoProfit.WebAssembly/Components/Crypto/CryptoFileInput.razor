@@ -33,8 +33,8 @@
             var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
             var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
-            AppState.SetCryptoAssets(cryptoAssets);
-            AppState.SetCryptoRetraits(cryptoRetraits);
+            AppState.CryptoAssets = cryptoAssets;
+            AppState.CryptoRetraits = cryptoRetraits;
             AppState.IsCalculatingCrypto = false;
             CsvFileStream = null;
         }

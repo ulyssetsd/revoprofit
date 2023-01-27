@@ -3,7 +3,7 @@
 @inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
-@if (AppState.CryptoRetraits.Count != 0)
+@if (AppState.CryptoRetraits.Any())
 {
     <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "€")</h3>
     <div class="table-responsive">
@@ -46,7 +46,7 @@
         </table>
     </div>
 }
-@if (AppState.CryptoAssets.Count != 0)
+@if (AppState.CryptoAssets.Any())
 {
     <h3 class="mt-5">@Loc[nameof(Localization.CryptoLefts)]</h3>
     <div class="table-responsive">

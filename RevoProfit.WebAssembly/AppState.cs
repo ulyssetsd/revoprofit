@@ -7,7 +7,9 @@ public class AppState
 {
     private bool _isCalculatingStock;
     private bool _isCalculatingCrypto;
-    private bool _hasInsertEmail;
+    private IEnumerable<AnnualReport> _annualReports = new List<AnnualReport>();
+    private IEnumerable<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
+    private IEnumerable<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
 
     public bool IsCalculatingStock
     {
@@ -29,42 +31,37 @@ public class AppState
         }
     }
 
-    public bool HasInsertEmail
+    public IEnumerable<AnnualReport> AnnualReports
     {
-        get => _hasInsertEmail;
+        get => _annualReports;
         set
         {
-            _hasInsertEmail = value;
+            _annualReports = value;
             NotifyStateChanged();
         }
     }
 
-    public List<AnnualReport> AnnualReports { get; } = new();
-    public List<CryptoAsset> CryptoAssets { get; } = new();
-    public List<CryptoRetrait> CryptoRetraits { get; } = new();
+    public IEnumerable<CryptoAsset> CryptoAssets
+    {
+        get => _cryptoAssets;
+        set
+        {
+            _cryptoAssets = value;
+            NotifyStateChanged();
+        }
+    }
+
+    public IEnumerable<CryptoRetrait> CryptoRetraits
+    {
+        get => _cryptoRetraits;
+        set
+        {
+            _cryptoRetraits = value;
+            NotifyStateChanged();
+        }
+    }
 
     public event Action? OnChange;
 
-    public void SetAnnualReports(IEnumerable<AnnualReport>? annualReports)
-    {
-        AnnualReports.Clear();
-        if (annualReports != null) AnnualReports.AddRange(annualReports);
-        NotifyStateChanged();
-    }
-
     private void NotifyStateChanged() => OnChange?.Invoke();
-
-    public void SetCryptoAssets(List<CryptoAsset>? cryptoAssets)
-    {
-        CryptoAssets.Clear();
-        if (cryptoAssets != null) CryptoAssets.AddRange(cryptoAssets);
-        NotifyStateChanged();
-    }
-
-    public void SetCryptoRetraits(List<CryptoRetrait>? cryptoRetraits)
-    {
-        CryptoRetraits.Clear();
-        if (cryptoRetraits != null) CryptoRetraits.AddRange(cryptoRetraits);
-        NotifyStateChanged();
-    }
 }

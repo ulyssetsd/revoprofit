@@ -33,7 +33,7 @@
             var transactions = await CsvService.ReadCsv(CsvFileStream);
             var annualReports = TransactionService.GetAnnualReports(transactions);
             Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
-            AppState.SetAnnualReports(annualReports);
+            AppState.AnnualReports = annualReports;
             AppState.IsCalculatingStock = false;
             CsvFileStream = null;
         }

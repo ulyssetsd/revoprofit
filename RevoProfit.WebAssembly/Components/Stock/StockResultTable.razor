@@ -2,7 +2,7 @@
 @inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
-@if (AppState.AnnualReports.Count != 0)
+@if (AppState.AnnualReports.Any())
 {
     <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "$")</h3>
     <div class="table-responsive">

@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DF89
 		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevoProfit.Console", "RevoProfit.Console\RevoProfit.Console.csproj", "{AED8CBDD-83C6-48F4-B478-D15B3B57F669}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AED8CBDD-83C6-48F4-B478-D15B3B57F669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AED8CBDD-83C6-48F4-B478-D15B3B57F669}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AED8CBDD-83C6-48F4-B478-D15B3B57F669}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AED8CBDD-83C6-48F4-B478-D15B3B57F669}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -68,7 +68,7 @@
                 @foreach (var sellOrder in annualReport.SellOrders)
                 {
                     <tr>
-                        <td>@sellOrder.Date.ToString(_us)</td>
+                        <td>@sellOrder.Date</td>
                         <td>@sellOrder.Ticker</td>
                         <td>@sellOrder.Amount.ToString("C", _us)</td>
                         <td>@sellOrder.Gains.ToString("C", _us)</td>

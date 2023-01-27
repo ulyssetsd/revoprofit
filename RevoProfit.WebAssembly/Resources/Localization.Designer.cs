@@ -142,6 +142,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 🪙 Crypto Lefts.
+        /// </summary>
+        public static string CryptoLefts {
+            get {
+                return ResourceManager.GetString("CryptoLefts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jeton.
         /// </summary>
         public static string CryptoSymbol {

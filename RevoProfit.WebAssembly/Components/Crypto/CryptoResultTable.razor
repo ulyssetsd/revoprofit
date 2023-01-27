@@ -1,33 +1,29 @@
 ﻿@inject AppState AppState
+@inject ICryptoService CryptoService
 @inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
-@if (AppState.CryptoAssets.Count != 0)
+@if (AppState.CryptoRetraits.Count != 0)
 {
     <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "€")</h3>
     <div class="table-responsive">
         <table class="table">
             <tr>
-                <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
-                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
-                <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
+                <th scope="col">@Loc[nameof(Localization.Year)]</th>
+                <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
                 <th scope="col">@Loc[nameof(Localization.Fees)]</th>
             </tr>
-            @foreach (var cryptoAsset in AppState.CryptoAssets)
+            @foreach (var annualReport in CryptoService.MapToReports(AppState.CryptoRetraits))
             {
                 <tr>
-                    <td>@cryptoAsset.Jeton</td>
-                    <td>@Math.Round(cryptoAsset.Montant, 10, MidpointRounding.ToEven)</td>
-                    <td>@cryptoAsset.MontantEnEuros.ToString("C", _fr)</td>
-                    <td>@Math.Round(cryptoAsset.Frais, 10, MidpointRounding.ToEven)</td>
+                    <td>@annualReport.Year</td>
+                    <td>@annualReport.GainsEnEuros.ToString("C", _fr)</td>
+                    <td>@annualReport.FraisEnEuros.ToString("C", _fr)</td>
                 </tr>
             }
         </table>
     </div>
-}
-@if (AppState.CryptoRetraits.Count != 0)
-{
-    <h3 class="mt-5">💶 Détails des retraits</h3>
+    <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
     <div class="table-responsive">
         <table class="table">
             <tr>
@@ -50,9 +46,32 @@
         </table>
     </div>
 }
+@if (AppState.CryptoAssets.Count != 0)
+{
+    <h3 class="mt-5">@Loc[nameof(Localization.CryptoLefts)]</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
+                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
+                <th scope="col">@Loc[nameof(Localization.Fees)]</th>
+            </tr>
+            @foreach (var cryptoAsset in AppState.CryptoAssets)
+            {
+                <tr>
+                    <td>@cryptoAsset.Jeton</td>
+                    <td>@Math.Round(cryptoAsset.Montant, 10, MidpointRounding.ToEven)</td>
+                    <td>@cryptoAsset.MontantEnEuros.ToString("C", _fr)</td>
+                    <td>@Math.Round(cryptoAsset.Frais, 10, MidpointRounding.ToEven)</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
 
 @code {
-    readonly CultureInfo _fr = new ("fr-FR");
+    readonly CultureInfo _fr = new("fr-FR");
 
     protected override void OnInitialized()
     {

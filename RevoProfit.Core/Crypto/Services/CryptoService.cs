@@ -45,6 +45,18 @@ public class CryptoService : ICryptoService
         }
     }
 
+    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits)
+    {
+        return cryptoRetraits
+            .GroupBy(retrait => retrait.Date.Year)
+            .Select(retraits => new CryptoReport
+            {
+                Year = retraits.Key, 
+                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros), 
+                FraisEnEuros = retraits.Sum(retrait => retrait.FraisEnEuros),
+            });
+    }
+
     public (List<CryptoAsset>, List<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();

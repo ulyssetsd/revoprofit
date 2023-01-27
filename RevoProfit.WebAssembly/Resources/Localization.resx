@@ -213,4 +213,7 @@
   <data name="RevoProfit" xml:space="preserve">
     <value>RevoProfit</value>
   </data>
+  <data name="CryptoLefts" xml:space="preserve">
+    <value>🪙 Crypto Lefts</value>
+  </data>
 </root>

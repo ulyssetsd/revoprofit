@@ -1,17 +1,12 @@
-﻿using System.Globalization;
-using AutoMapper;
-using RevoProfit.Core.Stock.Models;
+﻿using RevoProfit.Core.Stock.Models;
+using RevoProfit.Core.Stock.Services.Interfaces;
+using System.Globalization;
 
-namespace RevoProfit.Core.Stock.Mapping;
+namespace RevoProfit.Core.Stock.Services;
 
-public static class StockMapper
+public class StockTransactionMapper : IStockTransactionMapper
 {
-    public static void CreateMap(IMapperConfigurationExpression cfg)
-    {
-        cfg.CreateMap<TransactionCsvLine, Transaction>().ConvertUsing(source => ToTransaction(source));
-    }
-
-    private static Transaction ToTransaction(TransactionCsvLine source)
+    public Transaction Map(TransactionCsvLine source)
     {
         return new Transaction
         {

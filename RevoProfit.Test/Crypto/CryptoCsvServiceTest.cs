@@ -13,7 +13,8 @@ namespace RevoProfit.Test.Crypto
     internal class CryptoCsvServiceTest
     {
         private const string Bitcoin = "BTC";
-        private CryptoCsvService _cryptoCsvService;
+        private const string Headers = "Type,Date,Montant reçu,Monnaie ou jeton reçu,Montant envoyé,Monnaie ou jeton envoyé,Frais,Monnaie ou jeton des frais,Exchange / Plateforme,Description,Label,Prix du jeton du montant envoyé,Prix du jeton du montant recu,Prix du jeton des frais";
+        private CryptoCsvService _cryptoCsvService = null!;
 
         [SetUp]
         public void Setup()
@@ -25,12 +26,12 @@ namespace RevoProfit.Test.Crypto
         public async Task ReadCsv_WhenAValidContentIsGiven_ShouldReturnAMappedListOfTheContent()
         {
             // Arrange
-            const string content = @"
-Type,Date,Montant reçu,Monnaie ou jeton reçu,Montant envoyé,Monnaie ou jeton envoyé,Frais,Monnaie ou jeton des frais,Exchange / Plateforme,Description,Label,Prix du jeton du montant envoyé,Prix du jeton du montant recu,Prix du jeton des frais
-Dépôt,12/06/2018 12:16:32,""0,01713112"",BTC,,,,,Revolut,Exchanged to SOL,,,""5708,036473"",
-Retrait,19/08/2018 20:43:55,,,""0,008196"",BTC,,,Revolut,Exchanged to SOL,Paiement,""5504,071"",,
-Échange,05/04/2021 23:24:05,""0,00959825"",BTC,""0,6"",BCH,""0,000144"",BTC,Revolut,Exchanged to SOL,,""776,0666485"",""46613,99539"",""46613,99539""
-";
+            var content = new StringBuilder()
+                .AppendLine(Headers)
+                .AppendLine("Dépôt,12/06/2018 12:16:32,\"0,01713112\",BTC,,,,,Revolut,Exchanged to SOL,,,\"5708,036473\",")
+                .AppendLine("Retrait,19/08/2018 20:43:55,,,\"0,008196\",BTC,,,Revolut,Exchanged to SOL,Paiement,\"5504,071\",,")
+                .AppendLine("Échange,05/04/2021 23:24:05,\"0,00959825\",BTC,\"0,6\",BCH,\"0,000144\",BTC,Revolut,Exchanged to SOL,,\"776,0666485\",\"46613,99539\",\"46613,99539\"")
+                .ToString();
             using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
             // Act

@@ -9,7 +9,7 @@ namespace RevoProfit.Test.Crypto;
 
 public class CryptoMapperTest
 {
-    private Mapper _mapper;
+    private Mapper _mapper = null!;
 
     [SetUp]
     public void Setup()

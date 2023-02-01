@@ -14,7 +14,7 @@ builder.Services.AddLocalization();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<AppState>();
 builder.Services.AddSingleton<IStockCsvService, StockCsvService>();
-builder.Services.AddSingleton<ITransactionService, TransactionService>();
+builder.Services.AddSingleton<ITransactionService, StockTransactionService>();
 builder.Services.AddScoped<ICryptoCsvService, CryptoCsvService>();
 builder.Services.AddScoped<ICryptoService, CryptoService>();
 

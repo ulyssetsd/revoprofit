@@ -1,23 +1,20 @@
-﻿using RevoProfit.Core.Mapping;
-using RevoProfit.Core.Services;
+﻿using RevoProfit.Core.Services;
 using RevoProfit.Core.Stock.Models;
 using RevoProfit.Core.Stock.Services.Interfaces;
-using System.Globalization;
-using AutoMapper;
 
 namespace RevoProfit.Core.Stock.Services;
 
 public class StockCsvService : CsvGenericService<Transaction, TransactionCsvLine>, IStockCsvService
 {
-    private readonly Mapper _mapper;
+    private readonly IStockTransactionMapper _stockTransactionMapper;
 
-    public StockCsvService() : base(CultureInfo.GetCultureInfo("en-GB"))
+    public StockCsvService(IStockTransactionMapper stockTransactionMapper)
     {
-        _mapper = MapperFactory.GetMapper();
+        _stockTransactionMapper = stockTransactionMapper;
     }
 
     public override Transaction MapCsvLineToModel(TransactionCsvLine source)
     {
-        return _mapper.Map<Transaction>(source);
+        return _stockTransactionMapper.Map(source);
     }
 }

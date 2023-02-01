@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using RevoProfit.Core.Crypto.Mapping;
-using RevoProfit.Core.Stock.Mapping;
 
 namespace RevoProfit.Core.Mapping;
 
@@ -11,7 +10,6 @@ public static class MapperFactory
         var config = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<string, double>().ConvertUsing(MappingFunction);
-            StockMapper.CreateMap(cfg);
             CryptoMapper.CreateMap(cfg);
         });
         return new Mapper(config);

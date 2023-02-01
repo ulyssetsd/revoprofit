@@ -124,7 +124,7 @@ public class CsvServiceTest
     }
 
     [Test]
-    public async Task test_csv_conversion_is_available_for_en_us_format_2022()
+    public async Task test_csv_conversion_is_mapping_correctly_for_the_new_format_2022()
     {
         var content = new StringBuilder()
             .AppendLine(Headers)
@@ -141,69 +141,69 @@ public class CsvServiceTest
         {
             new()
             {
-                Date = new DateTime(2020, 03, 10, 17, 48, 01),
+                Date = new DateTime(2020, 03, 10, 17, 48, 01).AddTicks(8524200),
                 Ticker = string.Empty,
                 Type = TransactionType.CashTopUp,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
                 Currency = Currency.Usd,
-                FxRate = 1.1324686027,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 03, 10, 17, 48, 28),
+                Date = new DateTime(2020, 03, 10, 17, 48, 28).AddTicks(9201150),
                 Ticker = "BLK",
                 Type = TransactionType.Buy,
                 Quantity = 0.02245576,
                 PricePerShare = 445.32,
                 TotalAmount = 10.00,
                 Currency = Currency.Usd,
-                FxRate = 1.1324878383,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 05, 31, 23, 30, 04),
+                Date = new DateTime(2020, 05, 31, 23, 30, 04).AddTicks(7265790),
                 Ticker = string.Empty,
                 Type = TransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01,
                 Currency = Currency.Usd,
-                FxRate = 1.1118967596,
+                FxRate = 1.12,
             },
             new()
             {
-                Date = new DateTime(2020, 06, 24, 05, 25, 25),
+                Date = new DateTime(2020, 06, 24, 05, 28, 27).AddTicks(1413060),
                 Ticker = "BLK",
                 Type = TransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63,
                 Currency = Currency.Usd,
-                FxRate = 1.1317497421,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 08, 20, 16, 20, 42),
+                Date = new DateTime(2020, 08, 20, 16, 20, 42).AddTicks(2718400),
                 Ticker = "TSLA",
                 Type = TransactionType.Sell,
                 Quantity = 0.0361623,
                 PricePerShare = 1991.30,
-                TotalAmount = 72.01,
+                TotalAmount = 72,
                 Currency = Currency.Usd,
-                FxRate = 1.1859934110,
+                FxRate = 1.19,
             },
             new()
             {
-                Date = new DateTime(2021, 07, 20, 10, 35, 47),
+                Date = new DateTime(2021, 07, 20, 10, 35, 47).AddTicks(3104290),
                 Ticker = "NVDA",
                 Type = TransactionType.StockSplit,
                 Quantity = 1.5,
                 PricePerShare = 0,
                 TotalAmount = 0,
                 Currency = Currency.Usd,
-                FxRate = 1.1795,
+                FxRate = 1.18,
             },
         });
     }
@@ -226,69 +226,69 @@ public class CsvServiceTest
         {
             new()
             {
-                Date = new DateTime(2020, 03, 10, 17, 48, 01),
+                Date = new DateTime(2020, 03, 10, 17, 48, 01).AddTicks(8524200),
                 Ticker = string.Empty,
                 Type = TransactionType.CashTopUp,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
                 Currency = Currency.Usd,
-                FxRate = 1.1324686027,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 03, 10, 17, 48, 28),
+                Date = new DateTime(2020, 03, 10, 17, 48, 28).AddTicks(9201150),
                 Ticker = "BLK",
                 Type = TransactionType.Buy,
                 Quantity = 0.02245576,
                 PricePerShare = 445.32,
                 TotalAmount = 10.00,
                 Currency = Currency.Usd,
-                FxRate = 1.1324878383,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 05, 31, 23, 30, 04),
+                Date = new DateTime(2020, 05, 31, 23, 30, 04).AddTicks(7265790),
                 Ticker = string.Empty,
                 Type = TransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01,
                 Currency = Currency.Usd,
-                FxRate = 1.1118967596,
+                FxRate = 1.12,
             },
             new()
             {
-                Date = new DateTime(2020, 06, 24, 05, 25, 25),
+                Date = new DateTime(2020, 06, 24, 05, 28, 27).AddTicks(1413060),
                 Ticker = "BLK",
                 Type = TransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63,
                 Currency = Currency.Usd,
-                FxRate = 1.1317497421,
+                FxRate = 1.14,
             },
             new()
             {
-                Date = new DateTime(2020, 08, 20, 16, 20, 42),
+                Date = new DateTime(2020, 08, 20, 16, 20, 42).AddTicks(2718400),
                 Ticker = "TSLA",
                 Type = TransactionType.Sell,
                 Quantity = 0.0361623,
                 PricePerShare = 1991.30,
-                TotalAmount = 72.01,
+                TotalAmount = 72,
                 Currency = Currency.Usd,
-                FxRate = 1.1859934110,
+                FxRate = 1.19,
             },
             new()
             {
-                Date = new DateTime(2021, 07, 20, 10, 35, 47),
+                Date = new DateTime(2021, 07, 20, 10, 35, 47).AddTicks(3104290),
                 Ticker = "NVDA",
                 Type = TransactionType.StockSplit,
                 Quantity = 1.5,
                 PricePerShare = 0,
                 TotalAmount = 0,
                 Currency = Currency.Usd,
-                FxRate = 1.1795,
+                FxRate = 1.18,
             },
         });
     }

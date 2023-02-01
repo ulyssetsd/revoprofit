@@ -96,10 +96,6 @@ public class TransactionService : ITransactionService
             stock.Quantity = newQuantity;
             stock.AveragePrice *= ratio;
         }
-        else if (transaction.Type == TransactionType.Unknown)
-        {
-            throw new DataException();
-        }
         else
         {
             throw new DataException();

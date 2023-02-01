@@ -7,7 +7,6 @@ public enum Currency
 
 public enum TransactionType
 {
-    Unknown,
     Buy,
     CashTopUp,
     CustodyFee,

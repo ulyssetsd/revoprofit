@@ -14,8 +14,8 @@ public class StockTransactionMapper : IStockTransactionMapper
             Ticker = source.Ticker,
             Type = ToTransactionType(source.Type),
             Quantity = ToDouble(source.Quantity),
-            PricePerShare = CurrencyStringToDouble(source.PricePerShare),
-            TotalAmount = CurrencyStringToDouble(source.TotalAmount),
+            PricePerShare = ToDouble(source.PricePerShare),
+            TotalAmount = ToDouble(source.TotalAmount),
             Currency = Currency.Usd,
             FxRate = ToDouble(source.FxRate),
         };
@@ -23,7 +23,7 @@ public class StockTransactionMapper : IStockTransactionMapper
 
     private static DateTime ToDateTime(string source)
     {
-        if (DateTime.TryParseExact(source, "G", new CultureInfo("en-gb"), DateTimeStyles.None, out var gDate))
+        if (DateTime.TryParseExact(source, "G", CultureInfo.GetCultureInfo("en-GB"), DateTimeStyles.None, out var gDate))
         {
             return gDate;
         }
@@ -36,27 +36,20 @@ public class StockTransactionMapper : IStockTransactionMapper
         throw new ArgumentOutOfRangeException(source);
     }
 
-    private static double CurrencyStringToDouble(string source)
-    {
-        return double.TryParse(source.Replace("$", string.Empty), out var output) ? output : 0;
-    }
-
     private static double ToDouble(string source)
     {
-        return double.TryParse(source, out var output) ? output : 0;
+        if (string.IsNullOrEmpty(source)) return 0;
+        return double.Parse(source, NumberStyles.Currency | NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"));
     }
 
-    private static TransactionType ToTransactionType(string source)
+    private static TransactionType ToTransactionType(string source) => source switch
     {
-        return source switch
-        {
-            "CASH TOP-UP" => TransactionType.CashTopUp,
-            "BUY" or "BUY - MARKET" => TransactionType.Buy,
-            "CUSTODY_FEE" or "CUSTODY FEE" => TransactionType.CustodyFee,
-            "DIVIDEND" => TransactionType.Dividend,
-            "SELL" or "SELL - MARKET" => TransactionType.Sell,
-            "STOCK SPLIT" => TransactionType.StockSplit,
-            _ => throw new ArgumentOutOfRangeException(source)
-        };
-    }
+        "CASH TOP-UP" => TransactionType.CashTopUp,
+        "BUY" or "BUY - MARKET" => TransactionType.Buy,
+        "CUSTODY_FEE" or "CUSTODY FEE" => TransactionType.CustodyFee,
+        "DIVIDEND" => TransactionType.Dividend,
+        "SELL" or "SELL - MARKET" => TransactionType.Sell,
+        "STOCK SPLIT" => TransactionType.StockSplit,
+        _ => throw new ArgumentOutOfRangeException(source)
+    };
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace RevoProfit.Test.Crypto
         [SetUp]
         public void Setup()
         {
-            _cryptoCsvService = new CryptoCsvService();
+            _cryptoCsvService = new CryptoCsvService(new CryptoTransactionMapper());
         }
 
         [Test]
@@ -38,52 +39,54 @@ namespace RevoProfit.Test.Crypto
             var cryptoTransactions = (await _cryptoCsvService.ReadCsv(memoryStream)).ToArray();
 
             // Assert
-            cryptoTransactions.Should().HaveCount(3);
-            cryptoTransactions[0].Should().BeEquivalentTo(new CryptoTransaction
+            cryptoTransactions.Should().BeEquivalentTo(new CryptoTransaction[]
             {
-                Type = CryptoTransactionType.Depot,
-                Date = new DateTime(2018, 06, 12, 12, 16, 32),
-                MontantRecu = 0.01713112,
-                MonnaieOuJetonRecu = Bitcoin,
-                ExchangePlateforme = "Revolut",
-                Description = "Exchanged to SOL",
-                PrixDuJetonDuMontantRecu = 5708.036473,
+                new()
+                {
+                    Type = CryptoTransactionType.Depot,
+                    Date = new DateTime(2018, 06, 12, 12, 16, 32),
+                    MontantRecu = 0.01713112,
+                    MonnaieOuJetonRecu = Bitcoin,
+                    ExchangePlateforme = "Revolut",
+                    Description = "Exchanged to SOL",
+                    PrixDuJetonDuMontantRecu = 5708.036473,
 
-                Label = string.Empty,
-                MonnaieOuJetonEnvoye = string.Empty,
-                MonnaieOuJetonDesFrais = string.Empty,
-            });
-            cryptoTransactions[1].Should().BeEquivalentTo(new CryptoTransaction
-            {
-                Type = CryptoTransactionType.Retrait,
-                Date = new DateTime(2018, 08, 19, 20, 43, 55),
-                MontantEnvoye = 0.008196,
-                MonnaieOuJetonEnvoye = Bitcoin,
-                ExchangePlateforme = "Revolut",
-                Description = "Exchanged to SOL",
-                Label = "Paiement",
-                PrixDuJetonDuMontantEnvoye = 5504.071,
+                    Label = string.Empty,
+                    MonnaieOuJetonEnvoye = string.Empty,
+                    MonnaieOuJetonDesFrais = string.Empty,
+                },
+                new()
+                {
+                    Type = CryptoTransactionType.Retrait,
+                    Date = new DateTime(2018, 08, 19, 20, 43, 55),
+                    MontantEnvoye = 0.008196,
+                    MonnaieOuJetonEnvoye = Bitcoin,
+                    ExchangePlateforme = "Revolut",
+                    Description = "Exchanged to SOL",
+                    Label = "Paiement",
+                    PrixDuJetonDuMontantEnvoye = 5504.071,
 
-                MonnaieOuJetonDesFrais = string.Empty,
-                MonnaieOuJetonRecu = string.Empty,
-            });
-            cryptoTransactions[2].Should().BeEquivalentTo(new CryptoTransaction
-            {
-                Type = CryptoTransactionType.Echange,
-                Date = new DateTime(2021, 04, 05, 23, 24, 05),
-                MontantRecu = 0.00959825,
-                MonnaieOuJetonRecu = Bitcoin,
-                MontantEnvoye = 0.6,
-                MonnaieOuJetonEnvoye = "BCH",
-                Frais = 0.000144,
-                MonnaieOuJetonDesFrais = Bitcoin,
-                ExchangePlateforme = "Revolut",
-                Description = "Exchanged to SOL",
-                PrixDuJetonDuMontantEnvoye = 776.0666485,
-                PrixDuJetonDuMontantRecu = 46613.99539,
-                PrixDuJetonDesFrais = 46613.99539,
+                    MonnaieOuJetonDesFrais = string.Empty,
+                    MonnaieOuJetonRecu = string.Empty,
+                },
+                new()
+                {
+                    Type = CryptoTransactionType.Echange,
+                    Date = new DateTime(2021, 04, 05, 23, 24, 05),
+                    MontantRecu = 0.00959825,
+                    MonnaieOuJetonRecu = Bitcoin,
+                    MontantEnvoye = 0.6,
+                    MonnaieOuJetonEnvoye = "BCH",
+                    Frais = 0.000144,
+                    MonnaieOuJetonDesFrais = Bitcoin,
+                    ExchangePlateforme = "Revolut",
+                    Description = "Exchanged to SOL",
+                    PrixDuJetonDuMontantEnvoye = 776.0666485,
+                    PrixDuJetonDuMontantRecu = 46613.99539,
+                    PrixDuJetonDesFrais = 46613.99539,
 
-                Label = string.Empty,
+                    Label = string.Empty,
+                },
             });
         }
     }

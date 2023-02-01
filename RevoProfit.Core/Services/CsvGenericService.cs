@@ -1,21 +1,17 @@
 ﻿using System.Globalization;
-using AutoMapper;
 using CsvHelper;
 using RevoProfit.Core.Extensions;
-using RevoProfit.Core.Mapping;
 using RevoProfit.Core.Services.Intefaces;
 
 namespace RevoProfit.Core.Services;
 
-public class CsvGenericService<T, TCsv> : ICsvService<T>
+public abstract class CsvGenericService<T, TCsv> : ICsvService<T>
 {
-    private readonly Mapper _mapper;
     private readonly CultureInfo _cultureInfo;
 
-    public CsvGenericService(CultureInfo cultureInfo)
+    protected CsvGenericService(CultureInfo cultureInfo)
     {
         _cultureInfo = cultureInfo;
-        _mapper = MapperFactory.GetMapper();
     }
 
     public async Task<IEnumerable<T>> ReadCsv(string path)
@@ -39,11 +35,13 @@ public class CsvGenericService<T, TCsv> : ICsvService<T>
         try
         {
             var csvLines = await csv.GetRecordsAsync<TCsv>().ToEnumerableAsync();
-            return csvLines.Select(source => _mapper.Map<T>(source)).ToList();
+            return csvLines.Select(MapCsvLineToModel).ToList();
         }
         finally
         {
             Thread.CurrentThread.CurrentCulture = lastCulture;
         }
     }
+
+    public abstract T MapCsvLineToModel(TCsv source);
 }

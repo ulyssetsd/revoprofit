@@ -4,17 +4,17 @@ using System.Data;
 
 namespace RevoProfit.Core.Stock.Services;
 
-public class StockTransactionService : ITransactionService
+public class StockTransactionService : IStockTransactionService
 {
     private List<StockOwned> Stocks { get; } = new();
     private List<SellOrder> SellOrders { get; } = new();
-    private List<Transaction> Dividends { get; } = new();
-    private List<Transaction> CashTopUps { get; } = new();
-    private List<Transaction> CashWithdrawals { get; } = new();
-    private List<Transaction> CustodyFees { get; } = new();
+    private List<StockTransaction> Dividends { get; } = new();
+    private List<StockTransaction> CashTopUps { get; } = new();
+    private List<StockTransaction> CashWithdrawals { get; } = new();
+    private List<StockTransaction> CustodyFees { get; } = new();
     private List<int> Years { get; } = new();
 
-    public IEnumerable<AnnualReport> GetAnnualReports(IEnumerable<Transaction> transactions)
+    public IEnumerable<AnnualReport> GetAnnualReports(IEnumerable<StockTransaction> transactions)
     {
         ClearData();
         ProcessTransactions(transactions);
@@ -32,7 +32,7 @@ public class StockTransactionService : ITransactionService
         Years.Clear();
     }
 
-    public void ProcessTransactions(IEnumerable<Transaction> transactions)
+    public void ProcessTransactions(IEnumerable<StockTransaction> transactions)
     {
         foreach (var transaction in transactions.OrderBy(transaction => transaction.Date))
         {
@@ -40,37 +40,37 @@ public class StockTransactionService : ITransactionService
         }
     }
 
-    private void ProcessTransaction(Transaction transaction)
+    private void ProcessTransaction(StockTransaction stockTransaction)
     {
-        Years.Add(transaction.Date.Year);
-        switch (transaction.Type)
+        Years.Add(stockTransaction.Date.Year);
+        switch (stockTransaction.Type)
         {
             case TransactionType.Buy:
             {
-                var stock = GetStockOrCreate(transaction.Ticker);
-                stock.ValueInserted += transaction.Quantity * transaction.PricePerShare;
-                stock.Quantity += transaction.Quantity;
+                var stock = GetStockOrCreate(stockTransaction.Ticker);
+                stock.ValueInserted += stockTransaction.Quantity * stockTransaction.PricePerShare;
+                stock.Quantity += stockTransaction.Quantity;
                 stock.AveragePrice = stock.ValueInserted / stock.Quantity;
                 break;
             }
             case TransactionType.Sell:
             {
-                var stock = GetStockOrCreate(transaction.Ticker);
-                var equityValue = stock.Quantity * transaction.PricePerShare;
+                var stock = GetStockOrCreate(stockTransaction.Ticker);
+                var equityValue = stock.Quantity * stockTransaction.PricePerShare;
                 var insertedRatio = stock.ValueInserted / equityValue;
                 var gainsRatio = 1 - insertedRatio;
 
                 SellOrders.Add(new SellOrder
                 {
-                    Date = transaction.Date,
-                    Ticker = transaction.Ticker,
-                    Amount = transaction.TotalAmount,
-                    Gains = transaction.TotalAmount * gainsRatio,
-                    FxRate = transaction.FxRate,
+                    Date = stockTransaction.Date,
+                    Ticker = stockTransaction.Ticker,
+                    Amount = stockTransaction.TotalAmount,
+                    Gains = stockTransaction.TotalAmount * gainsRatio,
+                    FxRate = stockTransaction.FxRate,
                 });
 
-                stock.Quantity -= transaction.Quantity;
-                stock.ValueInserted -= transaction.TotalAmount * insertedRatio;
+                stock.Quantity -= stockTransaction.Quantity;
+                stock.ValueInserted -= stockTransaction.TotalAmount * insertedRatio;
 
                 if (Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0)
                 {
@@ -80,26 +80,26 @@ public class StockTransactionService : ITransactionService
                 break;
             }
             case TransactionType.CashTopUp:
-                CashTopUps.Add(transaction);
+                CashTopUps.Add(stockTransaction);
                 break;
             case TransactionType.CashWithdrawal:
-                CashWithdrawals.Add(transaction);
+                CashWithdrawals.Add(stockTransaction);
                 break;
             case TransactionType.CustodyFee:
-                CustodyFees.Add(transaction);
+                CustodyFees.Add(stockTransaction);
                 break;
             case TransactionType.Dividend:
             {
-                Dividends.Add(transaction);
-                var stock = GetStockOrCreate(transaction.Ticker);
-                stock.TotalDividend += transaction.TotalAmount;
+                Dividends.Add(stockTransaction);
+                var stock = GetStockOrCreate(stockTransaction.Ticker);
+                stock.TotalDividend += stockTransaction.TotalAmount;
                 break;
             }
             case TransactionType.StockSplit:
             {
-                var stock = GetStockOrCreate(transaction.Ticker);
+                var stock = GetStockOrCreate(stockTransaction.Ticker);
                 var previousQuantity = stock.Quantity;
-                var newQuantity = stock.Quantity + transaction.Quantity;
+                var newQuantity = stock.Quantity + stockTransaction.Quantity;
                 var ratio = previousQuantity / newQuantity;
                 stock.Quantity = newQuantity;
                 stock.AveragePrice *= ratio;

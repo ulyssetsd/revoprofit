@@ -4,5 +4,5 @@ namespace RevoProfit.Core.Stock.Services.Interfaces;
 
 public interface IStockTransactionMapper
 {
-    Transaction Map(TransactionCsvLine source);
+    StockTransaction Map(TransactionCsvLine source);
 }

@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public class Transaction
+public class StockTransaction
 {
     public DateTime Date { get; set; }
     public string Ticker { get; set; }

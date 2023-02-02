@@ -15,7 +15,7 @@ public class StockCsvService : IStockCsvService
         _stockTransactionMapper = stockTransactionMapper;
     }
 
-    public async Task<IEnumerable<Transaction>> ReadCsv(Stream stream)
+    public async Task<IEnumerable<StockTransaction>> ReadCsv(Stream stream)
     {
         using var streamReader = new StreamReader(stream);
         using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);

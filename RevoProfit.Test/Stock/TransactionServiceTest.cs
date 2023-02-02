@@ -228,4 +228,50 @@ public class TransactionServiceTest
             DividendsInEuro = 100,
         }, options => options.Excluding(o => o.SellOrders));
     }
+
+    [Test]
+    public void Test_cash_withdrawal_transaction_behaviour()
+    {
+        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        {
+            new()
+            {
+                Date = DateTime.Today.AddDays(-1),
+                Ticker = string.Empty,
+                Type = TransactionType.CashTopUp,
+                Quantity = 0,
+                PricePerShare = 0,
+                TotalAmount = 200,
+                Currency = Currency.Usd,
+                FxRate = 0.5
+            },
+            new()
+            {
+                Date = DateTime.Today.AddDays(0),
+                Ticker = string.Empty,
+                Type = TransactionType.CashWithdrawal,
+                Quantity = 0,
+                PricePerShare = 0,
+                TotalAmount = 200,
+                Currency = Currency.Usd,
+                FxRate = 2
+            },
+        });
+
+        _stockTransactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
+        {
+            Year = DateTime.Today.Year,
+            Gains = 0,
+            Dividends = 0,
+            CashTopUp = 200,
+            CashWithdrawal = 200,
+            CustodyFee = 0,
+            GainsInEuro = 0,
+            DividendsInEuro = 0,
+            CashTopUpInEuro = 400,
+            CashWithdrawalInEuro = 100,
+            CustodyFeeInEuro = 0,
+            SellOrders = new List<SellOrder>()
+        });
+    }
 }

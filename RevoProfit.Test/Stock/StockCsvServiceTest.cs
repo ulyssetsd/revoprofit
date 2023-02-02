@@ -117,7 +117,9 @@ public class StockCsvServiceTest
             .AppendLine("2020-05-31T23:30:04.726579Z,,CUSTODY FEE,,,-$0.01,USD,1.12")
             .AppendLine("2020-06-24T05:28:27.141306Z,BLK,DIVIDEND,,,$0.63,USD,1.14")
             .AppendLine("2020-08-20T16:20:42.271840Z,TSLA,SELL - MARKET,0.0361623,\"$1,991.30\",$72,USD,1.19")
+            .AppendLine("2021-01-27T16:14:18.204877Z,GME,SELL - STOP,1,$347.98,$346.76,USD,1.21")
             .AppendLine("2021-07-20T10:35:47.310429Z,NVDA,STOCK SPLIT,1.5,,$0,USD,1.18")
+            .AppendLine("2022-11-21T06:46:50.732022Z,,CASH WITHDRAWAL,,,-$800,USD,1.03")
             .ToString();
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
         var transactions = await _stockCsvService.ReadCsv(memoryStream);
@@ -180,6 +182,17 @@ public class StockCsvServiceTest
             },
             new()
             {
+                Date = new DateTime(2021, 01, 27, 16, 14, 18).AddTicks(2048770),
+                Ticker = "GME",
+                Type = TransactionType.Sell,
+                Quantity = 1,
+                PricePerShare = 347.98,
+                TotalAmount = 346.76,
+                Currency = Currency.Usd,
+                FxRate = 1.21,
+            },
+            new()
+            {
                 Date = new DateTime(2021, 07, 20, 10, 35, 47).AddTicks(3104290),
                 Ticker = "NVDA",
                 Type = TransactionType.StockSplit,
@@ -188,6 +201,17 @@ public class StockCsvServiceTest
                 TotalAmount = 0,
                 Currency = Currency.Usd,
                 FxRate = 1.18,
+            },
+            new()
+            {
+                Date = new DateTime(2022, 11, 21, 06, 46, 50).AddTicks(7320220),
+                Ticker = string.Empty,
+                Type = TransactionType.CashWithdrawal,
+                Quantity = 0,
+                PricePerShare = 0,
+                TotalAmount = -800,
+                Currency = Currency.Usd,
+                FxRate = 1.03,
             },
         });
     }

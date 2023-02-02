@@ -133,6 +133,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cash Withdrawal.
+        /// </summary>
+        public static string CashWithdrawal {
+            get {
+                return ResourceManager.GetString("CashWithdrawal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your Waltio Account Statement export file (.csv).
         /// </summary>
         public static string CryptoFile {

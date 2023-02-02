@@ -13,4 +13,5 @@ public enum TransactionType
     Dividend,
     Sell,
     StockSplit,
+    CashWithdrawal,
 }

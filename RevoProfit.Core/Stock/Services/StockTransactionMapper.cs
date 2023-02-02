@@ -42,14 +42,15 @@ public class StockTransactionMapper : IStockTransactionMapper
         return double.Parse(source, NumberStyles.Currency | NumberStyles.Number, CultureInfo.GetCultureInfo("en-US"));
     }
 
-    private static TransactionType ToTransactionType(string source) => source switch
+    private static TransactionType ToTransactionType(string source) => source.Split(" - ").First() switch
     {
         "CASH TOP-UP" => TransactionType.CashTopUp,
-        "BUY" or "BUY - MARKET" => TransactionType.Buy,
+        "BUY" => TransactionType.Buy, // "BUY - MARKET" and "BUY - STOP"
         "CUSTODY_FEE" or "CUSTODY FEE" => TransactionType.CustodyFee,
         "DIVIDEND" => TransactionType.Dividend,
-        "SELL" or "SELL - MARKET" => TransactionType.Sell,
+        "SELL" => TransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
         "STOCK SPLIT" => TransactionType.StockSplit,
+        "CASH WITHDRAWAL" => TransactionType.CashWithdrawal,
         _ => throw new ArgumentOutOfRangeException(source)
     };
 }

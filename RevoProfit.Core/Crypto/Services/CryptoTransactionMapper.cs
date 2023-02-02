@@ -11,7 +11,7 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
         return new CryptoTransaction
         {
             Type = ToCryptoTransactionType(source.Type),
-            Date = DateTime.ParseExact(source.Date, "G", new CultureInfo("fr"), DateTimeStyles.None),
+            Date = DateTime.ParseExact(source.Date, "G", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None),
             MontantRecu = ToDouble(source.MontantRecu),
             MonnaieOuJetonRecu = source.MonnaieOuJetonRecu,
             MontantEnvoye = ToDouble(source.MontantEnvoye),
@@ -30,7 +30,7 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
     private static double ToDouble(string? source)
     {
         if (string.IsNullOrEmpty(source)) return 0;
-        return double.Parse(source, CultureInfo.CreateSpecificCulture("fr-FR"));
+        return double.Parse(source, CultureInfo.GetCultureInfo("fr-FR"));
     }
 
     private static CryptoTransactionType ToCryptoTransactionType(string source) => source switch

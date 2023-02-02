@@ -71,7 +71,7 @@
 }
 
 @code {
-    readonly CultureInfo _fr = new("fr-FR");
+    readonly CultureInfo _fr = CultureInfo.GetCultureInfo("fr-FR");
 
     protected override void OnInitialized()
     {

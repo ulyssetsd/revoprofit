@@ -81,8 +81,8 @@
 }
 
 @code {
-    readonly CultureInfo _us = new ("en-US");
-    readonly CultureInfo _fr = new ("fr-FR");
+    readonly CultureInfo _us = CultureInfo.GetCultureInfo("en-US");
+    readonly CultureInfo _fr = CultureInfo.GetCultureInfo("fr-FR");
     const double Dummy = 999.99d;
 
     protected override void OnInitialized()

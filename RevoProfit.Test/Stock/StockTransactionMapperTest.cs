@@ -79,13 +79,16 @@ public class StockTransactionMapperTest
 
     [TestCase("BUY", TransactionType.Buy)]
     [TestCase("BUY - MARKET", TransactionType.Buy)]
+    [TestCase("BUY - STOP", TransactionType.Buy)]
     [TestCase("CASH TOP-UP", TransactionType.CashTopUp)]
     [TestCase("CUSTODY_FEE" , TransactionType.CustodyFee)]
     [TestCase("CUSTODY FEE", TransactionType.CustodyFee)]
     [TestCase("DIVIDEND", TransactionType.Dividend)]
     [TestCase("SELL", TransactionType.Sell)]
     [TestCase("SELL - MARKET", TransactionType.Sell)]
+    [TestCase("SELL - STOP", TransactionType.Sell)]
     [TestCase("STOCK SPLIT", TransactionType.StockSplit)]
+    [TestCase("CASH WITHDRAWAL", TransactionType.CashWithdrawal)]
     public void TestEnumMapping(string type, TransactionType expectedType)
     {
         var csvLine = new TransactionCsvLine

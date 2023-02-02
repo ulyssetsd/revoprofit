@@ -19,7 +19,19 @@ public class CryptoMapperTest
     private static CryptoTransactionCsvLine GetDummyCryptoTransactionCsvLine(string type) => new()
     {
         Date = "12/06/2018 12:16:32",
-        Type = type
+        MontantRecu = string.Empty,
+        MonnaieOuJetonRecu = string.Empty,
+        MontantEnvoye = string.Empty,
+        MonnaieOuJetonEnvoye = string.Empty,
+        Frais = string.Empty,
+        MonnaieOuJetonDesFrais = string.Empty,
+        ExchangePlateforme = string.Empty,
+        Description = string.Empty,
+        Label = string.Empty,
+        PrixDuJetonDuMontantEnvoye = string.Empty,
+        PrixDuJetonDuMontantRecu = string.Empty,
+        PrixDuJetonDesFrais = string.Empty,
+        Type = type,
     };
 
     [TestCase("Dépôt", CryptoTransactionType.Depot)]

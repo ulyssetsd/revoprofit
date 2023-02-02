@@ -27,9 +27,9 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
         };
     }
 
-    private static double ToDouble(string? source)
+    private static double ToDouble(string source)
     {
-        if (string.IsNullOrEmpty(source)) return 0;
+        if (source == string.Empty) return 0;
         return double.Parse(source, CultureInfo.GetCultureInfo("fr-FR"));
     }
 

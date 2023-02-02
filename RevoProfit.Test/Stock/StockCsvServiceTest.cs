@@ -36,7 +36,7 @@ public class StockCsvServiceTest
 
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
         var transactions = await _stockCsvService.ReadCsv(memoryStream);
-        transactions.ToArray().Should().BeEquivalentTo(new Transaction[]
+        transactions.ToArray().Should().BeEquivalentTo(new StockTransaction[]
         {
             new()
             {
@@ -123,7 +123,7 @@ public class StockCsvServiceTest
             .ToString();
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
         var transactions = await _stockCsvService.ReadCsv(memoryStream);
-        transactions.ToArray().Should().BeEquivalentTo(new Transaction[]
+        transactions.ToArray().Should().BeEquivalentTo(new StockTransaction[]
         {
             new()
             {

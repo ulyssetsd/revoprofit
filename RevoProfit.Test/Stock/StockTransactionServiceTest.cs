@@ -8,21 +8,21 @@ using RevoProfit.Core.Stock.Services;
 
 namespace RevoProfit.Test.Stock;
 
-public class TransactionServiceTest
+public class StockTransactionServiceTest
 {
-    private StockTransactionService _stockTransactionService = null!;
+    private StockStockTransactionService _stockStockTransactionService = null!;
     private int _dateIncrement;
 
     [SetUp]
     public void Setup()
     {
-        _stockTransactionService = new StockTransactionService();
+        _stockStockTransactionService = new StockStockTransactionService();
         _dateIncrement = 0;
     }
 
-    private Transaction Tesla(TransactionType transactionType, double price, double quantity = 1, int yearIncrement = 0, double fxRate = 1)
+    private StockTransaction Tesla(TransactionType transactionType, double price, double quantity = 1, int yearIncrement = 0, double fxRate = 1)
     {
-        return new Transaction
+        return new StockTransaction
         {
             Date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement),
             Ticker = "TSLA",
@@ -38,14 +38,14 @@ public class TransactionServiceTest
     [Test]
     public void TestGainsCalculation()
     {
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Buy, 200, yearIncrement: -1),
             Tesla(TransactionType.Sell, 1000, yearIncrement: -1),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().Gains.Should().Be(800);
-        _stockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First().Gains.Should().Be(800);
+        _stockStockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -53,14 +53,14 @@ public class TransactionServiceTest
             AveragePrice = 0,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Buy, 10),
             Tesla(TransactionType.Buy, 30),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().Be(0);
-        _stockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().Be(0);
+        _stockStockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 2,
@@ -68,13 +68,13 @@ public class TransactionServiceTest
             AveragePrice = 20,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Sell, 30),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(10, 0.01);
-        _stockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(10, 0.01);
+        _stockStockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -82,14 +82,14 @@ public class TransactionServiceTest
             AveragePrice = 20,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Buy, 10),
             Tesla(TransactionType.Sell, 30),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(25, 0.01);
-        _stockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(25, 0.01);
+        _stockStockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -97,13 +97,13 @@ public class TransactionServiceTest
             AveragePrice = 15,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Sell, 10),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(20, 0.01);
-        _stockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First(report => report.Year == DateTime.Today.Year).Gains.Should().BeApproximately(20, 0.01);
+        _stockStockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -115,12 +115,12 @@ public class TransactionServiceTest
     [Test]
     public void TestStockSplitCalculation()
     {
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Buy, 10)
         });
 
-        _stockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -128,7 +128,7 @@ public class TransactionServiceTest
             AveragePrice = 10,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             new()
             {
@@ -141,7 +141,7 @@ public class TransactionServiceTest
             },
         });
 
-        _stockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetCurrentStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 10,
@@ -149,13 +149,13 @@ public class TransactionServiceTest
             AveragePrice = 1,
         });
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Sell, 1, 10),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().Gains.Should().Be(0);
-        _stockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
+        _stockStockTransactionService.GetAnnualGainsReports().First().Gains.Should().Be(0);
+        _stockStockTransactionService.GetOldStocks().First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -167,29 +167,29 @@ public class TransactionServiceTest
     [Test]
     public void TestFxRateGainsCalculation()
     {
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Buy, 10, quantity: 3),
             Tesla(TransactionType.Sell, 20, fxRate: 2),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(5);
+        _stockStockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(5);
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Sell, 20, fxRate: 1),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(15);
+        _stockStockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(15);
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             Tesla(TransactionType.Sell, 20, fxRate: 0.5),
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(35);
+        _stockStockTransactionService.GetAnnualGainsReports().First().GainsInEuro.Should().Be(35);
 
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             new()
             {
@@ -215,7 +215,7 @@ public class TransactionServiceTest
             },
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
+        _stockStockTransactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
         {
             Year = DateTime.Today.Year,
             Gains = 30,
@@ -232,7 +232,7 @@ public class TransactionServiceTest
     [Test]
     public void Test_cash_withdrawal_transaction_behaviour()
     {
-        _stockTransactionService.ProcessTransactions(new List<Transaction>
+        _stockStockTransactionService.ProcessTransactions(new List<StockTransaction>
         {
             new()
             {
@@ -258,7 +258,7 @@ public class TransactionServiceTest
             },
         });
 
-        _stockTransactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
+        _stockStockTransactionService.GetAnnualGainsReports().First().Should().BeEquivalentTo(new AnnualReport
         {
             Year = DateTime.Today.Year,
             Gains = 0,

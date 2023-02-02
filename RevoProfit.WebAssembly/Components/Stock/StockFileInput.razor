@@ -1,5 +1,5 @@
 ﻿@inject IStockCsvService CsvService
-@inject ITransactionService TransactionService
+@inject IStockTransactionService StockTransactionService
 @inject ILogger<StockFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
@@ -31,7 +31,7 @@
             if (CsvFileStream == null) return;
             AppState.IsCalculatingStock = true;
             var transactions = await CsvService.ReadCsv(CsvFileStream);
-            var annualReports = TransactionService.GetAnnualReports(transactions);
+            var annualReports = StockTransactionService.GetAnnualReports(transactions);
             Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
             AppState.AnnualReports = annualReports;
             AppState.IsCalculatingStock = false;

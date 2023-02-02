@@ -34,7 +34,7 @@ public class StockTransactionMapperTest
 
         var transaction = _mapper.Map(csvLine);
 
-        transaction.Should().BeEquivalentTo(new Transaction
+        transaction.Should().BeEquivalentTo(new StockTransaction
         {
             Date = new DateTime(2020, 03, 10, 17, 48, 01),
             Ticker = "BLK",
@@ -64,7 +64,7 @@ public class StockTransactionMapperTest
 
         var transaction = _mapper.Map(csvLine);
 
-        transaction.Should().BeEquivalentTo(new Transaction
+        transaction.Should().BeEquivalentTo(new StockTransaction
         {
             Type = TransactionType.CashTopUp,
             Quantity = 0,

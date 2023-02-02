@@ -6,9 +6,9 @@ namespace RevoProfit.Core.Stock.Services;
 
 public class StockTransactionMapper : IStockTransactionMapper
 {
-    public Transaction Map(TransactionCsvLine source)
+    public StockTransaction Map(TransactionCsvLine source)
     {
-        return new Transaction
+        return new StockTransaction
         {
             Date = ToDateTime(source.Date),
             Ticker = source.Ticker,

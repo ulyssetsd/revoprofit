@@ -18,9 +18,6 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
             MonnaieOuJetonEnvoye = source.MonnaieOuJetonEnvoye,
             Frais = ToDouble(source.Frais),
             MonnaieOuJetonDesFrais = source.MonnaieOuJetonDesFrais,
-            ExchangePlateforme = source.ExchangePlateforme,
-            Description = source.Description,
-            Label = source.Label,
             PrixDuJetonDuMontantEnvoye = ToDouble(source.PrixDuJetonDuMontantEnvoye),
             PrixDuJetonDuMontantRecu = ToDouble(source.PrixDuJetonDuMontantRecu),
             PrixDuJetonDesFrais = ToDouble(source.PrixDuJetonDesFrais)

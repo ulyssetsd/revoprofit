@@ -1,10 +1,12 @@
-﻿using RevoProfit.Core.Crypto.Models;
+﻿using CsvHelper;
+using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
-using RevoProfit.Core.Services;
+using System.Globalization;
+using RevoProfit.Core.Extensions;
 
 namespace RevoProfit.Core.Crypto.Services;
 
-public class CryptoCsvService : CsvGenericService<CryptoTransaction, CryptoTransactionCsvLine>, ICryptoCsvService
+public class CryptoCsvService : ICryptoCsvService
 {
     private readonly ICryptoTransactionMapper _cryptoTransactionMapper;
 
@@ -13,8 +15,12 @@ public class CryptoCsvService : CsvGenericService<CryptoTransaction, CryptoTrans
         _cryptoTransactionMapper = cryptoTransactionMapper;
     }
 
-    public override CryptoTransaction MapCsvLineToModel(CryptoTransactionCsvLine source)
+    public async Task<IEnumerable<CryptoTransaction>> ReadCsv(Stream stream)
     {
-        return _cryptoTransactionMapper.Map(source);
+        using var streamReader = new StreamReader(stream);
+        using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        var csvLines = await csv.GetRecordsAsync<CryptoTransactionCsvLine>().ToEnumerableAsync();
+        return csvLines.Select(_cryptoTransactionMapper.Map);
     }
 }

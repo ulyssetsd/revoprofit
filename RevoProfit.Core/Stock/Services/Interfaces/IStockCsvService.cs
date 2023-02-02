@@ -1,6 +1,8 @@
-﻿using RevoProfit.Core.Services.Intefaces;
-using RevoProfit.Core.Stock.Models;
+﻿using RevoProfit.Core.Stock.Models;
 
 namespace RevoProfit.Core.Stock.Services.Interfaces;
 
-public interface IStockCsvService : ICsvService<Transaction> { }
+public interface IStockCsvService
+{
+    Task<IEnumerable<Transaction>> ReadCsv(Stream stream);
+}

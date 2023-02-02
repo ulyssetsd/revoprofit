@@ -35,7 +35,7 @@ public class CryptoServiceTest
 
     private CryptoTransaction CryptoTransaction(CryptoTransactionType cryptoTransactionType, double prix, double quantite = 1, int yearIncrement = 0, double prixDestination = 1, string source = bitcoin, string destination = ethereum)
     {
-        DateTime date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement);
+        var date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement);
 
         return cryptoTransactionType switch
         {

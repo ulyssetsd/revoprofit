@@ -2,7 +2,7 @@
 
 namespace RevoProfit.Core.Stock.Services.Interfaces;
 
-public interface IStockCsvService
+public interface IStockTransactionMapper
 {
-    Task<IEnumerable<Transaction>> ReadCsv(Stream stream);
+    Transaction Map(TransactionCsvLine source);
 }

@@ -216,4 +216,7 @@
   <data name="CryptoLefts" xml:space="preserve">
     <value>🪙 Crypto Lefts</value>
   </data>
+  <data name="CashWithdrawal" xml:space="preserve">
+    <value>Cash Withdrawal</value>
+  </data>
 </root>

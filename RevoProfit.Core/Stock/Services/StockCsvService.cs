@@ -1,11 +1,26 @@
-﻿using RevoProfit.Core.Services;
+﻿using CsvHelper;
 using RevoProfit.Core.Stock.Models;
 using RevoProfit.Core.Stock.Services.Interfaces;
 using System.Globalization;
+using RevoProfit.Core.Extensions;
 
 namespace RevoProfit.Core.Stock.Services;
 
-public class StockCsvService : CsvGenericService<Transaction, TransactionCsvLine>, IStockCsvService
+public class StockCsvService : IStockCsvService
 {
-    public StockCsvService() : base(CultureInfo.GetCultureInfo("en-GB")) { }
+    private readonly IStockTransactionMapper _stockTransactionMapper;
+
+    public StockCsvService(IStockTransactionMapper stockTransactionMapper)
+    {
+        _stockTransactionMapper = stockTransactionMapper;
+    }
+
+    public async Task<IEnumerable<Transaction>> ReadCsv(Stream stream)
+    {
+        using var streamReader = new StreamReader(stream);
+        using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        var csvLines = await csv.GetRecordsAsync<TransactionCsvLine>().ToEnumerableAsync();
+        return csvLines.Select(_stockTransactionMapper.Map);
+    }
 }

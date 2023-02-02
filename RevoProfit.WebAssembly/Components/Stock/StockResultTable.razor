@@ -11,6 +11,7 @@
                 <th scope="col">@Loc[nameof(Localization.Year)]</th>
                 <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 <th scope="col">@Loc[nameof(Localization.CashTopUp)]</th>
+                <th scope="col">@Loc[nameof(Localization.CashWithdrawal)]</th>
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
@@ -20,6 +21,7 @@
                     <td>@annualReport.Year</td>
                     <td>@annualReport.Gains.ToString("C", _us)</td>
                     <td>@annualReport.CashTopUp.ToString("C", _us)</td>
+                    <td>@annualReport.CashWithdrawal.ToString("C", _us)</td>
                     <td>@annualReport.Dividends.ToString("C", _us)</td>
                     <td>@annualReport.CustodyFee.ToString("C", _us)</td>
                 </tr>
@@ -34,6 +36,7 @@
                 <th scope="col">@Loc[nameof(Localization.Year)]</th>
                 <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 <th scope="col">@Loc[nameof(Localization.CashTopUp)]</th>
+                <th scope="col">@Loc[nameof(Localization.CashWithdrawal)]</th>
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
@@ -43,6 +46,7 @@
                     <td>@annualReport.Year</td>
                     <td>@annualReport.GainsInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.CashTopUpInEuro.ToString("C", _fr)</td>
+                    <td>@annualReport.CashWithdrawalInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.DividendsInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.CustodyFeeInEuro.ToString("C", _fr)</td>
                 </tr>
@@ -81,8 +85,8 @@
 }
 
 @code {
-    readonly CultureInfo _us = new ("en-US");
-    readonly CultureInfo _fr = new ("fr-FR");
+    readonly CultureInfo _us = CultureInfo.GetCultureInfo("en-US");
+    readonly CultureInfo _fr = CultureInfo.GetCultureInfo("fr-FR");
     const double Dummy = 999.99d;
 
     protected override void OnInitialized()

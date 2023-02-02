@@ -7,11 +7,11 @@ public enum Currency
 
 public enum TransactionType
 {
-    Unknown,
     Buy,
     CashTopUp,
     CustodyFee,
     Dividend,
     Sell,
     StockSplit,
+    CashWithdrawal,
 }

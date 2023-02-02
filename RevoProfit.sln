@@ -15,6 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DF89
 		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".csv", ".csv", "{85E69B12-DF0D-4623-AEDE-FA313802F28D}"
+	ProjectSection(SolutionItems) = preProject
+		.csv\stock_input_2021.csv = .csv\stock_input_2021.csv
+		.csv\crypto_input_waltio_2021.csv = .csv\crypto_input_waltio_2021.csv
+		.csv\stock_input_2022.csv = .csv\stock_input_2022.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -4,7 +4,7 @@ using System.Data;
 
 namespace RevoProfit.Core.Stock.Services;
 
-public class StockStockTransactionService : IStockTransactionService
+public class StockTransactionService : IStockTransactionService
 {
     private List<StockOwned> Stocks { get; } = new();
     private List<SellOrder> SellOrders { get; } = new();

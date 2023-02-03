@@ -18,9 +18,6 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
             MonnaieOuJetonEnvoye = source.MonnaieOuJetonEnvoye,
             Frais = ToDouble(source.Frais),
             MonnaieOuJetonDesFrais = source.MonnaieOuJetonDesFrais,
-            ExchangePlateforme = source.ExchangePlateforme,
-            Description = source.Description,
-            Label = source.Label,
             PrixDuJetonDuMontantEnvoye = ToDouble(source.PrixDuJetonDuMontantEnvoye),
             PrixDuJetonDuMontantRecu = ToDouble(source.PrixDuJetonDuMontantRecu),
             PrixDuJetonDesFrais = ToDouble(source.PrixDuJetonDesFrais)
@@ -30,7 +27,9 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
     private static double ToDouble(string source)
     {
         if (source == string.Empty) return 0;
-        return double.Parse(source, CultureInfo.GetCultureInfo("fr-FR"));
+        if (double.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("fr-FR"), out var frResult)) return frResult;
+        if (double.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out var enResult)) return enResult;
+        throw new InvalidOperationException();
     }
 
     private static CryptoTransactionType ToCryptoTransactionType(string source) => source switch

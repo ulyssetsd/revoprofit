@@ -15,9 +15,16 @@
         <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
     }
 </button>
+@if (ErrorMessage != null)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @ErrorMessage
+    </div>
+}
 
 @code {
     public Stream? CsvFileStream { get; set; }
+    public string? ErrorMessage { get; set; }
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {
@@ -26,21 +33,27 @@
 
     private async Task SeeResults()
     {
+        if (CsvFileStream == null) return;
+        AppState.IsCalculatingCrypto = true;
+        ErrorMessage = null;
+
         try
         {
-            if (CsvFileStream == null) return;
-            AppState.IsCalculatingCrypto = true;
             var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
             var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
             AppState.CryptoAssets = cryptoAssets;
             AppState.CryptoRetraits = cryptoRetraits;
-            AppState.IsCalculatingCrypto = false;
-            CsvFileStream = null;
         }
         catch (Exception exception)
         {
-            Logger.LogError(exception, "something went wrong while reading the stream");
+            ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
+            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+        }
+        finally
+        {
+            AppState.IsCalculatingCrypto = false;
+            CsvFileStream = null;
         }
     }
 }

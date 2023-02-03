@@ -219,4 +219,7 @@
   <data name="CashWithdrawal" xml:space="preserve">
     <value>Retrait d'espèces</value>
   </data>
+  <data name="GeneralErrorMessage" xml:space="preserve">
+    <value>Quelque chose s'est mal passé lors de la lecture du csv</value>
+  </data>
 </root>

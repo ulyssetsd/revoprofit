@@ -15,9 +15,16 @@
         <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
     }
 </button>
+@if (ErrorMessage != null)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @ErrorMessage
+    </div>
+}
 
 @code {
     public Stream? CsvFileStream { get; set; }
+    public string? ErrorMessage { get; set; }
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {
@@ -26,20 +33,26 @@
 
     private async Task SeeResults()
     {
+        if (CsvFileStream == null) return;
+        AppState.IsCalculatingStock = true;
+        ErrorMessage = null;
+
         try
         {
-            if (CsvFileStream == null) return;
-            AppState.IsCalculatingStock = true;
             var transactions = await CsvService.ReadCsv(CsvFileStream);
             var annualReports = StockTransactionService.GetAnnualReports(transactions);
             Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
             AppState.AnnualReports = annualReports;
-            AppState.IsCalculatingStock = false;
-            CsvFileStream = null;
         }
         catch (Exception exception)
         {
-            Logger.LogError(exception, "something went wrong while reading the stream");
+            ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
+            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+        }
+        finally
+        {
+            AppState.IsCalculatingStock = false;
+            CsvFileStream = null;
         }
     }
 }

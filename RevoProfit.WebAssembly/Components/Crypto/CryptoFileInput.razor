@@ -12,7 +12,7 @@
     @Loc[nameof(Localization.SeeResults)]
     @if (AppState.IsCalculatingCrypto)
     {
-        <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
     }
 </button>
 @if (ErrorMessage != null)
@@ -28,7 +28,16 @@
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {
-        CsvFileStream = e.File.OpenReadStream();
+        ErrorMessage = null;
+        try
+        {
+            CsvFileStream = e.File.OpenReadStream(2_048_000);
+        }
+        catch (Exception exception)
+        {
+            ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
+            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+        }
     }
 
     private async Task SeeResults()

@@ -149,6 +149,6 @@ public class CryptoService : ICryptoService
             }
         }
 
-        return (cryptos, retraits);
+        return (cryptos, retraits.OrderBy(retrait => retrait.Date));
     }
 }

@@ -2,7 +2,6 @@
 
 public record RevolutTransaction
 {
-    public RevolutTransactionType Type { get; init; } // todo delete this
     public DateTime CompletedDate { get; init; }
     public string Description { get; init; }
     public decimal Amount { get; init; }
@@ -11,5 +10,4 @@ public record RevolutTransaction
     public decimal FiatAmountIncludingFees { get; init; }
     public decimal Fee { get; init; }
     public string BaseCurrency { get; init; }
-    public decimal? Balance { get; init; }
 }

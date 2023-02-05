@@ -10,7 +10,6 @@ public class RevolutTransactionMapper : IRevolutTransactionMapper
     {
         return new RevolutTransaction
         {
-            Type = ToRevolutTransactionType(source.Type),
             Description = source.Description,
             CompletedDate = ToDateTime(source.CompletedDate),
             Amount = ToDecimal(source.Amount),
@@ -19,7 +18,6 @@ public class RevolutTransactionMapper : IRevolutTransactionMapper
             FiatAmountIncludingFees = ToDecimal(source.FiatAmountIncludingFees),
             Fee = ToDecimal(source.Fee),
             BaseCurrency = source.BaseCurrency,
-            Balance = ToDoubleNullable(source.Balance),
         };
     }
 
@@ -28,26 +26,9 @@ public class RevolutTransactionMapper : IRevolutTransactionMapper
         return DateTime.ParseExact(source, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None);
     }
 
-    private static decimal? ToDoubleNullable(string source)
-    {
-        if (string.IsNullOrEmpty(source)) return null;
-        return ToDecimal(source);
-    }
-
     private static decimal ToDecimal(string source)
     {
         if (decimal.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out var result)) return result;
         throw new InvalidOperationException(source);
     }
-
-    private static RevolutTransactionType ToRevolutTransactionType(string source) => source switch
-    {
-        "EXCHANGE" => RevolutTransactionType.Exchange,
-        "TRANSFER" => RevolutTransactionType.Transfer,
-        "CASHBACK" => RevolutTransactionType.CashBack,
-        "CARD_PAYMENT" => RevolutTransactionType.CardPayment,
-        "CARD_REFUND" => RevolutTransactionType.CardRefund,
-        "REWARD" => RevolutTransactionType.Reward,
-        _ => throw new ArgumentOutOfRangeException(source),
-    };
 }

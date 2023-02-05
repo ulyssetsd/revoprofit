@@ -30,7 +30,6 @@ public class RevolutServiceTest
         FiatAmountIncludingFees = 11,
         Fee = 1,
         BaseCurrency = "EUR",
-        Balance = null
     };
 
     [Test]
@@ -66,7 +65,6 @@ public class RevolutServiceTest
                 FiatAmountIncludingFees = 110,
                 Fee = 10,
                 BaseCurrency = "EUR",
-                Balance = null
             }
         };
 
@@ -110,7 +108,6 @@ public class RevolutServiceTest
                 FiatAmountIncludingFees = -100,
                 Fee = 10,
                 BaseCurrency = "EUR",
-                Balance = null
             }
         };
 

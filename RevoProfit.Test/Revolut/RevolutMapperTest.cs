@@ -39,7 +39,6 @@ public class RevolutMapperTest
         var csvLine = _revolutTransactionMapper.Map(GetDefault());
         csvLine.Should().BeEquivalentTo(new RevolutTransaction
         {
-            Type = RevolutTransactionType.CashBack,
             CompletedDate = new DateTime(2021, 12, 20, 12, 59, 23),
             Description = "description",
             Amount = 0,
@@ -48,20 +47,7 @@ public class RevolutMapperTest
             FiatAmountIncludingFees = 0,
             Fee = 0,
             BaseCurrency = string.Empty,
-            Balance = 0,
         });
-    }
-
-    [TestCase("CASHBACK", RevolutTransactionType.CashBack)]
-    [TestCase("EXCHANGE", RevolutTransactionType.Exchange)]
-    [TestCase("TRANSFER", RevolutTransactionType.Transfer)]
-    [TestCase("CARD_PAYMENT", RevolutTransactionType.CardPayment)]
-    [TestCase("CARD_REFUND", RevolutTransactionType.CardRefund)]
-    [TestCase("REWARD", RevolutTransactionType.Reward)]
-    public void Test_revolut_transaction_type_mapping(string type, RevolutTransactionType expectedType)
-    {
-        var transaction = _revolutTransactionMapper.Map(GetDefault() with { Type = type });
-        transaction.Type.Should().Be(expectedType);
     }
 
     [Test]

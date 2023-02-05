@@ -42,7 +42,6 @@ internal class RevolutCsvServiceTest
         {
             new()
             {
-                Type = RevolutTransactionType.CashBack,
                 CompletedDate = new DateTime(2022, 08, 25, 16, 28, 23),
                 Description = "Metal Cashback",
                 Amount = new decimal(0.00000014),
@@ -51,11 +50,9 @@ internal class RevolutCsvServiceTest
                 FiatAmountIncludingFees = new decimal(0.01),
                 Fee = 0,
                 BaseCurrency = "EUR",
-                Balance = new decimal(0.00225287)
             },
             new()
             {
-                Type = RevolutTransactionType.Transfer,
                 CompletedDate = new DateTime(2021, 12, 10, 8, 09, 00),
                 Description = "Balance migration to another region or legal entity",
                 Amount = new decimal(1.19357501),
@@ -64,11 +61,9 @@ internal class RevolutCsvServiceTest
                 FiatAmountIncludingFees = new decimal(4318.84),
                 Fee = 0,
                 BaseCurrency = "EUR",
-                Balance = null,
             },
             new()
             {
-                Type = RevolutTransactionType.Exchange,
                 CompletedDate = new DateTime(2022, 05, 09, 11, 24, 31),
                 Description = "Exchanged to USD",
                 Amount = new decimal(-3.33720027),
@@ -77,11 +72,9 @@ internal class RevolutCsvServiceTest
                 FiatAmountIncludingFees = new decimal(-187.58),
                 Fee = new decimal(2.85),
                 BaseCurrency = "EUR",
-                Balance = 0
             },
             new()
             {
-                Type = RevolutTransactionType.CardPayment,
                 CompletedDate = new DateTime(2018, 07, 20, 05, 28, 14),
                 Description = "Hotel On Booking.com",
                 Amount = new decimal(-0.00893541),
@@ -90,11 +83,9 @@ internal class RevolutCsvServiceTest
                 FiatAmountIncludingFees = new decimal(-56.53),
                 Fee = 0,
                 BaseCurrency = "EUR",
-                Balance = new decimal(0.00819571)
             },
             new()
             {
-                Type = RevolutTransactionType.CardRefund,
                 CompletedDate = new DateTime(2018, 08, 21, 19 ,20 ,13),
                 Description = "Refund from Hotel On Booking.com",
                 Amount = new decimal(0.00893541),
@@ -103,7 +94,6 @@ internal class RevolutCsvServiceTest
                 FiatAmountIncludingFees = new decimal(50.01),
                 Fee = 0,
                 BaseCurrency = "EUR",
-                Balance = new decimal(0.00893541)
             },
         });
     }

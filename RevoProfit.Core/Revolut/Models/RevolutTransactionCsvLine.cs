@@ -1,8 +1,8 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace RevoProfit.Core.Crypto.Models;
+namespace RevoProfit.Core.Revolut.Models;
 
-public class CryptoTransactionRevolutCsvLine
+public record RevolutTransactionCsvLine
 {
     [Name("Type")] public string Type { get; init; }
     [Name("Product")] public string Product { get; init; }

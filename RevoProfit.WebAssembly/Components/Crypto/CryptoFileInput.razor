@@ -1,5 +1,5 @@
-﻿@inject ICryptoCsvService CryptoCsvService
-@inject ICryptoService CryptoService
+﻿@inject IRevolutCsvService CryptoCsvService
+@inject IRevolutService CryptoService
 @inject ILogger<CryptoFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
@@ -49,7 +49,7 @@
         try
         {
             var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
-            var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
+            var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions); // todo investigate why this does throw an exception
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
             AppState.CryptoAssets = cryptoAssets;
             AppState.CryptoRetraits = cryptoRetraits;

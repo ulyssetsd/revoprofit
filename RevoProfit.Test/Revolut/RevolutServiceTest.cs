@@ -49,6 +49,45 @@ public class RevolutServiceTest
     }
 
     [Test]
+    public void Test_when_closing_transaction_should_ignore()
+    {
+        // Arrange
+        var transactions = new[]
+        {
+            Transaction() with
+            {
+                Description = "Closing transaction",
+                Amount = 0,
+            }
+        };
+
+        // Act
+        var results = _revolutService.ConvertToCryptoTransactions(transactions);
+
+        // Assert
+        results.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Test_when_three_depot_transactions_happened_on_the_same_time_should_ignore_work_fine()
+    {
+        // Arrange
+        var date = DateTime.Today;
+        var transactions = new[]
+        {
+            Transaction() with { CompletedDate = date },
+            Transaction() with { CompletedDate = date },
+            Transaction() with { CompletedDate = date },
+        };
+
+        // Act
+        var results = _revolutService.ConvertToCryptoTransactions(transactions);
+
+        // Assert
+        results.Should().HaveCount(3).And.AllSatisfy(transaction => transaction.Type.Should().Be(CryptoTransactionType.Depot));
+    }
+
+    [Test]
     public void Test_when_amount_is_positive_and_no_matching_transaction_at_same_time_should_return_a_depot()
     {
         // EXCHANGE,Current,2021-03-12 12:07:49,2021-03-12 12:07:49,Exchanged to BCH,0.00917915,BCH,4.14,4.2,0.06,EUR,COMPLETED,0.48372838

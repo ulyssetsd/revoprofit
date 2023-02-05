@@ -1,7 +1,9 @@
 ﻿using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.Exceptions;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services.Interfaces;
+using System.Linq;
 
 namespace RevoProfit.Core.Revolut.Services;
 
@@ -16,103 +18,125 @@ public class RevolutService : IRevolutService
 
     public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
     {
-        return _cryptoService.ProcessTransactions(ConvertToCryptoTransactions(transactions));
+        var cryptoTransactions = ConvertToCryptoTransactions(transactions);
+        return _cryptoService.ProcessTransactions(cryptoTransactions);
     }
 
     public IEnumerable<CryptoTransaction> ConvertToCryptoTransactions(IEnumerable<RevolutTransaction> transactions)
     {
-        return transactions.Where(transaction => transaction.Description != "Balance migration to another region or legal entity")
+        return transactions.Where(IsNotTransactionToIgnore)
             .GroupBy(transaction => transaction.CompletedDate)
             .Select(HandleTransactionsGroupedByDate)
-            .ToList();
+            .SelectMany(enumerable => enumerable);
     }
 
-    private static CryptoTransaction HandleTransactionsGroupedByDate(IEnumerable<RevolutTransaction> revolutTransactions)
+    private static bool IsNotTransactionToIgnore(RevolutTransaction transaction)
     {
-        RevolutTransaction? retrait = null;
-        RevolutTransaction? depot = null;
+        return transaction.Description is not "Balance migration to another region or legal entity" and not "Closing transaction";
+    }
+
+    private static IEnumerable<CryptoTransaction> HandleTransactionsGroupedByDate(IEnumerable<RevolutTransaction> revolutTransactions)
+    {
+        var retraits = new List<RevolutTransaction>();
+        var depots = new List<RevolutTransaction>();
         var count = 0;
         foreach (var transaction in revolutTransactions)
         {
             count++;
             if (transaction.Amount < 0)
             {
-                retrait ??= transaction;
+                retraits.Add(transaction);
             }
             if (transaction.Amount > 0)
             {
-                depot ??= transaction;
+                depots.Add(transaction);
+            }
+            if (transaction.Amount == 0)
+            {
+                throw new ProcessException("A transaction with an empty amount was in the export");
             }
         }
 
-        if (new[] { retrait != null, depot != null }.Count(t => true) < count)
+        if (retraits.Count > 1 || retraits.Count == 1 && depots.Count > 1)
         {
-            throw new Exception("more than two transactions on the same date time");
+            throw new ProcessException("More than two transactions on the same date time");
         }
 
-        if (retrait == null && depot != null)
+        if (retraits.Count == 0 && depots.Count > 0)
         {
-            var currencyPrice = depot.FiatAmount / depot.Amount;
-            return new CryptoTransaction
+            return depots.Select(depot =>
             {
-                Type = CryptoTransactionType.Depot,
-                Date = depot.CompletedDate,
-                MontantRecu = (double)depot.Amount,
-                MonnaieOuJetonRecu = depot.Currency,
-                PrixDuJetonDuMontantRecu = (double)currencyPrice,
-                MontantEnvoye = 0,
-                MonnaieOuJetonEnvoye = null,
-                PrixDuJetonDuMontantEnvoye = 0,
-                Frais = (double)depot.Fee,
-                MonnaieOuJetonDesFrais = depot.BaseCurrency,
-                PrixDuJetonDesFrais = 1,
-            };
+                var currencyPrice = depot.FiatAmount / depot.Amount;
+                return new CryptoTransaction
+                {
+                    Type = CryptoTransactionType.Depot,
+                    Date = depot.CompletedDate,
+                    MontantRecu = (double)depot.Amount,
+                    MonnaieOuJetonRecu = depot.Currency,
+                    PrixDuJetonDuMontantRecu = (double)currencyPrice,
+                    MontantEnvoye = 0,
+                    MonnaieOuJetonEnvoye = null,
+                    PrixDuJetonDuMontantEnvoye = 0,
+                    Frais = (double)depot.Fee,
+                    MonnaieOuJetonDesFrais = depot.BaseCurrency,
+                    PrixDuJetonDesFrais = 1,
+                };
+            });
         }
 
-        if (depot == null && retrait != null)
+        if (retraits.Count == 1 && depots.Count == 0)
         {
+            var retrait = retraits.First();
             var currencyPrice = retrait.FiatAmount / retrait.Amount;
-            return new CryptoTransaction
+            return new[]
             {
-                Type = CryptoTransactionType.Retrait,
-                Date = retrait.CompletedDate,
-                MontantRecu = 0,
-                MonnaieOuJetonRecu = null,
-                PrixDuJetonDuMontantRecu = 0,
-                MontantEnvoye = (double)-retrait.Amount,
-                MonnaieOuJetonEnvoye = retrait.Currency,
-                PrixDuJetonDuMontantEnvoye = (double)currencyPrice,
-                Frais = (double)retrait.Fee,
-                MonnaieOuJetonDesFrais = retrait.BaseCurrency,
-                PrixDuJetonDesFrais = 1,
+                new CryptoTransaction
+                {
+                    Type = CryptoTransactionType.Retrait,
+                    Date = retrait.CompletedDate,
+                    MontantRecu = 0,
+                    MonnaieOuJetonRecu = null,
+                    PrixDuJetonDuMontantRecu = 0,
+                    MontantEnvoye = (double)-retrait.Amount,
+                    MonnaieOuJetonEnvoye = retrait.Currency,
+                    PrixDuJetonDuMontantEnvoye = (double)currencyPrice,
+                    Frais = (double)retrait.Fee,
+                    MonnaieOuJetonDesFrais = retrait.BaseCurrency,
+                    PrixDuJetonDesFrais = 1,
+                }
             };
         }
 
-        if (depot != null && retrait != null)
+        if (retraits.Count == 1 && depots.Count == 1)
         {
+            var retrait = retraits.First();
+            var depot = depots.First();
             var totalFee = retrait.Fee + depot.Fee;
             var sourceCurrencyPrice = retrait.FiatAmountIncludingFees / retrait.Amount;
             var targetCurrencyPrice = depot.FiatAmount / depot.Amount;
 
-            return new CryptoTransaction
+            return new[]
             {
-                Type = CryptoTransactionType.Echange,
-                Date = retrait.CompletedDate,
+                new CryptoTransaction
+                {
+                    Type = CryptoTransactionType.Echange,
+                    Date = retrait.CompletedDate,
 
-                MontantRecu = (double)depot.Amount,
-                MonnaieOuJetonRecu = depot.Currency,
-                PrixDuJetonDuMontantRecu = (double)targetCurrencyPrice,
+                    MontantRecu = (double)depot.Amount,
+                    MonnaieOuJetonRecu = depot.Currency,
+                    PrixDuJetonDuMontantRecu = (double)targetCurrencyPrice,
 
-                MontantEnvoye = (double)-retrait.Amount,
-                MonnaieOuJetonEnvoye = retrait.Currency,
-                PrixDuJetonDuMontantEnvoye = (double)sourceCurrencyPrice,
+                    MontantEnvoye = (double)-retrait.Amount,
+                    MonnaieOuJetonEnvoye = retrait.Currency,
+                    PrixDuJetonDuMontantEnvoye = (double)sourceCurrencyPrice,
 
-                Frais = (double)(totalFee / targetCurrencyPrice),
-                MonnaieOuJetonDesFrais = depot.Currency,
-                PrixDuJetonDesFrais = (double)targetCurrencyPrice,
+                    Frais = (double)(totalFee / targetCurrencyPrice),
+                    MonnaieOuJetonDesFrais = depot.Currency,
+                    PrixDuJetonDesFrais = (double)targetCurrencyPrice,
+                }
             };
         }
 
-        throw new Exception("transactions without correct format");
+        throw new ProcessException("Transactions without correct format");
     }
 }

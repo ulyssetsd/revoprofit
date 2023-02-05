@@ -31,6 +31,7 @@ internal class RevolutCsvServiceTest
             .AppendLine("EXCHANGE,Current,2022-05-09 11:24:31,2022-05-09 11:24:31,Exchanged to USD,-3.33720027,WLUNA,-190.44,-187.58,2.85,EUR,COMPLETED,0")
             .AppendLine("CARD_PAYMENT,Current,2018-07-19 15:52:15,2018-07-20 5:28:14,Hotel On Booking.com,-0.00893541,BTC,-56.53,-56.53,0,EUR,COMPLETED,0.00819571")
             .AppendLine("CARD_REFUND,Current,2018-08-21 10:49:04,2018-08-21 19:20:13,Refund from Hotel On Booking.com,0.00893541,BTC,50.01,50.01,0,EUR,COMPLETED,0.00893541")
+            .AppendLine("TRANSFER,Savings,2022-11-17 8:46:10,2022-11-17 8:46:10,Closing transaction,0,BTC,,,0,EUR,COMPLETED,0")
             .ToString();
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
@@ -95,6 +96,30 @@ internal class RevolutCsvServiceTest
                 Fee = 0,
                 BaseCurrency = "EUR",
             },
+            new()
+            {
+                CompletedDate = new DateTime(2022, 11, 17, 08 ,46 ,10),
+                Description = "Closing transaction",
+                Amount = 0,
+                Currency = "BTC",
+                FiatAmount = 0,
+                FiatAmountIncludingFees = 0,
+                Fee = 0,
+                BaseCurrency = "EUR",
+            },
         });
+    }
+
+    [Test]
+    public async Task Read_csv_with_a_massive_input_should_not_throw_any_exception()
+    {
+        // Arrange
+        await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2022.csv", FileMode.Open);
+
+        // Act
+        var act = async () => (await _revolutCsvService.ReadCsv(memoryStream)).ToArray();
+
+        // Assert
+        await act.Should().NotThrowAsync();
     }
 }

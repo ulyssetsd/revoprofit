@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using RevoProfit.Core.Exceptions;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services;
 
@@ -51,25 +52,16 @@ public class RevolutMapperTest
     }
 
     [Test]
-    public void Test_revolut_transaction_type_mapping_should_throw_if_not_matching()
-    {
-        var act = () => _revolutTransactionMapper.Map(GetDefault() with { Type = "wrongtype" });
-        act.Should().Throw<Exception>();
-    }
-
-    [Test]
     public void Test_revolut_mapping_when_double_fields_are_empty_should_throw_exception()
     {
         Func<RevolutTransaction> act;
         act = () => _revolutTransactionMapper.Map(GetDefault() with { Amount = string.Empty });
         act.Should().Throw<Exception>();
         act = () => _revolutTransactionMapper.Map(GetDefault() with { FiatAmount = string.Empty });
-        act.Should().Throw<Exception>();
+        act.Should().NotThrow<Exception>();
         act = () => _revolutTransactionMapper.Map(GetDefault() with { FiatAmountIncludingFees = string.Empty });
-        act.Should().Throw<Exception>();
+        act.Should().NotThrow<Exception>();
         act = () => _revolutTransactionMapper.Map(GetDefault() with { Fee = string.Empty });
         act.Should().Throw<Exception>();
-        act = () => _revolutTransactionMapper.Map(GetDefault() with { Balance = string.Empty });
-        act.Should().NotThrow();
     }
 }

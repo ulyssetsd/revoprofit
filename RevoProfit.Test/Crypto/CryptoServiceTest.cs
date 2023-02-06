@@ -85,14 +85,11 @@ public class CryptoServiceTest
         {
             Montant = 0.5,
             MontantEnEuros = 100,
-            Gains = 0.25,
             GainsEnEuros = 50,
             Jeton = bitcoin,
-            PrixDuJetonDuMontant = 200,
+            PrixDuJeton = 200,
             Frais = 0,
             FraisEnEuros = 0,
-            ValeurGlobale = 200,
-            PrixAcquisition = 100,
         }, opt => opt.Excluding(x => x.Date));
 
         cryptoAssets.First(Bitcoin).Should().BeEquivalentTo(new CryptoAsset

@@ -227,4 +227,77 @@ public class RevolutServiceTest
             }
         });
     }
+
+    private RevolutTransaction Btc(double amount, double price) => new()
+    {
+        CompletedDate = new DateTime(2018, 06, 12, 14, 16, 32).AddHours(_incrementHours++),
+        Description = "Exchanged",
+        Amount = new decimal(amount),
+        Currency = "BTC",
+        FiatAmount = new decimal(price),
+        FiatAmountIncludingFees = new decimal(price),
+        Fee = 0,
+        BaseCurrency = "EUR",
+    };
+
+    [Test]
+    public void Process_when_buy_and_sell_without_gains_should_have_retrait_without_gains()
+    {
+        // EXCHANGE,Current,2018-06-12 14:16:32,2018-06-12 14:16:32,Exchanged to BTC,0.01713112,BTC,100,100,0,EUR,COMPLETED,0.01713112
+        // CARD_PAYMENT,Current,2018-07-19 15:52:15,2018-07-20 5:28:14,Hotel On Booking.com,-0.00893541,BTC,-56.53,-56.53,0,EUR,COMPLETED,0.00819571
+        // Arrange
+        var transactions = new[]
+        {
+            Btc(0.02, 100),
+            Btc(-0.01, -50),
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEquivalentTo(new[]
+        {
+            new CryptoRetrait
+            {
+                Date = transactions[1].CompletedDate,
+                Jeton = "BTC",
+                Montant = 0.01,
+                MontantEnEuros = 50,
+                GainsEnEuros = 0,
+                PrixDuJeton = 5000,
+            }
+        });
+    }
+
+    [Test]
+    public void Process_when_buy_and_sell_with_gains_should_have_retrait_with_gains()
+    {
+        // EXCHANGE,Current,2018-06-12 14:16:32,2018-06-12 14:16:32,Exchanged to BTC,0.01713112,BTC,100,100,0,EUR,COMPLETED,0.01713112
+        // CARD_PAYMENT,Current,2018-07-19 15:52:15,2018-07-20 5:28:14,Hotel On Booking.com,-0.00893541,BTC,-56.53,-56.53,0,EUR,COMPLETED,0.00819571
+        // Arrange
+        var transactions = new[]
+        {
+            Btc(0.02, 100),
+            Btc(-0.01, -60),
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEquivalentTo(new[]
+        {
+            new CryptoRetrait
+            {
+                Date = transactions[1].CompletedDate,
+                Jeton = "BTC",
+                Montant = 0.01,
+                MontantEnEuros = 60,
+                GainsEnEuros = 10,
+                PrixDuJeton = 6000,
+            }
+        });
+        // todo this test should not fail, replace in crypto transaction the double with decimal to fix this issue
+    }
 }

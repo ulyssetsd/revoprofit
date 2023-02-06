@@ -125,26 +125,23 @@ public class CryptoService : ICryptoService
                 var ratioPlusValue = 1 - ratioInsere;
 
                 var gains = transaction.MontantEnvoye * ratioPlusValue;
-                var gainsEnDollars = gains * transaction.PrixDuJetonDuMontantEnvoye;
-                var montantEnvoyeEnDollars = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
+                var gainsEnEuros = gains * transaction.PrixDuJetonDuMontantEnvoye;
+                var montantEnvoyeEnEuros = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
 
                 retraits.Add(new CryptoRetrait
                 {
                     Date = transaction.Date,
                     Jeton = transaction.MonnaieOuJetonEnvoye,
                     Montant = transaction.MontantEnvoye,
-                    MontantEnEuros = montantEnvoyeEnDollars,
-                    Gains = gains,
-                    GainsEnEuros = gainsEnDollars,
-                    PrixDuJetonDuMontant = transaction.PrixDuJetonDuMontantEnvoye,
+                    MontantEnEuros = montantEnvoyeEnEuros,
+                    GainsEnEuros = gainsEnEuros,
+                    PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
                     Frais = transaction.Frais,
                     FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,
-                    ValeurGlobale = cryptoEnvoye.Montant * transaction.PrixDuJetonDuMontantEnvoye,
-                    PrixAcquisition = cryptoEnvoye.MontantEnEuros,
                 });
 
                 cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= montantEnvoyeEnDollars * ratioInsere;
+                cryptoEnvoye.MontantEnEuros -= montantEnvoyeEnEuros * ratioInsere;
                 ReinitialiseSiNul(cryptoEnvoye);
             }
         }

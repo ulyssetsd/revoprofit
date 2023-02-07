@@ -12,23 +12,23 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
         {
             Type = ToCryptoTransactionType(source.Type),
             Date = DateTime.ParseExact(source.Date, "G", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None),
-            MontantRecu = ToDouble(source.MontantRecu),
+            MontantRecu = ToDecimal(source.MontantRecu),
             MonnaieOuJetonRecu = source.MonnaieOuJetonRecu,
-            MontantEnvoye = ToDouble(source.MontantEnvoye),
+            MontantEnvoye = ToDecimal(source.MontantEnvoye),
             MonnaieOuJetonEnvoye = source.MonnaieOuJetonEnvoye,
-            Frais = ToDouble(source.Frais),
+            Frais = ToDecimal(source.Frais),
             MonnaieOuJetonDesFrais = source.MonnaieOuJetonDesFrais,
-            PrixDuJetonDuMontantEnvoye = ToDouble(source.PrixDuJetonDuMontantEnvoye),
-            PrixDuJetonDuMontantRecu = ToDouble(source.PrixDuJetonDuMontantRecu),
-            PrixDuJetonDesFrais = ToDouble(source.PrixDuJetonDesFrais)
+            PrixDuJetonDuMontantEnvoye = ToDecimal(source.PrixDuJetonDuMontantEnvoye),
+            PrixDuJetonDuMontantRecu = ToDecimal(source.PrixDuJetonDuMontantRecu),
+            PrixDuJetonDesFrais = ToDecimal(source.PrixDuJetonDesFrais)
         };
     }
 
-    private static double ToDouble(string source)
+    private static decimal ToDecimal(string source)
     {
         if (source == string.Empty) return 0;
-        if (double.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("fr-FR"), out var frResult)) return frResult;
-        if (double.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out var enResult)) return enResult;
+        if (decimal.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("fr-FR"), out var frResult)) return frResult;
+        if (decimal.TryParse(source, NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out var enResult)) return enResult;
         throw new InvalidOperationException();
     }
 

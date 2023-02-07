@@ -1,18 +1,23 @@
-﻿@inject ICryptoCsvService CryptoCsvService
+﻿@using RevoProfit.Core.Crypto.Models
+@inject ICryptoCsvService CryptoCsvService
 @inject ICryptoService CryptoService
+@inject IRevolutCsvService RevolutCsvService
+@inject IRevolutService RevolutService
 @inject ILogger<CryptoFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
 
 <div class="mb-3">
     <label class="form-label">@Loc[nameof(Localization.CryptoFile)]</label>
-    <InputFile class="form-control" OnChange="@LoadFiles" required />
+    <InputFile class="form-control mb-2" OnChange="@LoadWaltioFile" required />
+    <label class="form-label">@Loc[nameof(Localization.RevolutFile)]</label>
+    <InputFile class="form-control" OnChange="@LoadRevolutFile" required />
 </div>
 <button class="btn btn-primary btn-lg" @onclick="SeeResults">
     @Loc[nameof(Localization.SeeResults)]
     @if (AppState.IsCalculatingCrypto)
     {
-        <span class="spinner-border spinner-border-sm ml-5" role="status" aria-hidden="true"></span>
+        <span class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"></span>
     }
 </button>
 @if (ErrorMessage != null)
@@ -23,24 +28,44 @@
 }
 
 @code {
-    public Stream? CsvFileStream { get; set; }
+    public Stream? WaltioCsvFileStream { get; set; }
+    public Stream? RevolutCsvFileStream { get; set; }
     public string? ErrorMessage { get; set; }
 
-    private void LoadFiles(InputFileChangeEventArgs e)
+    private void LoadWaltioFile(InputFileChangeEventArgs e)
     {
-        CsvFileStream = e.File.OpenReadStream();
+        WaltioCsvFileStream = LoadFile(e);
+    }
+
+    private void LoadRevolutFile(InputFileChangeEventArgs e)
+    {
+        RevolutCsvFileStream = LoadFile(e);
+    }
+
+    private Stream? LoadFile(InputFileChangeEventArgs e)
+    {
+        ErrorMessage = null;
+        try
+        {
+            return e.File.OpenReadStream(2_048_000);
+        }
+        catch (Exception exception)
+        {
+            ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
+            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+            return null;
+        }
     }
 
     private async Task SeeResults()
     {
-        if (CsvFileStream == null) return;
+        if (WaltioCsvFileStream == null && RevolutCsvFileStream == null) return;
         AppState.IsCalculatingCrypto = true;
         ErrorMessage = null;
 
         try
         {
-            var transactions = await CryptoCsvService.ReadCsv(CsvFileStream);
-            var (cryptoAssets, cryptoRetraits) = CryptoService.ProcessTransactions(transactions);
+            var (cryptoAssets, cryptoRetraits) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
             AppState.CryptoAssets = cryptoAssets;
             AppState.CryptoRetraits = cryptoRetraits;
@@ -53,7 +78,19 @@
         finally
         {
             AppState.IsCalculatingCrypto = false;
-            CsvFileStream = null;
+            WaltioCsvFileStream = null;
         }
+    }
+
+    private async Task<(IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait> cryptoRetraits)> CryptoReport(Stream waltioCsvFileStream)
+    {
+        var transactions = await CryptoCsvService.ReadCsv(waltioCsvFileStream);
+        return CryptoService.ProcessTransactions(transactions);
+    }
+
+    private async Task<(IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait> cryptoRetraits)> RevolutReport(Stream revolutCsvFileStream)
+    {
+        var transactions = await RevolutCsvService.ReadCsv(revolutCsvFileStream);
+        return RevolutService.ProcessTransactions(transactions);
     }
 }

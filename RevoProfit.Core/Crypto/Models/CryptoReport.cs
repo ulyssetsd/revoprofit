@@ -3,6 +3,6 @@
 public class CryptoReport
 {
     public int Year { get; init; }
-    public double GainsEnEuros { get; init; }
-    public double FraisEnEuros { get; init; }
+    public decimal GainsEnEuros { get; init; }
+    public decimal FraisEnEuros { get; init; }
 }

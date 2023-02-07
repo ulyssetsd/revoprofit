@@ -3,9 +3,9 @@
 public class CryptoAsset
 {
     public string Jeton { get; init; }
-    public double MontantEnEuros { get; set; }
-    public double Montant { get; set; }
-    public double Frais { get; set; }
+    public decimal MontantEnEuros { get; set; }
+    public decimal Montant { get; set; }
+    public decimal Frais { get; set; }
 
     public override string ToString()
     {

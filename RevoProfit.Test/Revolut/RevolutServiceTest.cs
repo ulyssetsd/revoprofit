@@ -120,8 +120,7 @@ public class RevolutServiceTest
                 MontantRecu = 10,
                 MonnaieOuJetonRecu = "BTC",
                 PrixDuJetonDuMontantRecu = 10,
-                MontantEnvoye = 0,
-                MonnaieOuJetonEnvoye = null,
+                MontantEnvoye = 0m,
                 PrixDuJetonDuMontantEnvoye = 0,
                 Frais = 10,
                 MonnaieOuJetonDesFrais = "EUR",
@@ -161,9 +160,8 @@ public class RevolutServiceTest
                 Type = CryptoTransactionType.Retrait,
                 Date = new DateTime(2022, 02, 05, 12, 30, 50),
                 MontantRecu = 0,
-                MonnaieOuJetonRecu = null,
                 PrixDuJetonDuMontantRecu = 0,
-                MontantEnvoye = 11,
+                MontantEnvoye = 11m,
                 MonnaieOuJetonEnvoye = "BTC",
                 PrixDuJetonDuMontantEnvoye = 10,
                 Frais = 10,
@@ -186,7 +184,7 @@ public class RevolutServiceTest
             {
                 CompletedDate = dateTimeOfTransfer,
                 Currency = "BTC",
-                Amount = new decimal(-1.1),
+                Amount = -1.1m,
                 FiatAmount = -100,
                 FiatAmountIncludingFees = -110,
                 Fee = 10,
@@ -217,7 +215,7 @@ public class RevolutServiceTest
                 MonnaieOuJetonRecu = "ETH",
                 PrixDuJetonDuMontantRecu = 10,
 
-                MontantEnvoye = 1.1,
+                MontantEnvoye = 1.1m,
                 MonnaieOuJetonEnvoye = "BTC",
                 PrixDuJetonDuMontantEnvoye = 100,
                 
@@ -228,14 +226,14 @@ public class RevolutServiceTest
         });
     }
 
-    private RevolutTransaction Btc(double amount, double price) => new()
+    private RevolutTransaction Btc(decimal amount, decimal price) => new()
     {
         CompletedDate = new DateTime(2018, 06, 12, 14, 16, 32).AddHours(_incrementHours++),
         Description = "Exchanged",
-        Amount = new decimal(amount),
+        Amount = amount,
         Currency = "BTC",
-        FiatAmount = new decimal(price),
-        FiatAmountIncludingFees = new decimal(price),
+        FiatAmount = price,
+        FiatAmountIncludingFees = price,
         Fee = 0,
         BaseCurrency = "EUR",
     };
@@ -248,8 +246,8 @@ public class RevolutServiceTest
         // Arrange
         var transactions = new[]
         {
-            Btc(0.02, 100),
-            Btc(-0.01, -50),
+            Btc(0.02m, 100),
+            Btc(-0.01m, -50),
         };
 
         // Act
@@ -262,7 +260,7 @@ public class RevolutServiceTest
             {
                 Date = transactions[1].CompletedDate,
                 Jeton = "BTC",
-                Montant = 0.01,
+                Montant = 0.01m,
                 MontantEnEuros = 50,
                 GainsEnEuros = 0,
                 PrixDuJeton = 5000,
@@ -278,8 +276,8 @@ public class RevolutServiceTest
         // Arrange
         var transactions = new[]
         {
-            Btc(0.02, 100),
-            Btc(-0.01, -60),
+            Btc(0.02m, 100),
+            Btc(-0.01m, -60),
         };
 
         // Act
@@ -292,12 +290,11 @@ public class RevolutServiceTest
             {
                 Date = transactions[1].CompletedDate,
                 Jeton = "BTC",
-                Montant = 0.01,
+                Montant = 0.01m,
                 MontantEnEuros = 60,
                 GainsEnEuros = 10,
                 PrixDuJeton = 6000,
             }
         });
-        // todo this test should not fail, replace in crypto transaction the double with decimal to fix this issue
     }
 }

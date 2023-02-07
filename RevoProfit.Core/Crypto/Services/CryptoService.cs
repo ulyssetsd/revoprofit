@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using System.Reflection.Metadata;
 
 namespace RevoProfit.Core.Crypto.Services;
 
@@ -134,7 +135,7 @@ public class CryptoService : ICryptoService
                     Jeton = transaction.MonnaieOuJetonEnvoye,
                     Montant = transaction.MontantEnvoye,
                     MontantEnEuros = montantEnvoyeEnEuros,
-                    GainsEnEuros = gainsEnEuros,
+                    GainsEnEuros = Math.Round(gainsEnEuros, 20, MidpointRounding.ToEven),
                     PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
                     Frais = transaction.Frais,
                     FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,

@@ -71,13 +71,12 @@ public class RevolutService : IRevolutService
                 {
                     Type = CryptoTransactionType.Depot,
                     Date = depot.CompletedDate,
-                    MontantRecu = (double)depot.Amount,
+                    MontantRecu = depot.Amount,
                     MonnaieOuJetonRecu = depot.Currency,
-                    PrixDuJetonDuMontantRecu = (double)currencyPrice,
+                    PrixDuJetonDuMontantRecu = currencyPrice,
                     MontantEnvoye = 0,
-                    MonnaieOuJetonEnvoye = null,
                     PrixDuJetonDuMontantEnvoye = 0,
-                    Frais = (double)depot.Fee,
+                    Frais = depot.Fee,
                     MonnaieOuJetonDesFrais = depot.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
                 };
@@ -95,12 +94,11 @@ public class RevolutService : IRevolutService
                     Type = CryptoTransactionType.Retrait,
                     Date = retrait.CompletedDate,
                     MontantRecu = 0,
-                    MonnaieOuJetonRecu = null,
                     PrixDuJetonDuMontantRecu = 0,
-                    MontantEnvoye = (double)-retrait.Amount,
+                    MontantEnvoye = -retrait.Amount,
                     MonnaieOuJetonEnvoye = retrait.Currency,
-                    PrixDuJetonDuMontantEnvoye = (double)currencyPrice,
-                    Frais = (double)retrait.Fee,
+                    PrixDuJetonDuMontantEnvoye = currencyPrice,
+                    Frais = retrait.Fee,
                     MonnaieOuJetonDesFrais = retrait.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
                 }
@@ -122,17 +120,17 @@ public class RevolutService : IRevolutService
                     Type = CryptoTransactionType.Echange,
                     Date = retrait.CompletedDate,
 
-                    MontantRecu = (double)depot.Amount,
+                    MontantRecu = depot.Amount,
                     MonnaieOuJetonRecu = depot.Currency,
-                    PrixDuJetonDuMontantRecu = (double)targetCurrencyPrice,
+                    PrixDuJetonDuMontantRecu = targetCurrencyPrice,
 
-                    MontantEnvoye = (double)-retrait.Amount,
+                    MontantEnvoye = -retrait.Amount,
                     MonnaieOuJetonEnvoye = retrait.Currency,
-                    PrixDuJetonDuMontantEnvoye = (double)sourceCurrencyPrice,
+                    PrixDuJetonDuMontantEnvoye = sourceCurrencyPrice,
 
-                    Frais = (double)(totalFee / targetCurrencyPrice),
+                    Frais = (totalFee / targetCurrencyPrice),
                     MonnaieOuJetonDesFrais = depot.Currency,
-                    PrixDuJetonDesFrais = (double)targetCurrencyPrice,
+                    PrixDuJetonDesFrais = targetCurrencyPrice,
                 }
             };
         }

@@ -4,12 +4,12 @@ public class CryptoRetrait
 {
     public DateTime Date { get; init; }
     public string Jeton { get; init; }
-    public double Montant { get; init; }
-    public double MontantEnEuros { get; init; }
-    public double GainsEnEuros { get; init; }
-    public double PrixDuJeton { get; init; }
-    public double Frais { get; init; }
-    public double FraisEnEuros { get; init; }
+    public decimal Montant { get; init; }
+    public decimal MontantEnEuros { get; init; }
+    public decimal GainsEnEuros { get; init; }
+    public decimal PrixDuJeton { get; init; }
+    public decimal Frais { get; init; }
+    public decimal FraisEnEuros { get; init; }
 
     public override string ToString()
     {

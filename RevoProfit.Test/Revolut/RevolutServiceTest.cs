@@ -20,6 +20,8 @@ public class RevolutServiceTest
         _incrementHours = 0;
     }
 
+    #region ConvertToCryptoTransactions
+
     private RevolutTransaction Transaction() => new()
     {
         CompletedDate = DateTime.Now.AddDays(-10).AddHours(_incrementHours++),
@@ -33,7 +35,7 @@ public class RevolutServiceTest
     };
 
     [Test]
-    public void Test_when_migration_to_another_region_should_ignore()
+    public void Convert_when_migration_to_another_region_should_ignore()
     {
         // Arrange
         var transactions = new[]
@@ -49,7 +51,7 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Test_when_closing_transaction_should_ignore()
+    public void Convert_when_closing_transaction_should_ignore()
     {
         // Arrange
         var transactions = new[]
@@ -69,7 +71,7 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Test_when_three_depot_transactions_happened_on_the_same_time_should_ignore_work_fine()
+    public void Convert_when_three_depot_transactions_happened_on_the_same_time_should_ignore_work_fine()
     {
         // Arrange
         var date = DateTime.Today;
@@ -88,7 +90,7 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Test_when_amount_is_positive_and_no_matching_transaction_at_same_time_should_return_a_depot()
+    public void Convert_when_amount_is_positive_and_no_matching_transaction_at_same_time_should_return_a_depot()
     {
         // EXCHANGE,Current,2021-03-12 12:07:49,2021-03-12 12:07:49,Exchanged to BCH,0.00917915,BCH,4.14,4.2,0.06,EUR,COMPLETED,0.48372838
         // Arrange
@@ -130,7 +132,7 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Test_when_amount_is_negative_and_no_matching_transaction_at_same_time_should_return_a_retrait()
+    public void Convert_when_amount_is_negative_and_no_matching_transaction_at_same_time_should_return_a_retrait()
     {
         // EXCHANGE,Current,2021-02-26 10:45:25,2021-02-26 10:45:25,Exchanged to USD,-0.33413706,BCH,-133.89,-131.91,1.98,EUR,COMPLETED,0.34827498
         // Arrange
@@ -172,7 +174,7 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Test_when_amount_positive_and_match_another_transaction_should_return_an_exchange_that_come_from_the_combination_of_both_transactions()
+    public void Convert_when_amount_positive_and_match_another_transaction_should_return_an_exchange_that_come_from_the_combination_of_both_transactions()
     {
         // Arrange
         // EXCHANGE,Current,2022-05-06 10:26:48,2022-05-06 10:26:48,Exchanged to ETH,-50.21745342,MATIC,-49.88,-49.13,0.74,EUR,COMPLETED,0
@@ -226,12 +228,41 @@ public class RevolutServiceTest
         });
     }
 
-    private RevolutTransaction Btc(decimal amount, decimal price) => new()
+    [Test]
+    public void Convert_when_multiple_currency_transactions_are_sort_first_by_currrency_then_date_time_should_return_transactions_in_datetime_order_first()
     {
-        CompletedDate = new DateTime(2018, 06, 12, 14, 16, 32).AddHours(_incrementHours++),
+        // Arrange
+        var transactions = new[]
+        {
+            Transaction() with
+            {
+                CompletedDate = DateTime.Now,
+                Currency = "BTC",
+            },
+            Transaction() with
+            {
+                CompletedDate = DateTime.Now.AddDays(-1),
+                Currency = "ETH",
+            },
+        };
+
+        // Act
+        var results = _revolutService.ConvertToCryptoTransactions(transactions);
+
+        // Assert
+        results.Should().BeInAscendingOrder(transaction => transaction.Date);
+    }
+
+    #endregion
+
+    #region ProcessTransactions
+
+    private RevolutTransaction Tran(string currency, decimal amount, decimal price, bool sameDateForNextTran = false) => new()
+    {
+        CompletedDate = new DateTime(2018, 06, 12, 14, 16, 32).AddHours(sameDateForNextTran ? _incrementHours : _incrementHours++),
         Description = "Exchanged",
         Amount = amount,
-        Currency = "BTC",
+        Currency = currency,
         FiatAmount = price,
         FiatAmountIncludingFees = price,
         Fee = 0,
@@ -241,13 +272,11 @@ public class RevolutServiceTest
     [Test]
     public void Process_when_buy_and_sell_without_gains_should_have_retrait_without_gains()
     {
-        // EXCHANGE,Current,2018-06-12 14:16:32,2018-06-12 14:16:32,Exchanged to BTC,0.01713112,BTC,100,100,0,EUR,COMPLETED,0.01713112
-        // CARD_PAYMENT,Current,2018-07-19 15:52:15,2018-07-20 5:28:14,Hotel On Booking.com,-0.00893541,BTC,-56.53,-56.53,0,EUR,COMPLETED,0.00819571
         // Arrange
         var transactions = new[]
         {
-            Btc(0.02m, 100),
-            Btc(-0.01m, -50),
+            Tran("BTC", 0.02m, 100),
+            Tran("BTC", -0.01m, -50),
         };
 
         // Act
@@ -266,18 +295,25 @@ public class RevolutServiceTest
                 PrixDuJeton = 5000,
             }
         });
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 50,
+                Montant = 0.01m,
+            }
+        });
     }
 
     [Test]
     public void Process_when_buy_and_sell_with_gains_should_have_retrait_with_gains()
     {
-        // EXCHANGE,Current,2018-06-12 14:16:32,2018-06-12 14:16:32,Exchanged to BTC,0.01713112,BTC,100,100,0,EUR,COMPLETED,0.01713112
-        // CARD_PAYMENT,Current,2018-07-19 15:52:15,2018-07-20 5:28:14,Hotel On Booking.com,-0.00893541,BTC,-56.53,-56.53,0,EUR,COMPLETED,0.00819571
         // Arrange
         var transactions = new[]
         {
-            Btc(0.02m, 100),
-            Btc(-0.01m, -60),
+            Tran("BTC", 0.02m, 100),
+            Tran("BTC", -0.01m, -60),
         };
 
         // Act
@@ -296,5 +332,132 @@ public class RevolutServiceTest
                 PrixDuJeton = 6000,
             }
         });
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 50,
+                Montant = 0.01m,
+            }
+        });
     }
+
+    [Test]
+    public void Process_when_buy_and_exchange_should_have_euro_amount_equivalent_to_portion_of_amount_from_source_currency()
+    {
+        // Arrange
+        var transactions = new[]
+        {
+            Tran("BTC", 0.02m, 100),
+            Tran("BTC", -0.015m, -60, sameDateForNextTran: true),
+            Tran("ETH", 0.1m, 60),
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEmpty();
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 25,
+                Montant = 0.005m,
+            },
+            new CryptoAsset
+            {
+                Jeton = "ETH",
+                MontantEnEuros = 75,
+                Montant = 0.1m,
+            },
+        });
+    }
+
+    [Test]
+    public void Process_when_buy_exchange_and_sell_with_gains_should_have_gains_equivalent_of_portion_of_source_crypto_exchanged()
+    {
+        // Arrange
+        var transactions = new[]
+        {
+            Tran("BTC", 0.02m, 100),
+            Tran("BTC", -0.015m, -10, sameDateForNextTran: true),
+            Tran("ETH", 0.1m, 10),
+            Tran("ETH", -0.1m, -20),
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEquivalentTo(new[]
+        {
+            new CryptoRetrait
+            {
+                Date = transactions[3].CompletedDate,
+                Jeton = "ETH",
+                Montant = 0.1m,
+                MontantEnEuros = 20,
+                GainsEnEuros = -55,
+                PrixDuJeton = 200,
+            }
+        });
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 25,
+                Montant = 0.005m,
+            },
+            new CryptoAsset
+            {
+                Jeton = "ETH",
+                MontantEnEuros = 0,
+                Montant = 0,
+            },
+        });
+    }
+
+    [Test]
+    public void Process_when_buy_and_sell_all_then_buy_again_should_not_try_to_divide_by_zero_and_throw()
+    {
+        // Arrange
+        var transactions = new[]
+        {
+            Tran("BTC", 0.02m, 100),
+            Tran("BTC", -0.02m, -100),
+            Tran("BTC", 0.1m, 1000),
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEquivalentTo(new[]
+        {
+            new CryptoRetrait
+            {
+                Date = transactions[1].CompletedDate,
+                Jeton = "BTC",
+                Montant = 0.02m,
+                MontantEnEuros = 100,
+                GainsEnEuros = 0,
+                PrixDuJeton = 5000,
+            }
+        });
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 1000,
+                Montant = 0.1m,
+            },
+        });
+    }
+
+    #endregion
 }

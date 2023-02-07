@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using RevoProfit.Core.Exceptions;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services;
 

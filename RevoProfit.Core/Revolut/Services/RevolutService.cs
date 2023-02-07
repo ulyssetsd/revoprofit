@@ -3,7 +3,6 @@ using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services.Interfaces;
-using System.Linq;
 
 namespace RevoProfit.Core.Revolut.Services;
 
@@ -18,7 +17,7 @@ public class RevolutService : IRevolutService
 
     public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
     {
-        var cryptoTransactions = ConvertToCryptoTransactions(transactions);
+        var cryptoTransactions = ConvertToCryptoTransactions(transactions).ToList();
         return _cryptoService.ProcessTransactions(cryptoTransactions);
     }
 
@@ -27,7 +26,8 @@ public class RevolutService : IRevolutService
         return transactions.Where(IsNotTransactionToIgnore)
             .GroupBy(transaction => transaction.CompletedDate)
             .Select(HandleTransactionsGroupedByDate)
-            .SelectMany(enumerable => enumerable);
+            .SelectMany(enumerable => enumerable)
+            .OrderBy(transaction => transaction.Date);
     }
 
     private static bool IsNotTransactionToIgnore(RevolutTransaction transaction)

@@ -1,13 +1,14 @@
 ﻿using FluentAssertions;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
-using System.Reflection.Metadata;
 
 namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
-    private CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string jeton)
+    private const int EuroDecimalsPrecision = 24;
+
+    private static CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string jeton)
     {
         var crypto = cryptos.FirstOrDefault(crypto => crypto.Jeton == jeton);
 
@@ -23,7 +24,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos)
+    private static void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos)
     {
         if (transaction.Frais == 0)
         {
@@ -37,7 +38,7 @@ public class CryptoService : ICryptoService
         cryptoFrais.Frais += transaction.Frais;
     }
 
-    private void ReinitialiseSiNul(CryptoAsset crypto)
+    private static void ReinitialiseSiNul(CryptoAsset crypto)
     {
         if (Math.Round(crypto.Montant, 14, MidpointRounding.ToEven) == 0)
         {
@@ -103,13 +104,13 @@ public class CryptoService : ICryptoService
                 var montantInsereEnvoyeEnDollars = transaction.PrixDuJetonDuMontantEnvoye * montantInsereEnvoye;
 
                 cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= montantInsereEnvoyeEnDollars;
+                cryptoEnvoye.MontantEnEuros -= Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
                 ReinitialiseSiNul(cryptoEnvoye);
 
                 var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
 
                 cryptoRecu.Montant += transaction.MontantRecu;
-                cryptoRecu.MontantEnEuros += montantInsereEnvoyeEnDollars;
+                cryptoRecu.MontantEnEuros += Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
             }
 
             if (transaction.Type == CryptoTransactionType.Retrait)
@@ -135,14 +136,14 @@ public class CryptoService : ICryptoService
                     Jeton = transaction.MonnaieOuJetonEnvoye,
                     Montant = transaction.MontantEnvoye,
                     MontantEnEuros = montantEnvoyeEnEuros,
-                    GainsEnEuros = Math.Round(gainsEnEuros, 20, MidpointRounding.ToEven),
+                    GainsEnEuros = Math.Round(gainsEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
                     PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
                     Frais = transaction.Frais,
                     FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,
                 });
 
                 cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= montantEnvoyeEnEuros * ratioInsere;
+                cryptoEnvoye.MontantEnEuros -= Math.Round(montantEnvoyeEnEuros * ratioInsere, EuroDecimalsPrecision, MidpointRounding.ToEven);
                 ReinitialiseSiNul(cryptoEnvoye);
             }
         }

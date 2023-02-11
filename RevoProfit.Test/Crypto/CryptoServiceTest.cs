@@ -46,6 +46,12 @@ public class CryptoServiceTest
                 MonnaieOuJetonRecu = source,
                 PrixDuJetonDuMontantRecu = prix,
                 MontantRecu = quantite,
+                MontantEnvoye = 0,
+                MonnaieOuJetonEnvoye = string.Empty,
+                PrixDuJetonDuMontantEnvoye = 0,
+                Frais = 0,
+                MonnaieOuJetonDesFrais = string.Empty,
+                PrixDuJetonDesFrais = 0,
             },
             CryptoTransactionType.Retrait => new CryptoTransaction
             {
@@ -54,6 +60,12 @@ public class CryptoServiceTest
                 MonnaieOuJetonEnvoye = source,
                 PrixDuJetonDuMontantEnvoye = prix,
                 MontantEnvoye = quantite,
+                MontantRecu = 0,
+                MonnaieOuJetonRecu = string.Empty,
+                PrixDuJetonDuMontantRecu = 0,
+                Frais = 0,
+                MonnaieOuJetonDesFrais = string.Empty,
+                PrixDuJetonDesFrais = 0,
             },
             CryptoTransactionType.Echange => new CryptoTransaction
             {
@@ -65,6 +77,9 @@ public class CryptoServiceTest
                 MonnaieOuJetonRecu = destination,
                 PrixDuJetonDuMontantRecu = prixDestination,
                 MontantRecu = quantite * prix / prixDestination,
+                Frais = 0,
+                MonnaieOuJetonDesFrais = string.Empty,
+                PrixDuJetonDesFrais = 0,
             },
             _ => throw new NotImplementedException()
         };
@@ -90,6 +105,7 @@ public class CryptoServiceTest
             PrixDuJeton = 200,
             Frais = 0,
             FraisEnEuros = 0,
+            Date = transactions[1].Date,
         }, opt => opt.Excluding(x => x.Date));
 
         cryptoAssets.First(Bitcoin).Should().BeEquivalentTo(new CryptoAsset

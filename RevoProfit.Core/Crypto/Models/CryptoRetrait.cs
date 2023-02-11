@@ -1,15 +1,15 @@
 ﻿namespace RevoProfit.Core.Crypto.Models;
 
-public class CryptoRetrait
+public record CryptoRetrait
 {
-    public DateTime Date { get; init; }
-    public string Jeton { get; init; }
-    public decimal Montant { get; init; }
-    public decimal MontantEnEuros { get; init; }
-    public decimal GainsEnEuros { get; init; }
-    public decimal PrixDuJeton { get; init; }
-    public decimal Frais { get; init; }
-    public decimal FraisEnEuros { get; init; }
+    public required DateTime Date { get; init; }
+    public required string Jeton { get; init; }
+    public required decimal Montant { get; init; }
+    public required decimal MontantEnEuros { get; init; }
+    public required decimal GainsEnEuros { get; init; }
+    public required decimal PrixDuJeton { get; init; }
+    public required decimal Frais { get; init; }
+    public required decimal FraisEnEuros { get; init; }
 
     public override string ToString()
     {

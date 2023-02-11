@@ -126,7 +126,8 @@ public class RevolutServiceTest
                 PrixDuJetonDuMontantEnvoye = 0,
                 Frais = 10,
                 MonnaieOuJetonDesFrais = "EUR",
-                PrixDuJetonDesFrais = 1
+                PrixDuJetonDesFrais = 1,
+                MonnaieOuJetonEnvoye = string.Empty,
             }
         });
     }
@@ -168,7 +169,8 @@ public class RevolutServiceTest
                 PrixDuJetonDuMontantEnvoye = 10,
                 Frais = 10,
                 MonnaieOuJetonDesFrais = "EUR",
-                PrixDuJetonDesFrais = 1
+                PrixDuJetonDesFrais = 1,
+                MonnaieOuJetonRecu = string.Empty,
             }
         });
     }
@@ -293,6 +295,8 @@ public class RevolutServiceTest
                 MontantEnEuros = 50,
                 GainsEnEuros = 0,
                 PrixDuJeton = 5000,
+                Frais = 0,
+                FraisEnEuros = 0,
             }
         });
         assets.Should().BeEquivalentTo(new[]
@@ -330,6 +334,8 @@ public class RevolutServiceTest
                 MontantEnEuros = 60,
                 GainsEnEuros = 10,
                 PrixDuJeton = 6000,
+                Frais = 0,
+                FraisEnEuros = 0,
             }
         });
         assets.Should().BeEquivalentTo(new[]
@@ -402,6 +408,8 @@ public class RevolutServiceTest
                 MontantEnEuros = 20,
                 GainsEnEuros = -55,
                 PrixDuJeton = 200,
+                Frais = 0,
+                FraisEnEuros = 0,
             }
         });
         assets.Should().BeEquivalentTo(new[]
@@ -446,6 +454,8 @@ public class RevolutServiceTest
                 MontantEnEuros = 100,
                 GainsEnEuros = 0,
                 PrixDuJeton = 5000,
+                Frais = 0,
+                FraisEnEuros = 0,
             }
         });
         assets.Should().BeEquivalentTo(new[]

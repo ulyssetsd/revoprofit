@@ -2,7 +2,7 @@
 
 public class CryptoAsset
 {
-    public string Jeton { get; init; }
+    public required string Jeton { get; init; }
     public decimal MontantEnEuros { get; set; }
     public decimal Montant { get; set; }
     public decimal Frais { get; set; }

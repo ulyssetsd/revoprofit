@@ -1,8 +1,8 @@
 ﻿namespace RevoProfit.Core.Crypto.Models;
 
-public class CryptoReport
+public record CryptoReport
 {
-    public int Year { get; init; }
-    public decimal GainsEnEuros { get; init; }
-    public decimal FraisEnEuros { get; init; }
+    public required int Year { get; init; }
+    public required decimal GainsEnEuros { get; init; }
+    public required decimal FraisEnEuros { get; init; }
 }

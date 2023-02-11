@@ -2,7 +2,7 @@
 
 public class StockOwned
 {
-    public string Ticker { get; set; }
+    public required string Ticker { get; init; }
     public double Quantity { get; set; }
     public double AveragePrice { get; set; }
     public double ValueInserted { get; set; }

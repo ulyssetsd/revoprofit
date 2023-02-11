@@ -71,11 +71,15 @@ public class RevolutService : IRevolutService
                 {
                     Type = CryptoTransactionType.Depot,
                     Date = depot.CompletedDate,
+
                     MontantRecu = depot.Amount,
                     MonnaieOuJetonRecu = depot.Currency,
                     PrixDuJetonDuMontantRecu = currencyPrice,
+
                     MontantEnvoye = 0,
+                    MonnaieOuJetonEnvoye = string.Empty,
                     PrixDuJetonDuMontantEnvoye = 0,
+
                     Frais = depot.Fee,
                     MonnaieOuJetonDesFrais = depot.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
@@ -93,11 +97,15 @@ public class RevolutService : IRevolutService
                 {
                     Type = CryptoTransactionType.Retrait,
                     Date = retrait.CompletedDate,
+
                     MontantRecu = 0,
                     PrixDuJetonDuMontantRecu = 0,
+                    MonnaieOuJetonRecu = string.Empty,
+
                     MontantEnvoye = -retrait.Amount,
                     MonnaieOuJetonEnvoye = retrait.Currency,
                     PrixDuJetonDuMontantEnvoye = currencyPrice,
+
                     Frais = retrait.Fee,
                     MonnaieOuJetonDesFrais = retrait.BaseCurrency,
                     PrixDuJetonDesFrais = 1,

@@ -1,21 +1,21 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public class AnnualReport
+public record AnnualReport
 {
-    public int Year { get; init; }
-    public double Gains { get; init; }
-    public double Dividends { get; init; }
-    public double CashTopUp { get; init; }
-    public double CashWithdrawal { get; init; }
-    public double CustodyFee { get; init; }
+    public required int Year { get; init; }
+    public required double Gains { get; init; }
+    public required double Dividends { get; init; }
+    public required double CashTopUp { get; init; }
+    public required double CashWithdrawal { get; init; }
+    public required double CustodyFee { get; init; }
 
-    public double GainsInEuro { get; init; }
-    public double DividendsInEuro { get; init; }
-    public double CashTopUpInEuro { get; init; }
-    public double CashWithdrawalInEuro { get; init; }
-    public double CustodyFeeInEuro { get; init; }
+    public required double GainsInEuro { get; init; }
+    public required double DividendsInEuro { get; init; }
+    public required double CashTopUpInEuro { get; init; }
+    public required double CashWithdrawalInEuro { get; init; }
+    public required double CustodyFeeInEuro { get; init; }
 
-    public List<SellOrder> SellOrders { get; init; }
+    public required IEnumerable<SellOrder> SellOrders { get; init; }
 
     public override string ToString()
     {

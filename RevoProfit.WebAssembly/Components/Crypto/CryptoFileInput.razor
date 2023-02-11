@@ -65,7 +65,7 @@
 
         try
         {
-            var (cryptoAssets, cryptoRetraits) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream);
+            var (cryptoAssets, cryptoRetraits) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream!);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
             AppState.CryptoAssets = cryptoAssets;
             AppState.CryptoRetraits = cryptoRetraits;

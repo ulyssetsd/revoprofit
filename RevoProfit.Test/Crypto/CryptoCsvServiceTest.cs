@@ -48,6 +48,10 @@ internal class CryptoCsvServiceTest
 
                 MonnaieOuJetonEnvoye = string.Empty,
                 MonnaieOuJetonDesFrais = string.Empty,
+                MontantEnvoye = 0,
+                PrixDuJetonDuMontantEnvoye = 0,
+                Frais = 0,
+                PrixDuJetonDesFrais = 0,
             },
             new()
             {
@@ -59,6 +63,10 @@ internal class CryptoCsvServiceTest
 
                 MonnaieOuJetonDesFrais = string.Empty,
                 MonnaieOuJetonRecu = string.Empty,
+                MontantRecu = 0,
+                PrixDuJetonDuMontantRecu = 0,
+                Frais = 0,
+                PrixDuJetonDesFrais = 0,
             },
             new()
             {

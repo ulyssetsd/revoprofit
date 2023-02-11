@@ -2,14 +2,14 @@
 
 namespace RevoProfit.Core.Stock.Models;
 
-public class TransactionCsvLine
+public record TransactionCsvLine
 {
-    [Name("Date")] public string Date { get; set; }
-    [Name("Ticker")] public string Ticker { get; set; }
-    [Name("Type")] public string Type { get; set; }
-    [Name("Quantity")] public string Quantity { get; set; }
-    [Name("Price per share")] public string PricePerShare { get; set; }
-    [Name("Total Amount")] public string TotalAmount { get; set; }
-    [Name("Currency")] public string Currency { get; set; }
-    [Name("FX Rate")] public string FxRate { get; set; }
+    [Name("Date")] public required string Date { get; init; }
+    [Name("Ticker")] public required string Ticker { get; init; }
+    [Name("Type")] public required string Type { get; init; }
+    [Name("Quantity")] public required string Quantity { get; init; }
+    [Name("Price per share")] public required string PricePerShare { get; init; }
+    [Name("Total Amount")] public required string TotalAmount { get; init; }
+    [Name("Currency")] public required string Currency { get; init; }
+    [Name("FX Rate")] public required string FxRate { get; init; }
 }

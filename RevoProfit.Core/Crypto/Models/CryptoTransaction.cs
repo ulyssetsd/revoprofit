@@ -2,15 +2,15 @@
 
 public record CryptoTransaction
 {
-    public CryptoTransactionType Type { get; init; }
-    public DateTime Date { get; init; }
-    public decimal MontantRecu { get; init; }
-    public string MonnaieOuJetonRecu { get; init; }
-    public decimal PrixDuJetonDuMontantRecu { get; init; }
-    public decimal MontantEnvoye { get; init; }
-    public string MonnaieOuJetonEnvoye { get; init; }
-    public decimal PrixDuJetonDuMontantEnvoye { get; init; }
-    public decimal Frais { get; init; }
-    public string MonnaieOuJetonDesFrais { get; init; }
-    public decimal PrixDuJetonDesFrais { get; init; }
+    public required CryptoTransactionType Type { get; init; }
+    public required DateTime Date { get; init; }
+    public required decimal MontantRecu { get; init; }
+    public required string MonnaieOuJetonRecu { get; init; }
+    public required decimal PrixDuJetonDuMontantRecu { get; init; }
+    public required decimal MontantEnvoye { get; init; }
+    public required string MonnaieOuJetonEnvoye { get; init; }
+    public required decimal PrixDuJetonDuMontantEnvoye { get; init; }
+    public required decimal Frais { get; init; }
+    public required string MonnaieOuJetonDesFrais { get; init; }
+    public required decimal PrixDuJetonDesFrais { get; init; }
 }

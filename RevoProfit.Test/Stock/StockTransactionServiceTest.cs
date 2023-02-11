@@ -138,6 +138,8 @@ public class StockTransactionServiceTest
                 Quantity = 9,
                 Currency = Currency.Usd,
                 FxRate = 1,
+                PricePerShare = 0,
+                TotalAmount = 0,
             },
         });
 
@@ -197,6 +199,10 @@ public class StockTransactionServiceTest
                 Type = TransactionType.CustodyFee,
                 TotalAmount = 100,
                 FxRate = 0.5,
+                Ticker = string.Empty,
+                Quantity = 0,
+                PricePerShare = 0,
+                Currency = Currency.Usd,
             },
             new()
             {
@@ -204,6 +210,10 @@ public class StockTransactionServiceTest
                 Type = TransactionType.CashTopUp,
                 TotalAmount = 100,
                 FxRate = 2,
+                Ticker = string.Empty,
+                Quantity = 0,
+                PricePerShare = 0,
+                Currency = Currency.Usd,
             },
             new()
             {
@@ -212,6 +222,9 @@ public class StockTransactionServiceTest
                 Ticker = "TSLA",
                 TotalAmount = 100,
                 FxRate = 1,
+                Quantity = 0,
+                PricePerShare = 0,
+                Currency = Currency.Usd,
             },
         });
 
@@ -222,8 +235,11 @@ public class StockTransactionServiceTest
             GainsInEuro = 35,
             CustodyFee = 100,
             CustodyFeeInEuro = 200,
+            SellOrders = Array.Empty<SellOrder>(),
             CashTopUp = 100,
+            CashWithdrawal = 0,
             CashTopUpInEuro = 50,
+            CashWithdrawalInEuro = 0,
             Dividends = 100,
             DividendsInEuro = 100,
         }, options => options.Excluding(o => o.SellOrders));
@@ -271,7 +287,7 @@ public class StockTransactionServiceTest
             CashTopUpInEuro = 400,
             CashWithdrawalInEuro = 100,
             CustodyFeeInEuro = 0,
-            SellOrders = new List<SellOrder>()
+            SellOrders = Array.Empty<SellOrder>(),
         });
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public class StockTransaction
+public record StockTransaction
 {
-    public DateTime Date { get; set; }
-    public string Ticker { get; set; }
-    public TransactionType Type { get; set; }
-    public double Quantity { get; set; }
-    public double PricePerShare { get; set; }
-    public double TotalAmount { get; set; }
-    public Currency Currency { get; set; }
-    public double FxRate { get; set; }
+    public required DateTime Date { get; init; }
+    public required string Ticker { get; init; }
+    public required TransactionType Type { get; init; }
+    public required double Quantity { get; init; }
+    public required double PricePerShare { get; init; }
+    public required double TotalAmount { get; init; }
+    public required Currency Currency { get; init; }
+    public required double FxRate { get; init; }
 }

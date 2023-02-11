@@ -1,7 +1,6 @@
-﻿namespace RevoProfit.Core.Exceptions
+﻿namespace RevoProfit.Core.Exceptions;
+
+public class ProcessException : Exception
 {
-    public class ProcessException : Exception
-    {
-        public ProcessException(string? message) : base(message) { }
-    }
+    public ProcessException(string? message) : base(message) { }
 }

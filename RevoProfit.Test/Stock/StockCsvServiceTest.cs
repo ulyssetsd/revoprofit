@@ -47,18 +47,18 @@ public class StockCsvServiceTest
                 PricePerShare = 0,
                 TotalAmount = 30,
                 Currency = Currency.Usd,
-                FxRate = 1.1324686027,
+                FxRate = 1.1324686027m,
             },
             new()
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 28),
                 Ticker = "BLK",
                 Type = TransactionType.Buy,
-                Quantity = 0.02245576,
-                PricePerShare = 445.32,
-                TotalAmount = 10.00,
+                Quantity = 0.02245576m,
+                PricePerShare = 445.32m,
+                TotalAmount = 10.00m,
                 Currency = Currency.Usd,
-                FxRate = 1.1324878383,
+                FxRate = 1.1324878383m,
             },
             new()
             {
@@ -67,9 +67,9 @@ public class StockCsvServiceTest
                 Type = TransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
-                TotalAmount = -0.01,
+                TotalAmount = -0.01m,
                 Currency = Currency.Usd,
-                FxRate = 1.1118967596,
+                FxRate = 1.1118967596m,
             },
             new()
             {
@@ -78,31 +78,31 @@ public class StockCsvServiceTest
                 Type = TransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
-                TotalAmount = 0.63,
+                TotalAmount = 0.63m,
                 Currency = Currency.Usd,
-                FxRate = 1.1317497421,
+                FxRate = 1.1317497421m,
             },
             new()
             {
                 Date = new DateTime(2020, 08, 20, 16, 20, 42),
                 Ticker = "TSLA",
                 Type = TransactionType.Sell,
-                Quantity = 0.0361623,
-                PricePerShare = 1991.30,
-                TotalAmount = 72.01,
+                Quantity = 0.0361623m,
+                PricePerShare = 1991.30m,
+                TotalAmount = 72.01m,
                 Currency = Currency.Usd,
-                FxRate = 1.1859934110,
+                FxRate = 1.1859934110m,
             },
             new()
             {
                 Date = new DateTime(2021, 07, 20, 10, 35, 47),
                 Ticker = "NVDA",
                 Type = TransactionType.StockSplit,
-                Quantity = 1.5,
+                Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
                 Currency = Currency.Usd,
-                FxRate = 1.1795,
+                FxRate = 1.1795m,
             },
         });
     }
@@ -134,18 +134,18 @@ public class StockCsvServiceTest
                 PricePerShare = 0,
                 TotalAmount = 30,
                 Currency = Currency.Usd,
-                FxRate = 1.14,
+                FxRate = 1.14m,
             },
             new()
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 28).AddTicks(9201150),
                 Ticker = "BLK",
                 Type = TransactionType.Buy,
-                Quantity = 0.02245576,
-                PricePerShare = 445.32,
-                TotalAmount = 10.00,
+                Quantity = 0.02245576m,
+                PricePerShare = 445.32m,
+                TotalAmount = 10.00m,
                 Currency = Currency.Usd,
-                FxRate = 1.14,
+                FxRate = 1.14m,
             },
             new()
             {
@@ -154,9 +154,9 @@ public class StockCsvServiceTest
                 Type = TransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
-                TotalAmount = -0.01,
+                TotalAmount = -0.01m,
                 Currency = Currency.Usd,
-                FxRate = 1.12,
+                FxRate = 1.12m,
             },
             new()
             {
@@ -165,20 +165,20 @@ public class StockCsvServiceTest
                 Type = TransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
-                TotalAmount = 0.63,
+                TotalAmount = 0.63m,
                 Currency = Currency.Usd,
-                FxRate = 1.14,
+                FxRate = 1.14m,
             },
             new()
             {
                 Date = new DateTime(2020, 08, 20, 16, 20, 42).AddTicks(2718400),
                 Ticker = "TSLA",
                 Type = TransactionType.Sell,
-                Quantity = 0.0361623,
-                PricePerShare = 1991.30,
+                Quantity = 0.0361623m,
+                PricePerShare = 1991.30m,
                 TotalAmount = 72,
                 Currency = Currency.Usd,
-                FxRate = 1.19,
+                FxRate = 1.19m,
             },
             new()
             {
@@ -186,21 +186,21 @@ public class StockCsvServiceTest
                 Ticker = "GME",
                 Type = TransactionType.Sell,
                 Quantity = 1,
-                PricePerShare = 347.98,
-                TotalAmount = 346.76,
+                PricePerShare = 347.98m,
+                TotalAmount = 346.76m,
                 Currency = Currency.Usd,
-                FxRate = 1.21,
+                FxRate = 1.21m,
             },
             new()
             {
                 Date = new DateTime(2021, 07, 20, 10, 35, 47).AddTicks(3104290),
                 Ticker = "NVDA",
                 Type = TransactionType.StockSplit,
-                Quantity = 1.5,
+                Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
                 Currency = Currency.Usd,
-                FxRate = 1.18,
+                FxRate = 1.18m,
             },
             new()
             {
@@ -211,7 +211,7 @@ public class StockCsvServiceTest
                 PricePerShare = 0,
                 TotalAmount = -800,
                 Currency = Currency.Usd,
-                FxRate = 1.03,
+                FxRate = 1.03m,
             },
         });
     }

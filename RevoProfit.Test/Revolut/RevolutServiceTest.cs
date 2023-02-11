@@ -40,7 +40,7 @@ public class RevolutServiceTest
         // Arrange
         var transactions = new[]
         {
-            Transaction() with { Description = "Balance migration to another region or legal entity" }
+            Transaction() with { Description = "Balance migration to another region or legal entity" },
         };
 
         // Act
@@ -60,7 +60,7 @@ public class RevolutServiceTest
             {
                 Description = "Closing transaction",
                 Amount = 0,
-            }
+            },
         };
 
         // Act
@@ -106,7 +106,7 @@ public class RevolutServiceTest
                 FiatAmountIncludingFees = 110,
                 Fee = 10,
                 BaseCurrency = "EUR",
-            }
+            },
         };
 
         // Act
@@ -128,7 +128,7 @@ public class RevolutServiceTest
                 MonnaieOuJetonDesFrais = "EUR",
                 PrixDuJetonDesFrais = 1,
                 MonnaieOuJetonEnvoye = string.Empty,
-            }
+            },
         });
     }
 
@@ -149,7 +149,7 @@ public class RevolutServiceTest
                 FiatAmountIncludingFees = -100,
                 Fee = 10,
                 BaseCurrency = "EUR",
-            }
+            },
         };
 
         // Act
@@ -171,7 +171,7 @@ public class RevolutServiceTest
                 MonnaieOuJetonDesFrais = "EUR",
                 PrixDuJetonDesFrais = 1,
                 MonnaieOuJetonRecu = string.Empty,
-            }
+            },
         });
     }
 
@@ -226,7 +226,7 @@ public class RevolutServiceTest
                 Frais = 2,
                 MonnaieOuJetonDesFrais = "ETH",
                 PrixDuJetonDesFrais = 10,
-            }
+            },
         });
     }
 
@@ -297,7 +297,7 @@ public class RevolutServiceTest
                 PrixDuJeton = 5000,
                 Frais = 0,
                 FraisEnEuros = 0,
-            }
+            },
         });
         assets.Should().BeEquivalentTo(new[]
         {
@@ -306,7 +306,7 @@ public class RevolutServiceTest
                 Jeton = "BTC",
                 MontantEnEuros = 50,
                 Montant = 0.01m,
-            }
+            },
         });
     }
 
@@ -336,7 +336,7 @@ public class RevolutServiceTest
                 PrixDuJeton = 6000,
                 Frais = 0,
                 FraisEnEuros = 0,
-            }
+            },
         });
         assets.Should().BeEquivalentTo(new[]
         {
@@ -345,7 +345,7 @@ public class RevolutServiceTest
                 Jeton = "BTC",
                 MontantEnEuros = 50,
                 Montant = 0.01m,
-            }
+            },
         });
     }
 
@@ -410,7 +410,7 @@ public class RevolutServiceTest
                 PrixDuJeton = 200,
                 Frais = 0,
                 FraisEnEuros = 0,
-            }
+            },
         });
         assets.Should().BeEquivalentTo(new[]
         {
@@ -456,7 +456,7 @@ public class RevolutServiceTest
                 PrixDuJeton = 5000,
                 Frais = 0,
                 FraisEnEuros = 0,
-            }
+            },
         });
         assets.Should().BeEquivalentTo(new[]
         {

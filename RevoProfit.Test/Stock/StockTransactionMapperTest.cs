@@ -29,7 +29,7 @@ public class StockTransactionMapperTest
             PricePerShare = "445.32",
             TotalAmount = "10.00",
             Currency = "USD",
-            FxRate = "1.1324878383"
+            FxRate = "1.1324878383",
         };
 
         var transaction = _mapper.Map(csvLine);
@@ -39,11 +39,11 @@ public class StockTransactionMapperTest
             Date = new DateTime(2020, 03, 10, 17, 48, 01),
             Ticker = "BLK",
             Type = TransactionType.CashTopUp,
-            Quantity = 0.02245576,
-            PricePerShare = 445.32,
-            TotalAmount = 10.00,
+            Quantity = 0.02245576m,
+            PricePerShare = 445.32m,
+            TotalAmount = 10.00m,
             Currency = Currency.Usd,
-            FxRate = 1.1324878383
+            FxRate = 1.1324878383m,
         });
     }
 
@@ -59,7 +59,7 @@ public class StockTransactionMapperTest
             Currency = "USD",
             FxRate = string.Empty,
             Date = "10/03/2020 17:48:01",
-            Ticker = string.Empty
+            Ticker = string.Empty,
         };
 
         var transaction = _mapper.Map(csvLine);
@@ -100,7 +100,7 @@ public class StockTransactionMapperTest
             Currency = "USD",
             FxRate = string.Empty,
             Date = "10/03/2020 17:48:01",
-            Ticker = string.Empty
+            Ticker = string.Empty,
         };
 
         var transaction = _mapper.Map(csvLine);

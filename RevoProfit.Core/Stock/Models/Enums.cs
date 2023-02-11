@@ -2,7 +2,7 @@
 
 public enum Currency
 {
-    Usd
+    Usd,
 }
 
 public enum TransactionType

@@ -81,7 +81,7 @@ public class CryptoServiceTest
                 MonnaieOuJetonDesFrais = string.Empty,
                 PrixDuJetonDesFrais = 0,
             },
-            _ => throw new NotImplementedException()
+            _ => throw new NotImplementedException(),
         };
     }
 

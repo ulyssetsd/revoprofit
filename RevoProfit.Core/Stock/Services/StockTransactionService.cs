@@ -6,6 +6,8 @@ namespace RevoProfit.Core.Stock.Services;
 
 public class StockTransactionService : IStockTransactionService
 {
+    private const int StockDecimalsPrecision = 14;
+    private const int EuroDecimalsPrecision = 14;
     private List<StockOwned> Stocks { get; } = new();
     private List<SellOrder> SellOrders { get; } = new();
     private List<StockTransaction> Dividends { get; } = new();
@@ -70,9 +72,9 @@ public class StockTransactionService : IStockTransactionService
                 });
 
                 stock.Quantity -= stockTransaction.Quantity;
-                stock.ValueInserted -= stockTransaction.TotalAmount * insertedRatio;
+                stock.ValueInserted -= Math.Round(stockTransaction.TotalAmount * insertedRatio, EuroDecimalsPrecision, MidpointRounding.ToEven);
 
-                if (Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0)
+                if (Math.Round(stock.Quantity, StockDecimalsPrecision, MidpointRounding.ToEven) == 0)
                 {
                     stock.AveragePrice = 0;
                     stock.ValueInserted = 0;
@@ -125,13 +127,13 @@ public class StockTransactionService : IStockTransactionService
     public IEnumerable<StockOwned> GetCurrentStocks()
     {
         return Stocks.OrderBy(stock => stock.Ticker)
-            .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) != 0);
+            .Where(stock => Math.Round(stock.Quantity, StockDecimalsPrecision, MidpointRounding.ToEven) != 0);
     }
 
     public IEnumerable<StockOwned> GetOldStocks()
     {
         return Stocks.OrderBy(stock => stock.Ticker)
-            .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0);
+            .Where(stock => Math.Round(stock.Quantity, StockDecimalsPrecision, MidpointRounding.ToEven) == 0);
     }
 
     public IEnumerable<AnnualReport> GetAnnualGainsReports()
@@ -144,7 +146,7 @@ public class StockTransactionService : IStockTransactionService
                 {
                     Year = year,
 
-                    Gains = SellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains),
+                    Gains = Math.Round(SellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
                     Dividends = Dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
                     CashTopUp = CashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
                     CashWithdrawal = CashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
@@ -161,7 +163,7 @@ public class StockTransactionService : IStockTransactionService
             });
     }
 
-    private static double ConvertUsingFxRate(double value, double fxRate)
+    private static decimal ConvertUsingFxRate(decimal value, decimal fxRate)
     {
         return value * (1 / fxRate);
     }

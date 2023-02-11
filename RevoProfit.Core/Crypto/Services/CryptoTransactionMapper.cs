@@ -20,7 +20,7 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
             MonnaieOuJetonDesFrais = source.MonnaieOuJetonDesFrais,
             PrixDuJetonDuMontantEnvoye = ToDecimal(source.PrixDuJetonDuMontantEnvoye),
             PrixDuJetonDuMontantRecu = ToDecimal(source.PrixDuJetonDuMontantRecu),
-            PrixDuJetonDesFrais = ToDecimal(source.PrixDuJetonDesFrais)
+            PrixDuJetonDesFrais = ToDecimal(source.PrixDuJetonDesFrais),
         };
     }
 
@@ -37,6 +37,6 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
         "Dépôt" => CryptoTransactionType.Depot,
         "Retrait" => CryptoTransactionType.Retrait,
         "Échange" => CryptoTransactionType.Echange,
-        _ => throw new ArgumentOutOfRangeException()
+        _ => throw new ArgumentOutOfRangeException(),
     };
 }

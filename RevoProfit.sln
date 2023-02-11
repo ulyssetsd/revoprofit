@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DF891819-DB0D-48E7-AABE-9EF9C42CF5D3}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\dotnet-deploy-github.yml = .github\workflows\dotnet-deploy-github.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
 	EndProjectSection
 EndProject

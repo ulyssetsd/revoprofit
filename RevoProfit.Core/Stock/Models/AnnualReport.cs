@@ -3,17 +3,17 @@
 public record AnnualReport
 {
     public required int Year { get; init; }
-    public required double Gains { get; init; }
-    public required double Dividends { get; init; }
-    public required double CashTopUp { get; init; }
-    public required double CashWithdrawal { get; init; }
-    public required double CustodyFee { get; init; }
+    public required decimal Gains { get; init; }
+    public required decimal Dividends { get; init; }
+    public required decimal CashTopUp { get; init; }
+    public required decimal CashWithdrawal { get; init; }
+    public required decimal CustodyFee { get; init; }
 
-    public required double GainsInEuro { get; init; }
-    public required double DividendsInEuro { get; init; }
-    public required double CashTopUpInEuro { get; init; }
-    public required double CashWithdrawalInEuro { get; init; }
-    public required double CustodyFeeInEuro { get; init; }
+    public required decimal GainsInEuro { get; init; }
+    public required decimal DividendsInEuro { get; init; }
+    public required decimal CashTopUpInEuro { get; init; }
+    public required decimal CashWithdrawalInEuro { get; init; }
+    public required decimal CustodyFeeInEuro { get; init; }
 
     public required IEnumerable<SellOrder> SellOrders { get; init; }
 

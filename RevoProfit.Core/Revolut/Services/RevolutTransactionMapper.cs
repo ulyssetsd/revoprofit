@@ -31,7 +31,7 @@ public class RevolutTransactionMapper : IRevolutTransactionMapper
 
     private static DateTime ToDateTime(string source)
     {
-        if(DateTime.TryParseExact(source, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var result)) return result;
+        if (DateTime.TryParseExact(source, "yyyy-MM-dd H:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var result)) return result;
         throw new ProcessException($"fail to parse date {source}");
     }
 

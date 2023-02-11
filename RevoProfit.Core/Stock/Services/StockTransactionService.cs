@@ -1,167 +1,131 @@
-﻿using RevoProfit.Core.Stock.Models;
+﻿using RevoProfit.Core.Exceptions;
+using RevoProfit.Core.Stock.Models;
 using RevoProfit.Core.Stock.Services.Interfaces;
-using System.Data;
 
 namespace RevoProfit.Core.Stock.Services;
 
 public class StockTransactionService : IStockTransactionService
 {
-    private List<StockOwned> Stocks { get; } = new();
-    private List<SellOrder> SellOrders { get; } = new();
-    private List<StockTransaction> Dividends { get; } = new();
-    private List<StockTransaction> CashTopUps { get; } = new();
-    private List<StockTransaction> CashWithdrawals { get; } = new();
-    private List<StockTransaction> CustodyFees { get; } = new();
-    private List<int> Years { get; } = new();
+    private const int StockDecimalsPrecision = 14;
+    private const int EuroDecimalsPrecision = 14;
 
-    public IEnumerable<AnnualReport> GetAnnualReports(IEnumerable<StockTransaction> transactions)
+    public (IEnumerable<AnnualReport> annualReports, IEnumerable<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
     {
-        ClearData();
-        ProcessTransactions(transactions);
-        return GetAnnualGainsReports();
-    }
+        var stocks = new List<StockOwned>();
+        var sellOrders = new List<SellOrder>();
+        var dividends = new List<StockTransaction>();
+        var cashTopUps = new List<StockTransaction>();
+        var cashWithdrawals = new List<StockTransaction>();
+        var custodyFees = new List<StockTransaction>();
+        var years = new List<int>();
 
-    private void ClearData()
-    {
-        Stocks.Clear();
-        SellOrders.Clear();
-        Dividends.Clear();
-        CashTopUps.Clear();
-        CashWithdrawals.Clear();
-        CustodyFees.Clear();
-        Years.Clear();
-    }
-
-    public void ProcessTransactions(IEnumerable<StockTransaction> transactions)
-    {
-        foreach (var transaction in transactions.OrderBy(transaction => transaction.Date))
+        foreach (var stockTransaction in stockTransactions.OrderBy(transaction => transaction.Date))
         {
-            ProcessTransaction(transaction);
+            years.Add(stockTransaction.Date.Year);
+            switch (stockTransaction.Type)
+            {
+                case TransactionType.Buy:
+                    {
+                        var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
+                        stock.ValueInserted += stockTransaction.Quantity * stockTransaction.PricePerShare;
+                        stock.Quantity += stockTransaction.Quantity;
+                        stock.AveragePrice = stock.ValueInserted / stock.Quantity;
+                        break;
+                    }
+                case TransactionType.Sell:
+                    {
+                        var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
+                        var equityValue = stock.Quantity * stockTransaction.PricePerShare;
+                        var insertedRatio = stock.ValueInserted / equityValue;
+                        var gainsRatio = 1 - insertedRatio;
+
+                        sellOrders.Add(new SellOrder
+                        {
+                            Date = stockTransaction.Date,
+                            Ticker = stockTransaction.Ticker,
+                            Amount = stockTransaction.TotalAmount,
+                            Gains = stockTransaction.TotalAmount * gainsRatio,
+                            FxRate = stockTransaction.FxRate,
+                        });
+
+                        stock.Quantity -= stockTransaction.Quantity;
+                        stock.ValueInserted -= Math.Round(stockTransaction.TotalAmount * insertedRatio, EuroDecimalsPrecision, MidpointRounding.ToEven);
+
+                        if (Math.Round(stock.Quantity, StockDecimalsPrecision, MidpointRounding.ToEven) == 0)
+                        {
+                            stock.AveragePrice = 0;
+                            stock.ValueInserted = 0;
+                        }
+                        break;
+                    }
+                case TransactionType.CashTopUp:
+                    cashTopUps.Add(stockTransaction);
+                    break;
+                case TransactionType.CashWithdrawal:
+                    cashWithdrawals.Add(stockTransaction);
+                    break;
+                case TransactionType.CustodyFee:
+                    custodyFees.Add(stockTransaction);
+                    break;
+                case TransactionType.Dividend:
+                    {
+                        dividends.Add(stockTransaction);
+                        var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
+                        stock.TotalDividend += stockTransaction.TotalAmount;
+                        break;
+                    }
+                case TransactionType.StockSplit:
+                    {
+                        var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
+                        var previousQuantity = stock.Quantity;
+                        var newQuantity = stock.Quantity + stockTransaction.Quantity;
+                        var ratio = previousQuantity / newQuantity;
+                        stock.Quantity = newQuantity;
+                        stock.AveragePrice *= ratio;
+                        break;
+                    }
+                default:
+                    throw new ProcessException($"TransactionType was incorrect: {stockTransaction.Type}");
+            }
         }
+
+        var annualReports = years
+            .Distinct()
+            .Select(year => new AnnualReport
+            {
+                Year = year,
+
+                Dividends = dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+                CashTopUp = cashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+                CashWithdrawal = cashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+                CustodyFee = custodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
+
+                DividendsInEuro = dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+                CashTopUpInEuro = cashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+                CashWithdrawalInEuro = cashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+                CustodyFeeInEuro = custodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
+
+                SellOrders = sellOrders.Where(order => order.Date.Year == year).ToList(),
+                Gains = Math.Round(sellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                GainsInEuro = Math.Round(sellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)), EuroDecimalsPrecision, MidpointRounding.ToEven),
+            });
+
+        return (annualReports, stocks);
     }
 
-    private void ProcessTransaction(StockTransaction stockTransaction)
+    private static StockOwned GetStockOrCreate(string ticker, ICollection<StockOwned> stocks)
     {
-        Years.Add(stockTransaction.Date.Year);
-        switch (stockTransaction.Type)
-        {
-            case TransactionType.Buy:
-            {
-                var stock = GetStockOrCreate(stockTransaction.Ticker);
-                stock.ValueInserted += stockTransaction.Quantity * stockTransaction.PricePerShare;
-                stock.Quantity += stockTransaction.Quantity;
-                stock.AveragePrice = stock.ValueInserted / stock.Quantity;
-                break;
-            }
-            case TransactionType.Sell:
-            {
-                var stock = GetStockOrCreate(stockTransaction.Ticker);
-                var equityValue = stock.Quantity * stockTransaction.PricePerShare;
-                var insertedRatio = stock.ValueInserted / equityValue;
-                var gainsRatio = 1 - insertedRatio;
-
-                SellOrders.Add(new SellOrder
-                {
-                    Date = stockTransaction.Date,
-                    Ticker = stockTransaction.Ticker,
-                    Amount = stockTransaction.TotalAmount,
-                    Gains = stockTransaction.TotalAmount * gainsRatio,
-                    FxRate = stockTransaction.FxRate,
-                });
-
-                stock.Quantity -= stockTransaction.Quantity;
-                stock.ValueInserted -= stockTransaction.TotalAmount * insertedRatio;
-
-                if (Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0)
-                {
-                    stock.AveragePrice = 0;
-                    stock.ValueInserted = 0;
-                }
-                break;
-            }
-            case TransactionType.CashTopUp:
-                CashTopUps.Add(stockTransaction);
-                break;
-            case TransactionType.CashWithdrawal:
-                CashWithdrawals.Add(stockTransaction);
-                break;
-            case TransactionType.CustodyFee:
-                CustodyFees.Add(stockTransaction);
-                break;
-            case TransactionType.Dividend:
-            {
-                Dividends.Add(stockTransaction);
-                var stock = GetStockOrCreate(stockTransaction.Ticker);
-                stock.TotalDividend += stockTransaction.TotalAmount;
-                break;
-            }
-            case TransactionType.StockSplit:
-            {
-                var stock = GetStockOrCreate(stockTransaction.Ticker);
-                var previousQuantity = stock.Quantity;
-                var newQuantity = stock.Quantity + stockTransaction.Quantity;
-                var ratio = previousQuantity / newQuantity;
-                stock.Quantity = newQuantity;
-                stock.AveragePrice *= ratio;
-                break;
-            }
-            default:
-                throw new DataException();
-        }
-    }
-
-    private StockOwned GetStockOrCreate(string ticker)
-    {
-        var stock = Stocks.FirstOrDefault(s => s.Ticker == ticker);
+        var stock = stocks.FirstOrDefault(s => s.Ticker == ticker);
         if (stock == null)
         {
             stock = new StockOwned { Ticker = ticker };
-            Stocks.Add(stock);
+            stocks.Add(stock);
         }
 
         return stock;
     }
 
-    public IEnumerable<StockOwned> GetCurrentStocks()
-    {
-        return Stocks.OrderBy(stock => stock.Ticker)
-            .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) != 0);
-    }
-
-    public IEnumerable<StockOwned> GetOldStocks()
-    {
-        return Stocks.OrderBy(stock => stock.Ticker)
-            .Where(stock => Math.Round(stock.Quantity, 14, MidpointRounding.ToEven) == 0);
-    }
-
-    public IEnumerable<AnnualReport> GetAnnualGainsReports()
-    {
-        return Years
-            .Distinct()
-            .Select(year =>
-            {
-                return new AnnualReport
-                {
-                    Year = year,
-
-                    Gains = SellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains),
-                    Dividends = Dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
-                    CashTopUp = CashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
-                    CashWithdrawal = CashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
-                    CustodyFee = CustodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => transaction.TotalAmount),
-
-                    GainsInEuro = SellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)),
-                    DividendsInEuro = Dividends.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
-                    CashTopUpInEuro = CashTopUps.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
-                    CashWithdrawalInEuro = CashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
-                    CustodyFeeInEuro = CustodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
-
-                    SellOrders = SellOrders.Where(order => order.Date.Year == year).ToList(),
-                };
-            });
-    }
-
-    private static double ConvertUsingFxRate(double value, double fxRate)
+    private static decimal ConvertUsingFxRate(decimal value, decimal fxRate)
     {
         return value * (1 / fxRate);
     }

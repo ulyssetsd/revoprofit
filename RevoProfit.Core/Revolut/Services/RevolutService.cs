@@ -109,7 +109,7 @@ public class RevolutService : IRevolutService
                     Frais = retrait.Fee,
                     MonnaieOuJetonDesFrais = retrait.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
-                }
+                },
             };
         }
 
@@ -136,10 +136,10 @@ public class RevolutService : IRevolutService
                     MonnaieOuJetonEnvoye = retrait.Currency,
                     PrixDuJetonDuMontantEnvoye = sourceCurrencyPrice,
 
-                    Frais = (totalFee / targetCurrencyPrice),
+                    Frais = totalFee / targetCurrencyPrice,
                     MonnaieOuJetonDesFrais = depot.Currency,
                     PrixDuJetonDesFrais = targetCurrencyPrice,
-                }
+                },
             };
         }
 

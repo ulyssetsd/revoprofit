@@ -42,7 +42,6 @@ public class StockTransactionMapperTest
             Quantity = 0.02245576m,
             PricePerShare = 445.32m,
             TotalAmount = 10.00m,
-            Currency = Currency.Usd,
             FxRate = 1.1324878383m,
         });
     }
@@ -71,7 +70,6 @@ public class StockTransactionMapperTest
             PricePerShare = 0,
             TotalAmount = 0,
             FxRate = 0,
-            Currency = Currency.Usd,
             Date = new DateTime(2020, 03, 10, 17, 48, 01),
             Ticker = string.Empty,
         });

@@ -8,6 +8,5 @@ public record StockTransaction
     public required decimal Quantity { get; init; }
     public required decimal PricePerShare { get; init; }
     public required decimal TotalAmount { get; init; }
-    public required Currency Currency { get; init; }
     public required decimal FxRate { get; init; }
 }

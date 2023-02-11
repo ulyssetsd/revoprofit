@@ -46,7 +46,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
-                Currency = Currency.Usd,
                 FxRate = 1.1324686027m,
             },
             new()
@@ -57,7 +56,6 @@ public class StockCsvServiceTest
                 Quantity = 0.02245576m,
                 PricePerShare = 445.32m,
                 TotalAmount = 10.00m,
-                Currency = Currency.Usd,
                 FxRate = 1.1324878383m,
             },
             new()
@@ -68,7 +66,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01m,
-                Currency = Currency.Usd,
                 FxRate = 1.1118967596m,
             },
             new()
@@ -79,7 +76,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63m,
-                Currency = Currency.Usd,
                 FxRate = 1.1317497421m,
             },
             new()
@@ -90,7 +86,6 @@ public class StockCsvServiceTest
                 Quantity = 0.0361623m,
                 PricePerShare = 1991.30m,
                 TotalAmount = 72.01m,
-                Currency = Currency.Usd,
                 FxRate = 1.1859934110m,
             },
             new()
@@ -101,7 +96,6 @@ public class StockCsvServiceTest
                 Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
-                Currency = Currency.Usd,
                 FxRate = 1.1795m,
             },
         });
@@ -133,7 +127,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
-                Currency = Currency.Usd,
                 FxRate = 1.14m,
             },
             new()
@@ -144,7 +137,6 @@ public class StockCsvServiceTest
                 Quantity = 0.02245576m,
                 PricePerShare = 445.32m,
                 TotalAmount = 10.00m,
-                Currency = Currency.Usd,
                 FxRate = 1.14m,
             },
             new()
@@ -155,7 +147,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01m,
-                Currency = Currency.Usd,
                 FxRate = 1.12m,
             },
             new()
@@ -166,7 +157,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63m,
-                Currency = Currency.Usd,
                 FxRate = 1.14m,
             },
             new()
@@ -177,7 +167,6 @@ public class StockCsvServiceTest
                 Quantity = 0.0361623m,
                 PricePerShare = 1991.30m,
                 TotalAmount = 72,
-                Currency = Currency.Usd,
                 FxRate = 1.19m,
             },
             new()
@@ -188,7 +177,6 @@ public class StockCsvServiceTest
                 Quantity = 1,
                 PricePerShare = 347.98m,
                 TotalAmount = 346.76m,
-                Currency = Currency.Usd,
                 FxRate = 1.21m,
             },
             new()
@@ -199,7 +187,6 @@ public class StockCsvServiceTest
                 Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
-                Currency = Currency.Usd,
                 FxRate = 1.18m,
             },
             new()
@@ -210,7 +197,6 @@ public class StockCsvServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -800,
-                Currency = Currency.Usd,
                 FxRate = 1.03m,
             },
         });

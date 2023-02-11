@@ -19,7 +19,6 @@ public class StockTransactionMapper : IStockTransactionMapper
                 Quantity = ToDecimal(source.Quantity),
                 PricePerShare = ToDecimal(source.PricePerShare),
                 TotalAmount = ToDecimal(source.TotalAmount),
-                Currency = Currency.Usd,
                 FxRate = ToDecimal(source.FxRate),
             };
         }

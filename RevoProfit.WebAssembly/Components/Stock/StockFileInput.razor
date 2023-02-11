@@ -49,7 +49,7 @@
         try
         {
             var transactions = await CsvService.ReadCsv(CsvFileStream);
-            var annualReports = StockTransactionService.GetAnnualReports(transactions);
+            var (annualReports, _) = StockTransactionService.GetAnnualReports(transactions);
             Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
             AppState.AnnualReports = annualReports;
         }

@@ -2,12 +2,12 @@
 
 public record RevolutTransaction
 {
-    public DateTime CompletedDate { get; init; }
-    public string Description { get; init; }
-    public decimal Amount { get; init; }
-    public string Currency { get; init; }
-    public decimal FiatAmount { get; init; }
-    public decimal FiatAmountIncludingFees { get; init; }
-    public decimal Fee { get; init; }
-    public string BaseCurrency { get; init; }
+    public required DateTime CompletedDate { get; init; }
+    public required string Description { get; init; }
+    public required decimal Amount { get; init; }
+    public required string Currency { get; init; }
+    public required decimal FiatAmount { get; init; }
+    public required decimal FiatAmountIncludingFees { get; init; }
+    public required decimal Fee { get; init; }
+    public required string BaseCurrency { get; init; }
 }

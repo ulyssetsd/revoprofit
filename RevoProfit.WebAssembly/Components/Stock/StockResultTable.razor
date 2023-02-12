@@ -20,7 +20,7 @@
             {
                 <tr>
                     <td>@annualReport.Year</td>
-                    <td>@annualReport.Gains.ToString("C", _us)</td>
+                    <td>@annualReport.SellReport.Gains.ToString("C", _us)</td>
                     <td>@annualReport.CashTopUp.ToString("C", _us)</td>
                     <td>@annualReport.CashWithdrawal.ToString("C", _us)</td>
                     <td>@annualReport.Dividends.ToString("C", _us)</td>
@@ -45,7 +45,7 @@
             {
                 <tr>
                     <td>@annualReport.Year</td>
-                    <td>@annualReport.GainsInEuro.ToString("C", _fr)</td>
+                    <td>@annualReport.SellReport.GainsInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.CashTopUpInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.CashWithdrawalInEuro.ToString("C", _fr)</td>
                     <td>@annualReport.DividendsInEuro.ToString("C", _fr)</td>
@@ -70,14 +70,14 @@
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 </tr>
-                @foreach (var sellOrder in annualReport.StockSellOrders)
+                @foreach (var sellOrder in annualReport.SellReport.StockSellOrders)
                 {
                     <tr>
                         <td>@sellOrder.Date</td>
                         <td>@sellOrder.Ticker</td>
                         <td>@sellOrder.Amount.ToString("C", _us)</td>
                         <td>@sellOrder.Gains.ToString("C", _us)</td>
-                        <td>@((sellOrder.Gains * sellOrder.FxRate).ToString("C", _fr))</td>
+                        <td>@sellOrder.GainsInEuros.ToString("C", _fr)</td>
                     </tr>
                 }
             </table>

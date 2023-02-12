@@ -39,13 +39,15 @@ public class StockTransactionService : IStockTransactionService
                         var insertedRatio = stock.ValueInserted / equityValue;
                         var gainsRatio = 1 - insertedRatio;
 
+                        var gains = Math.Round(stockTransaction.TotalAmount * gainsRatio, EuroDecimalsPrecision, MidpointRounding.ToEven);
                         stockSellOrders.Add(new StockSellOrder
                         {
                             Date = stockTransaction.Date,
                             Ticker = stockTransaction.Ticker,
                             Amount = stockTransaction.TotalAmount,
-                            Gains = stockTransaction.TotalAmount * gainsRatio,
-                            FxRate = stockTransaction.FxRate,
+                            Gains = gains,
+                            GainsInEuros = ConvertUsingFxRate(gains, stockTransaction.FxRate),
+                            Quantity = stockTransaction.Quantity,
                         });
 
                         stock.Quantity -= stockTransaction.Quantity;
@@ -105,9 +107,12 @@ public class StockTransactionService : IStockTransactionService
                 CashWithdrawalInEuro = cashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
                 CustodyFeeInEuro = custodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
 
-                StockSellOrders = stockSellOrders.Where(order => order.Date.Year == year).ToList(),
-                Gains = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
-                GainsInEuro = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                SellReport = new StockSellAnnualReport
+                {
+                    StockSellOrders = stockSellOrders.Where(order => order.Date.Year == year).ToList(),
+                    Gains = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                    GainsInEuro = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.GainsInEuros), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                }
             });
 
         return (annualReports, stocks);
@@ -129,4 +134,11 @@ public class StockTransactionService : IStockTransactionService
     {
         return value * (1 / fxRate);
     }
+}
+
+public record StockSellAnnualReport
+{
+    public required IEnumerable<StockSellOrder> StockSellOrders { get; init; }
+    public required decimal Gains { get; init; }
+    public required decimal GainsInEuro { get; init; }
 }

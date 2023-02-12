@@ -34,27 +34,50 @@ public class StockTransactionServiceTest
     [Test]
     public void Process_when_buying_and_selling_everything_from_a_single_stock_should_get_the_gains_and_stock_as_zero_quantity()
     {
+        // Arrange
         var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 200),
             Tesla(StockTransactionType.Sell, 1000),
         };
 
+        // Act
         var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
-        reports.First().Gains.Should().Be(800);
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        // Assert
+        reports.Should().SatisfyRespectively(report => report.SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+            {
+                StockSellOrders = new[]
+                {
+                    new StockSellOrder
+                    {
+                        Date = stockTransactions[1].Date,
+                        Ticker = "TSLA",
+                        Amount = 1000,
+                        Gains = 800,
+                        Quantity = 1,
+                        GainsInEuros = 800,
+                    },
+                },
+                Gains = 800,
+                GainsInEuro = 800,
+            }));
+        stocks.Should().BeEquivalentTo(new[]
         {
-            Ticker = "TSLA",
-            Quantity = 0,
-            ValueInserted = 0,
-            AveragePrice = 0,
+            new StockOwned
+            {
+                Ticker = "TSLA",
+                Quantity = 0,
+                ValueInserted = 0,
+                AveragePrice = 0,
+            },
         });
     }
 
     [Test]
     public void Process_when_buying_and_selling_should_return_reports_for_each_year()
     {
+        // Arrange
         var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, quantity: 2) with { Date = new DateTime(2022, 01, 01) },
@@ -62,8 +85,10 @@ public class StockTransactionServiceTest
             Tesla(StockTransactionType.Sell) with { Date = new DateTime(2023, 01, 01) },
         };
 
+        // Act
         var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
+        // Assert
         reports.Should().HaveCount(2).And.SatisfyRespectively(
             report => report.Year.Should().Be(2022),
             report => report.Year.Should().Be(2023)
@@ -71,15 +96,25 @@ public class StockTransactionServiceTest
     }
 
     [Test]
-    public void TestGainsCalculation()
+    public void Process_when_no_sell_transaction_report_should_return_an_empty_gains_in_report()
     {
-        var (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Buy, 30),
-        });
+        };
 
-        reports.First().Gains.Should().Be(0);
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = Array.Empty<StockSellOrder>(),
+            Gains = 0,
+            GainsInEuro = 0,
+        });
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -87,15 +122,40 @@ public class StockTransactionServiceTest
             ValueInserted = 40,
             AveragePrice = 20,
         });
+    }
 
-        (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+    [Test]
+    public void Process_when_two_buys_on_different_price_and_one_sell_should_return_a_gains_equivalent_to_the_average_stock_price()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Buy, 30),
             Tesla(StockTransactionType.Sell, 30),
-        });
+        };
 
-        reports.First().Gains.Should().Be(10);
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new []
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date,
+                    Ticker = "TSLA",
+                    Amount = 30,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 10,
+                },
+            },
+            Gains = 10,
+            GainsInEuro = 10,
+        });
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -103,17 +163,51 @@ public class StockTransactionServiceTest
             ValueInserted = 20,
             AveragePrice = 20,
         });
+    }
 
-        (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+    [Test]
+    public void Process_when_stock_was_sold_then_buy_again_asold_again_should_use_an_average_stock_price_relative_to_the_quantity()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Buy, 30),
             Tesla(StockTransactionType.Sell, 30),
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Sell, 30),
-        });
+        };
 
-        reports.First().Gains.Should().Be(25);
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new []
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date,
+                    Ticker = "TSLA",
+                    Amount = 30,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 10,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[4].Date,
+                    Ticker = "TSLA",
+                    Amount = 30,
+                    Gains = 15,
+                    Quantity = 1,
+                    GainsInEuros = 15,
+                },
+            },
+            Gains = 25,
+            GainsInEuro = 25,
+        });
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -121,8 +215,13 @@ public class StockTransactionServiceTest
             ValueInserted = 15,
             AveragePrice = 15,
         });
+    }
 
-        (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+    [Test]
+    public void Process_when_selling_below_price_should_handle_the_negative_gains_correctly()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Buy, 30),
@@ -130,9 +229,47 @@ public class StockTransactionServiceTest
             Tesla(StockTransactionType.Buy, 10),
             Tesla(StockTransactionType.Sell, 30),
             Tesla(StockTransactionType.Sell, 10),
-        });
+        };
 
-        reports.First().Gains.Should().Be(20);
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new[]
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date,
+                    Ticker = "TSLA",
+                    Amount = 30,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 10,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[4].Date,
+                    Ticker = "TSLA",
+                    Amount = 30,
+                    Gains = 15,
+                    Quantity = 1,
+                    GainsInEuros = 15,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[5].Date,
+                    Ticker = "TSLA",
+                    Amount = 10,
+                    Gains = -5,
+                    Quantity = 1,
+                    GainsInEuros = -5,
+                },
+            },
+            Gains = 20, 
+            GainsInEuro = 20,
+        });
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -145,13 +282,16 @@ public class StockTransactionServiceTest
     [Test]
     public void TestStockSplitCalculation()
     {
+        // Arrange
         var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10),
         };
 
+        // Act
         var (_, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
+        // Assert
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -160,6 +300,7 @@ public class StockTransactionServiceTest
             AveragePrice = 10,
         });
 
+        // Arrange
         stockTransactions.AddRange(new List<StockTransaction>
         {
             new()
@@ -174,8 +315,10 @@ public class StockTransactionServiceTest
             },
         });
 
+        // Act
         (_, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
+        // Assert
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -189,9 +332,27 @@ public class StockTransactionServiceTest
             Tesla(StockTransactionType.Sell, 1, 10),
         });
 
+        // Act
         (var reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
-        reports.First().Gains.Should().Be(0);
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new[]
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date, 
+                    Ticker = "TSLA", 
+                    Amount = 10, 
+                    Gains = 0, 
+                    Quantity = 10,
+                    GainsInEuros = 0,
+                },
+            },
+            Gains = 0,
+            GainsInEuro = 0,
+        });
         stocks.First().Should().BeEquivalentTo(new StockOwned
         {
             Ticker = "TSLA",
@@ -204,39 +365,130 @@ public class StockTransactionServiceTest
     [Test]
     public void TestFxRateGainsCalculation()
     {
-        var (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10, quantity: 3),
             Tesla(StockTransactionType.Sell, 20, fxRate: 2),
+        };
+
+        // Act
+        var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new[]
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[1].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 5,
+                },
+            },
+            Gains = 10,
+            GainsInEuro = 5,
         });
 
-        reports.First().GainsInEuro.Should().Be(5);
-
-        (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+        // Arrange
+        stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10, quantity: 3),
             Tesla(StockTransactionType.Sell, 20, fxRate: 2),
             Tesla(StockTransactionType.Sell, 20, fxRate: 1),
+        };
+
+        // Act
+        (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = new[]
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[1].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 5,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 10,
+                },
+            },
+            Gains = 20,
+            GainsInEuro = 15,
         });
 
-        reports.First().GainsInEuro.Should().Be(15);
-
-        (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+        // Arrange
+        stockTransactions = new List<StockTransaction>
         {
             Tesla(StockTransactionType.Buy, 10, quantity: 3),
             Tesla(StockTransactionType.Sell, 20, fxRate: 2),
             Tesla(StockTransactionType.Sell, 20, fxRate: 1),
             Tesla(StockTransactionType.Sell, 20, fxRate: 0.5m),
-        });
+        };
 
-        reports.First().GainsInEuro.Should().Be(35);
+        // Act
+        (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
-        (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
         {
-            Tesla(StockTransactionType.Buy, 10, quantity: 3),
-            Tesla(StockTransactionType.Sell, 20, fxRate: 2),
-            Tesla(StockTransactionType.Sell, 20, fxRate: 1),
-            Tesla(StockTransactionType.Sell, 20, fxRate: 0.5m),
+            StockSellOrders = new[]
+            {
+                new StockSellOrder
+                {
+                    Date = stockTransactions[1].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 5,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[2].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 10,
+                },
+                new StockSellOrder
+                {
+                    Date = stockTransactions[3].Date,
+                    Ticker = "TSLA",
+                    Amount = 20,
+                    Gains = 10,
+                    Quantity = 1,
+                    GainsInEuros = 20,
+                },
+            },
+            Gains = 30,
+            GainsInEuro = 35,
+        });
+    }
+
+    [Test]
+    public void Process_when_custody_fee_cash_top_up_or_dividend_should_insert_those_into_annual_report()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
+        {
             new()
             {
                 Date = DateTime.Today,
@@ -267,28 +519,36 @@ public class StockTransactionServiceTest
                 Quantity = 0,
                 PricePerShare = 0,
             },
-        });
+        };
 
+        // Act
+        var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
         reports.First().Should().BeEquivalentTo(new StockAnnualReport
         {
             Year = DateTime.Today.Year,
-            Gains = 30,
-            GainsInEuro = 35,
             CustodyFee = 100,
             CustodyFeeInEuro = 200,
-            StockSellOrders = Array.Empty<StockSellOrder>(),
             CashTopUp = 100,
             CashWithdrawal = 0,
             CashTopUpInEuro = 50,
             CashWithdrawalInEuro = 0,
             Dividends = 100,
             DividendsInEuro = 100,
-        }, options => options.Excluding(o => o.StockSellOrders));
+            SellReport = new StockSellAnnualReport
+            {
+                StockSellOrders = Array.Empty<StockSellOrder>(),
+                Gains = 0,
+                GainsInEuro = 0,
+            },
+        });
     }
 
     [Test]
     public void Test_cash_withdrawal_transaction_behaviour()
     {
+        // Arrange
         var stockTransactions = new List<StockTransaction>
         {
             new()
@@ -313,22 +573,27 @@ public class StockTransactionServiceTest
             },
         };
 
+        // Act
         var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
+        // Assert
         reports.First().Should().BeEquivalentTo(new StockAnnualReport
         {
             Year = DateTime.Today.Year,
-            Gains = 0,
             Dividends = 0,
             CashTopUp = 200,
             CashWithdrawal = 200,
             CustodyFee = 0,
-            GainsInEuro = 0,
             DividendsInEuro = 0,
             CashTopUpInEuro = 400,
             CashWithdrawalInEuro = 100,
             CustodyFeeInEuro = 0,
-            StockSellOrders = Array.Empty<StockSellOrder>(),
+            SellReport = new StockSellAnnualReport
+            {
+                StockSellOrders = Array.Empty<StockSellOrder>(),
+                Gains = 0,
+                GainsInEuro = 0,
+            },
         });
     }
 }

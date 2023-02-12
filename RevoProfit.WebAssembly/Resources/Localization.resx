@@ -222,4 +222,13 @@
   <data name="GeneralErrorMessage" xml:space="preserve">
     <value>Something went wrong while reading the csv</value>
   </data>
+  <data name="AveragePrice" xml:space="preserve">
+    <value>Average stock price</value>
+  </data>
+  <data name="AmountInDollars" xml:space="preserve">
+    <value>Amount inserted</value>
+  </data>
+  <data name="StockLefts" xml:space="preserve">
+    <value>🚀 Stock Lefts</value>
+  </data>
 </root>

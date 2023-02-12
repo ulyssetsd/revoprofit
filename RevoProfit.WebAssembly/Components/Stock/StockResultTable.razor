@@ -1,8 +1,9 @@
 ﻿@inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
+@using RevoProfit.Core.Stock.Models
 @implements IDisposable
 
-@if (AppState.AnnualReports.Any())
+@if (AppState.StockAnnualReports.Any())
 {
     <h3 class="mt-5">💵 @string.Format(Loc[nameof(Localization.ResultsIn)], "$")</h3>
     <div class="table-responsive">
@@ -15,7 +16,7 @@
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
-            @foreach (var annualReport in AppState.AnnualReports)
+            @foreach (var annualReport in AppState.StockAnnualReports)
             {
                 <tr>
                     <td>@annualReport.Year</td>
@@ -40,7 +41,7 @@
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.CustodyFee)]</th>
             </tr>
-            @foreach (var annualReport in AppState.AnnualReports)
+            @foreach (var annualReport in AppState.StockAnnualReports)
             {
                 <tr>
                     <td>@annualReport.Year</td>
@@ -55,7 +56,7 @@
     </div>
 
     <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
-    @foreach (var annualReport in AppState.AnnualReports)
+    @foreach (var annualReport in AppState.StockAnnualReports)
     {
         <div class="table-responsive">
             <table class="table">
@@ -69,7 +70,7 @@
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 </tr>
-                @foreach (var sellOrder in annualReport.SellOrders)
+                @foreach (var sellOrder in annualReport.StockSellOrders)
                 {
                     <tr>
                         <td>@sellOrder.Date</td>
@@ -82,6 +83,32 @@
             </table>
         </div>
     }
+}
+
+@if (AppState.StockOwneds.Any())
+{
+    <h3 class="mt-5">@Loc[nameof(Localization.StockLefts)]</h3>
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th scope="col">@Loc[nameof(Localization.Ticker)]</th>
+                <th scope="col">@Loc[nameof(Localization.AveragePrice)]</th>
+                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
+                <th scope="col">@Loc[nameof(Localization.AmountInDollars)]</th>
+            </tr>
+            @foreach (var stockOwned in AppState.StockOwneds.Where(IsNotEmpty))
+            {
+                <tr>
+                    <td>@stockOwned.Ticker</td>
+                    <td>@stockOwned.AveragePrice.ToString("C", _us)</td>
+                    <td>@stockOwned.Quantity</td>
+                    <td>@stockOwned.TotalDividend.ToString("C", _us)</td>
+                    <td>@stockOwned.ValueInserted.ToString("C", _us)</td>
+                </tr>
+            }
+        </table>
+    </div>
 }
 
 @code {
@@ -97,5 +124,12 @@
     public void Dispose()
     {
         AppState.OnChange -= StateHasChanged;
+    }
+
+    private static bool IsNotEmpty(StockOwned owned)
+    {
+        return !(owned.Quantity == 0 &&
+               owned.TotalDividend == 0 &&
+               owned.ValueInserted == 0);
     }
 }

@@ -79,6 +79,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount inserted.
+        /// </summary>
+        public static string AmountInDollars {
+            get {
+                return ResourceManager.GetString("AmountInDollars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amout in €.
         /// </summary>
         public static string AmountInEuros {
@@ -111,6 +120,15 @@ namespace RevoProfit.WebAssembly.Resources {
         public static string Answer3 {
             get {
                 return ResourceManager.GetString("Answer3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average stock price.
+        /// </summary>
+        public static string AveragePrice {
+            get {
+                return ResourceManager.GetString("AveragePrice", resourceCulture);
             }
         }
         
@@ -336,6 +354,15 @@ namespace RevoProfit.WebAssembly.Resources {
         public static string SellOrderDetails {
             get {
                 return ResourceManager.GetString("SellOrderDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🚀 Stock Lefts.
+        /// </summary>
+        public static string StockLefts {
+            get {
+                return ResourceManager.GetString("StockLefts", resourceCulture);
             }
         }
         

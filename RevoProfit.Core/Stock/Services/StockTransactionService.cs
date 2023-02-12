@@ -9,10 +9,10 @@ public class StockTransactionService : IStockTransactionService
     private const int StockDecimalsPrecision = 14;
     private const int EuroDecimalsPrecision = 14;
 
-    public (IEnumerable<AnnualReport> annualReports, IEnumerable<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
+    public (IEnumerable<StockAnnualReport> annualReports, IEnumerable<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
     {
         var stocks = new List<StockOwned>();
-        var sellOrders = new List<SellOrder>();
+        var stockSellOrders = new List<StockSellOrder>();
         var dividends = new List<StockTransaction>();
         var cashTopUps = new List<StockTransaction>();
         var cashWithdrawals = new List<StockTransaction>();
@@ -24,7 +24,7 @@ public class StockTransactionService : IStockTransactionService
             years.Add(stockTransaction.Date.Year);
             switch (stockTransaction.Type)
             {
-                case TransactionType.Buy:
+                case StockTransactionType.Buy:
                     {
                         var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
                         stock.ValueInserted += stockTransaction.Quantity * stockTransaction.PricePerShare;
@@ -32,14 +32,14 @@ public class StockTransactionService : IStockTransactionService
                         stock.AveragePrice = stock.ValueInserted / stock.Quantity;
                         break;
                     }
-                case TransactionType.Sell:
+                case StockTransactionType.Sell:
                     {
                         var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
                         var equityValue = stock.Quantity * stockTransaction.PricePerShare;
                         var insertedRatio = stock.ValueInserted / equityValue;
                         var gainsRatio = 1 - insertedRatio;
 
-                        sellOrders.Add(new SellOrder
+                        stockSellOrders.Add(new StockSellOrder
                         {
                             Date = stockTransaction.Date,
                             Ticker = stockTransaction.Ticker,
@@ -58,23 +58,23 @@ public class StockTransactionService : IStockTransactionService
                         }
                         break;
                     }
-                case TransactionType.CashTopUp:
+                case StockTransactionType.CashTopUp:
                     cashTopUps.Add(stockTransaction);
                     break;
-                case TransactionType.CashWithdrawal:
+                case StockTransactionType.CashWithdrawal:
                     cashWithdrawals.Add(stockTransaction);
                     break;
-                case TransactionType.CustodyFee:
+                case StockTransactionType.CustodyFee:
                     custodyFees.Add(stockTransaction);
                     break;
-                case TransactionType.Dividend:
+                case StockTransactionType.Dividend:
                     {
                         dividends.Add(stockTransaction);
                         var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
                         stock.TotalDividend += stockTransaction.TotalAmount;
                         break;
                     }
-                case TransactionType.StockSplit:
+                case StockTransactionType.StockSplit:
                     {
                         var stock = GetStockOrCreate(stockTransaction.Ticker, stocks);
                         var previousQuantity = stock.Quantity;
@@ -85,13 +85,13 @@ public class StockTransactionService : IStockTransactionService
                         break;
                     }
                 default:
-                    throw new ProcessException($"TransactionType was incorrect: {stockTransaction.Type}");
+                    throw new ProcessException($"StockTransactionType was incorrect: {stockTransaction.Type}");
             }
         }
 
         var annualReports = years
             .Distinct()
-            .Select(year => new AnnualReport
+            .Select(year => new StockAnnualReport
             {
                 Year = year,
 
@@ -105,9 +105,9 @@ public class StockTransactionService : IStockTransactionService
                 CashWithdrawalInEuro = cashWithdrawals.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
                 CustodyFeeInEuro = custodyFees.Where(transaction => transaction.Date.Year == year).Sum(transaction => ConvertUsingFxRate(transaction.TotalAmount, transaction.FxRate)),
 
-                SellOrders = sellOrders.Where(order => order.Date.Year == year).ToList(),
-                Gains = Math.Round(sellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
-                GainsInEuro = Math.Round(sellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                StockSellOrders = stockSellOrders.Where(order => order.Date.Year == year).ToList(),
+                Gains = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
+                GainsInEuro = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)), EuroDecimalsPrecision, MidpointRounding.ToEven),
             });
 
         return (annualReports, stocks);

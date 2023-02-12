@@ -42,7 +42,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 01),
                 Ticker = string.Empty,
-                Type = TransactionType.CashTopUp,
+                Type = StockTransactionType.CashTopUp,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
@@ -52,7 +52,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 28),
                 Ticker = "BLK",
-                Type = TransactionType.Buy,
+                Type = StockTransactionType.Buy,
                 Quantity = 0.02245576m,
                 PricePerShare = 445.32m,
                 TotalAmount = 10.00m,
@@ -62,7 +62,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 05, 31, 23, 30, 04),
                 Ticker = string.Empty,
-                Type = TransactionType.CustodyFee,
+                Type = StockTransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01m,
@@ -72,7 +72,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 06, 24, 05, 25, 25),
                 Ticker = "BLK",
-                Type = TransactionType.Dividend,
+                Type = StockTransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63m,
@@ -82,7 +82,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 08, 20, 16, 20, 42),
                 Ticker = "TSLA",
-                Type = TransactionType.Sell,
+                Type = StockTransactionType.Sell,
                 Quantity = 0.0361623m,
                 PricePerShare = 1991.30m,
                 TotalAmount = 72.01m,
@@ -92,7 +92,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2021, 07, 20, 10, 35, 47),
                 Ticker = "NVDA",
-                Type = TransactionType.StockSplit,
+                Type = StockTransactionType.StockSplit,
                 Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
@@ -123,7 +123,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 01).AddTicks(8524200),
                 Ticker = string.Empty,
-                Type = TransactionType.CashTopUp,
+                Type = StockTransactionType.CashTopUp,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 30,
@@ -133,7 +133,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 03, 10, 17, 48, 28).AddTicks(9201150),
                 Ticker = "BLK",
-                Type = TransactionType.Buy,
+                Type = StockTransactionType.Buy,
                 Quantity = 0.02245576m,
                 PricePerShare = 445.32m,
                 TotalAmount = 10.00m,
@@ -143,7 +143,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 05, 31, 23, 30, 04).AddTicks(7265790),
                 Ticker = string.Empty,
-                Type = TransactionType.CustodyFee,
+                Type = StockTransactionType.CustodyFee,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -0.01m,
@@ -153,7 +153,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 06, 24, 05, 28, 27).AddTicks(1413060),
                 Ticker = "BLK",
-                Type = TransactionType.Dividend,
+                Type = StockTransactionType.Dividend,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 0.63m,
@@ -163,7 +163,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2020, 08, 20, 16, 20, 42).AddTicks(2718400),
                 Ticker = "TSLA",
-                Type = TransactionType.Sell,
+                Type = StockTransactionType.Sell,
                 Quantity = 0.0361623m,
                 PricePerShare = 1991.30m,
                 TotalAmount = 72,
@@ -173,7 +173,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2021, 01, 27, 16, 14, 18).AddTicks(2048770),
                 Ticker = "GME",
-                Type = TransactionType.Sell,
+                Type = StockTransactionType.Sell,
                 Quantity = 1,
                 PricePerShare = 347.98m,
                 TotalAmount = 346.76m,
@@ -183,7 +183,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2021, 07, 20, 10, 35, 47).AddTicks(3104290),
                 Ticker = "NVDA",
-                Type = TransactionType.StockSplit,
+                Type = StockTransactionType.StockSplit,
                 Quantity = 1.5m,
                 PricePerShare = 0,
                 TotalAmount = 0,
@@ -193,7 +193,7 @@ public class StockCsvServiceTest
             {
                 Date = new DateTime(2022, 11, 21, 06, 46, 50).AddTicks(7320220),
                 Ticker = string.Empty,
-                Type = TransactionType.CashWithdrawal,
+                Type = StockTransactionType.CashWithdrawal,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = -800,

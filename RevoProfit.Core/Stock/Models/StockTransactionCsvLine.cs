@@ -2,7 +2,7 @@
 
 namespace RevoProfit.Core.Stock.Models;
 
-public record TransactionCsvLine
+public record StockTransactionCsvLine
 {
     [Name("Date")] public required string Date { get; init; }
     [Name("Ticker")] public required string Ticker { get; init; }

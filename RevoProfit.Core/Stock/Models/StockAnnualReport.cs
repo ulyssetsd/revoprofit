@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public record AnnualReport
+public record StockAnnualReport
 {
     public required int Year { get; init; }
     public required decimal Gains { get; init; }
@@ -15,7 +15,7 @@ public record AnnualReport
     public required decimal CashWithdrawalInEuro { get; init; }
     public required decimal CustodyFeeInEuro { get; init; }
 
-    public required IEnumerable<SellOrder> SellOrders { get; init; }
+    public required IEnumerable<StockSellOrder> StockSellOrders { get; init; }
 
     public override string ToString()
     {

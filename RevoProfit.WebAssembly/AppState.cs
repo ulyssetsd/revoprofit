@@ -7,9 +7,10 @@ public class AppState
 {
     private bool _isCalculatingStock;
     private bool _isCalculatingCrypto;
-    private IEnumerable<AnnualReport> _annualReports = new List<AnnualReport>();
+    private IEnumerable<StockAnnualReport> _stockAnnualReports = new List<StockAnnualReport>();
     private IEnumerable<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
     private IEnumerable<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
+    private IEnumerable<StockOwned> _stockOwneds = new List<StockOwned>();
 
     public bool IsCalculatingStock
     {
@@ -31,12 +32,12 @@ public class AppState
         }
     }
 
-    public IEnumerable<AnnualReport> AnnualReports
+    public IEnumerable<StockAnnualReport> StockAnnualReports
     {
-        get => _annualReports;
+        get => _stockAnnualReports;
         set
         {
-            _annualReports = value;
+            _stockAnnualReports = value;
             NotifyStateChanged();
         }
     }
@@ -57,6 +58,16 @@ public class AppState
         set
         {
             _cryptoRetraits = value;
+            NotifyStateChanged();
+        }
+    }
+
+    public IEnumerable<StockOwned> StockOwneds
+    {
+        get => _stockOwneds;
+        set
+        {
+            _stockOwneds = value;
             NotifyStateChanged();
         }
     }

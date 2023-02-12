@@ -20,7 +20,7 @@ public class StockTransactionMapperTest
     [SetCulture("en-GB")]
     public void TestMapping()
     {
-        var csvLine = new TransactionCsvLine
+        var csvLine = new StockTransactionCsvLine
         {
             Date = "10/03/2020 17:48:01",
             Ticker = "BLK",
@@ -38,7 +38,7 @@ public class StockTransactionMapperTest
         {
             Date = new DateTime(2020, 03, 10, 17, 48, 01),
             Ticker = "BLK",
-            Type = TransactionType.CashTopUp,
+            Type = StockTransactionType.CashTopUp,
             Quantity = 0.02245576m,
             PricePerShare = 445.32m,
             TotalAmount = 10.00m,
@@ -49,7 +49,7 @@ public class StockTransactionMapperTest
     [Test]
     public void TestEmptyMapping()
     {
-        var csvLine = new TransactionCsvLine
+        var csvLine = new StockTransactionCsvLine
         {
             Type = "CASH TOP-UP",
             Quantity = string.Empty,
@@ -65,7 +65,7 @@ public class StockTransactionMapperTest
 
         transaction.Should().BeEquivalentTo(new StockTransaction
         {
-            Type = TransactionType.CashTopUp,
+            Type = StockTransactionType.CashTopUp,
             Quantity = 0,
             PricePerShare = 0,
             TotalAmount = 0,
@@ -75,21 +75,21 @@ public class StockTransactionMapperTest
         });
     }
 
-    [TestCase("BUY", TransactionType.Buy)]
-    [TestCase("BUY - MARKET", TransactionType.Buy)]
-    [TestCase("BUY - STOP", TransactionType.Buy)]
-    [TestCase("CASH TOP-UP", TransactionType.CashTopUp)]
-    [TestCase("CUSTODY_FEE" , TransactionType.CustodyFee)]
-    [TestCase("CUSTODY FEE", TransactionType.CustodyFee)]
-    [TestCase("DIVIDEND", TransactionType.Dividend)]
-    [TestCase("SELL", TransactionType.Sell)]
-    [TestCase("SELL - MARKET", TransactionType.Sell)]
-    [TestCase("SELL - STOP", TransactionType.Sell)]
-    [TestCase("STOCK SPLIT", TransactionType.StockSplit)]
-    [TestCase("CASH WITHDRAWAL", TransactionType.CashWithdrawal)]
-    public void TestEnumMapping(string type, TransactionType expectedType)
+    [TestCase("BUY", StockTransactionType.Buy)]
+    [TestCase("BUY - MARKET", StockTransactionType.Buy)]
+    [TestCase("BUY - STOP", StockTransactionType.Buy)]
+    [TestCase("CASH TOP-UP", StockTransactionType.CashTopUp)]
+    [TestCase("CUSTODY_FEE" , StockTransactionType.CustodyFee)]
+    [TestCase("CUSTODY FEE", StockTransactionType.CustodyFee)]
+    [TestCase("DIVIDEND", StockTransactionType.Dividend)]
+    [TestCase("SELL", StockTransactionType.Sell)]
+    [TestCase("SELL - MARKET", StockTransactionType.Sell)]
+    [TestCase("SELL - STOP", StockTransactionType.Sell)]
+    [TestCase("STOCK SPLIT", StockTransactionType.StockSplit)]
+    [TestCase("CASH WITHDRAWAL", StockTransactionType.CashWithdrawal)]
+    public void TestEnumMapping(string type, StockTransactionType expectedType)
     {
-        var csvLine = new TransactionCsvLine
+        var csvLine = new StockTransactionCsvLine
         {
             Type = type,
             Quantity = string.Empty,

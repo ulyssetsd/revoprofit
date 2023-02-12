@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public record SellOrder
+public record StockSellOrder
 {
     public required DateTime Date { get; init; }
     public required string Ticker { get; init; }

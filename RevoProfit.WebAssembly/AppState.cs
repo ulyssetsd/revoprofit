@@ -7,7 +7,7 @@ public class AppState
 {
     private bool _isCalculatingStock;
     private bool _isCalculatingCrypto;
-    private IEnumerable<AnnualReport> _annualReports = new List<AnnualReport>();
+    private IEnumerable<StockAnnualReport> _annualReports = new List<StockAnnualReport>();
     private IEnumerable<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
     private IEnumerable<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
 
@@ -31,7 +31,7 @@ public class AppState
         }
     }
 
-    public IEnumerable<AnnualReport> AnnualReports
+    public IEnumerable<StockAnnualReport> AnnualReports
     {
         get => _annualReports;
         set

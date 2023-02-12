@@ -69,7 +69,7 @@
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                     <th scope="col">@Loc[nameof(Localization.Gains)]</th>
                 </tr>
-                @foreach (var sellOrder in annualReport.SellOrders)
+                @foreach (var sellOrder in annualReport.StockSellOrders)
                 {
                     <tr>
                         <td>@sellOrder.Date</td>

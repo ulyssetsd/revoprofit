@@ -20,7 +20,7 @@ public class StockCsvService : IStockCsvService
         using var streamReader = new StreamReader(stream);
         using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
-        var csvLines = await csv.GetRecordsAsync<TransactionCsvLine>().ToEnumerableAsync();
+        var csvLines = await csv.GetRecordsAsync<StockTransactionCsvLine>().ToEnumerableAsync();
         return csvLines.Select(_stockTransactionMapper.Map);
     }
 }

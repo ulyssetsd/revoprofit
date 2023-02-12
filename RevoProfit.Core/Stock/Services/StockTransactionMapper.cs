@@ -7,7 +7,7 @@ namespace RevoProfit.Core.Stock.Services;
 
 public class StockTransactionMapper : IStockTransactionMapper
 {
-    public StockTransaction Map(TransactionCsvLine source)
+    public StockTransaction Map(StockTransactionCsvLine source)
     {
         try
         {
@@ -42,15 +42,15 @@ public class StockTransactionMapper : IStockTransactionMapper
         throw new ProcessException($"fail to parse decimal: {source}");
     }
 
-    private static TransactionType ToTransactionType(string source) => source.Split(" - ").First() switch
+    private static StockTransactionType ToTransactionType(string source) => source.Split(" - ").First() switch
     {
-        "CASH TOP-UP" => TransactionType.CashTopUp,
-        "BUY" => TransactionType.Buy, // "BUY - MARKET" and "BUY - STOP"
-        "CUSTODY_FEE" or "CUSTODY FEE" => TransactionType.CustodyFee,
-        "DIVIDEND" => TransactionType.Dividend,
-        "SELL" => TransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
-        "STOCK SPLIT" => TransactionType.StockSplit,
-        "CASH WITHDRAWAL" => TransactionType.CashWithdrawal,
-        _ => throw new ProcessException($"fail to parse TransactionType: {source}"),
+        "CASH TOP-UP" => StockTransactionType.CashTopUp,
+        "BUY" => StockTransactionType.Buy, // "BUY - MARKET" and "BUY - STOP"
+        "CUSTODY_FEE" or "CUSTODY FEE" => StockTransactionType.CustodyFee,
+        "DIVIDEND" => StockTransactionType.Dividend,
+        "SELL" => StockTransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
+        "STOCK SPLIT" => StockTransactionType.StockSplit,
+        "CASH WITHDRAWAL" => StockTransactionType.CashWithdrawal,
+        _ => throw new ProcessException($"fail to parse StockTransactionType: {source}"),
     };
 }

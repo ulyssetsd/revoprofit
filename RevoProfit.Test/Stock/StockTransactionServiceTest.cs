@@ -20,11 +20,11 @@ public class StockTransactionServiceTest
         _dateIncrement = 0;
     }
 
-    private StockTransaction Tesla(TransactionType transactionType, decimal price = 1, decimal quantity = 1, int yearIncrement = 0, decimal fxRate = 1) => new()
+    private StockTransaction Tesla(StockTransactionType stockTransactionType, decimal price = 1, decimal quantity = 1, int yearIncrement = 0, decimal fxRate = 1) => new()
     {
         Date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement),
         Ticker = "TSLA",
-        Type = transactionType,
+        Type = stockTransactionType,
         Quantity = quantity,
         PricePerShare = price,
         TotalAmount = price * quantity,
@@ -36,8 +36,8 @@ public class StockTransactionServiceTest
     {
         var stockTransactions = new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 200),
-            Tesla(TransactionType.Sell, 1000),
+            Tesla(StockTransactionType.Buy, 200),
+            Tesla(StockTransactionType.Sell, 1000),
         };
 
         var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
@@ -57,9 +57,9 @@ public class StockTransactionServiceTest
     {
         var stockTransactions = new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, quantity: 2) with { Date = new DateTime(2022, 01, 01) },
-            Tesla(TransactionType.Sell) with { Date = new DateTime(2022, 01, 01) },
-            Tesla(TransactionType.Sell) with { Date = new DateTime(2023, 01, 01) },
+            Tesla(StockTransactionType.Buy, quantity: 2) with { Date = new DateTime(2022, 01, 01) },
+            Tesla(StockTransactionType.Sell) with { Date = new DateTime(2022, 01, 01) },
+            Tesla(StockTransactionType.Sell) with { Date = new DateTime(2023, 01, 01) },
         };
 
         var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
@@ -75,8 +75,8 @@ public class StockTransactionServiceTest
     {
         var (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Buy, 30),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Buy, 30),
         });
 
         reports.First().Gains.Should().Be(0);
@@ -90,9 +90,9 @@ public class StockTransactionServiceTest
 
         (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Buy, 30),
-            Tesla(TransactionType.Sell, 30),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Buy, 30),
+            Tesla(StockTransactionType.Sell, 30),
         });
 
         reports.First().Gains.Should().Be(10);
@@ -106,11 +106,11 @@ public class StockTransactionServiceTest
 
         (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Buy, 30),
-            Tesla(TransactionType.Sell, 30),
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Sell, 30),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Buy, 30),
+            Tesla(StockTransactionType.Sell, 30),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Sell, 30),
         });
 
         reports.First().Gains.Should().Be(25);
@@ -124,12 +124,12 @@ public class StockTransactionServiceTest
 
         (reports, stocks) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Buy, 30),
-            Tesla(TransactionType.Sell, 30),
-            Tesla(TransactionType.Buy, 10),
-            Tesla(TransactionType.Sell, 30),
-            Tesla(TransactionType.Sell, 10),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Buy, 30),
+            Tesla(StockTransactionType.Sell, 30),
+            Tesla(StockTransactionType.Buy, 10),
+            Tesla(StockTransactionType.Sell, 30),
+            Tesla(StockTransactionType.Sell, 10),
         });
 
         reports.First().Gains.Should().Be(20);
@@ -147,7 +147,7 @@ public class StockTransactionServiceTest
     {
         var stockTransactions = new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10),
+            Tesla(StockTransactionType.Buy, 10),
         };
 
         var (_, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
@@ -166,7 +166,7 @@ public class StockTransactionServiceTest
             {
                 Date = DateTime.Today.AddDays(++_dateIncrement),
                 Ticker = "TSLA",
-                Type = TransactionType.StockSplit,
+                Type = StockTransactionType.StockSplit,
                 Quantity = 9,
                 FxRate = 1,
                 PricePerShare = 0,
@@ -186,7 +186,7 @@ public class StockTransactionServiceTest
 
         stockTransactions.AddRange(new List<StockTransaction>
         {
-            Tesla(TransactionType.Sell, 1, 10),
+            Tesla(StockTransactionType.Sell, 1, 10),
         });
 
         (var reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
@@ -206,41 +206,41 @@ public class StockTransactionServiceTest
     {
         var (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10, quantity: 3),
-            Tesla(TransactionType.Sell, 20, fxRate: 2),
+            Tesla(StockTransactionType.Buy, 10, quantity: 3),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 2),
         });
 
         reports.First().GainsInEuro.Should().Be(5);
 
         (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10, quantity: 3),
-            Tesla(TransactionType.Sell, 20, fxRate: 2),
-            Tesla(TransactionType.Sell, 20, fxRate: 1),
+            Tesla(StockTransactionType.Buy, 10, quantity: 3),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 2),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 1),
         });
 
         reports.First().GainsInEuro.Should().Be(15);
 
         (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10, quantity: 3),
-            Tesla(TransactionType.Sell, 20, fxRate: 2),
-            Tesla(TransactionType.Sell, 20, fxRate: 1),
-            Tesla(TransactionType.Sell, 20, fxRate: 0.5m),
+            Tesla(StockTransactionType.Buy, 10, quantity: 3),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 2),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 1),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 0.5m),
         });
 
         reports.First().GainsInEuro.Should().Be(35);
 
         (reports, _) = _stockTransactionService.GetAnnualReports(new List<StockTransaction>
         {
-            Tesla(TransactionType.Buy, 10, quantity: 3),
-            Tesla(TransactionType.Sell, 20, fxRate: 2),
-            Tesla(TransactionType.Sell, 20, fxRate: 1),
-            Tesla(TransactionType.Sell, 20, fxRate: 0.5m),
+            Tesla(StockTransactionType.Buy, 10, quantity: 3),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 2),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 1),
+            Tesla(StockTransactionType.Sell, 20, fxRate: 0.5m),
             new()
             {
                 Date = DateTime.Today,
-                Type = TransactionType.CustodyFee,
+                Type = StockTransactionType.CustodyFee,
                 TotalAmount = 100,
                 FxRate = 0.5m,
                 Ticker = string.Empty,
@@ -250,7 +250,7 @@ public class StockTransactionServiceTest
             new()
             {
                 Date = DateTime.Today,
-                Type = TransactionType.CashTopUp,
+                Type = StockTransactionType.CashTopUp,
                 TotalAmount = 100,
                 FxRate = 2,
                 Ticker = string.Empty,
@@ -260,7 +260,7 @@ public class StockTransactionServiceTest
             new()
             {
                 Date = DateTime.Today,
-                Type = TransactionType.Dividend,
+                Type = StockTransactionType.Dividend,
                 Ticker = "TSLA",
                 TotalAmount = 100,
                 FxRate = 1,
@@ -269,21 +269,21 @@ public class StockTransactionServiceTest
             },
         });
 
-        reports.First().Should().BeEquivalentTo(new AnnualReport
+        reports.First().Should().BeEquivalentTo(new StockAnnualReport
         {
             Year = DateTime.Today.Year,
             Gains = 30,
             GainsInEuro = 35,
             CustodyFee = 100,
             CustodyFeeInEuro = 200,
-            SellOrders = Array.Empty<SellOrder>(),
+            StockSellOrders = Array.Empty<StockSellOrder>(),
             CashTopUp = 100,
             CashWithdrawal = 0,
             CashTopUpInEuro = 50,
             CashWithdrawalInEuro = 0,
             Dividends = 100,
             DividendsInEuro = 100,
-        }, options => options.Excluding(o => o.SellOrders));
+        }, options => options.Excluding(o => o.StockSellOrders));
     }
 
     [Test]
@@ -295,7 +295,7 @@ public class StockTransactionServiceTest
             {
                 Date = DateTime.Today.AddDays(-1),
                 Ticker = string.Empty,
-                Type = TransactionType.CashTopUp,
+                Type = StockTransactionType.CashTopUp,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 200,
@@ -305,7 +305,7 @@ public class StockTransactionServiceTest
             {
                 Date = DateTime.Today.AddDays(0),
                 Ticker = string.Empty,
-                Type = TransactionType.CashWithdrawal,
+                Type = StockTransactionType.CashWithdrawal,
                 Quantity = 0,
                 PricePerShare = 0,
                 TotalAmount = 200,
@@ -315,7 +315,7 @@ public class StockTransactionServiceTest
 
         var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
-        reports.First().Should().BeEquivalentTo(new AnnualReport
+        reports.First().Should().BeEquivalentTo(new StockAnnualReport
         {
             Year = DateTime.Today.Year,
             Gains = 0,
@@ -328,7 +328,7 @@ public class StockTransactionServiceTest
             CashTopUpInEuro = 400,
             CashWithdrawalInEuro = 100,
             CustodyFeeInEuro = 0,
-            SellOrders = Array.Empty<SellOrder>(),
+            StockSellOrders = Array.Empty<StockSellOrder>(),
         });
     }
 }

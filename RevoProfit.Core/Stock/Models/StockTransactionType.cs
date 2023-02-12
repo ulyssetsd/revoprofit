@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public enum TransactionType
+public enum StockTransactionType
 {
     Buy,
     CashTopUp,

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RevoProfit.Core.Crypto.Services;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.Logging;
 using RevoProfit.Core.Revolut.Services;
 using RevoProfit.Core.Revolut.Services.Interfaces;
 using RevoProfit.Core.Stock.Services;
@@ -24,5 +25,6 @@ builder.Services.AddScoped<ICryptoTransactionMapper, CryptoTransactionMapper>();
 builder.Services.AddScoped<IRevolutCsvService, RevolutCsvService>();
 builder.Services.AddScoped<IRevolutService, RevolutService>();
 builder.Services.AddScoped<IRevolutTransactionMapper, RevolutTransactionMapper>();
+builder.Logging.AddProvider(new HeightBaseLoggerProvider());
 
 await builder.Build().RunAsync();

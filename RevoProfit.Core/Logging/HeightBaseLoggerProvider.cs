@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace RevoProfit.Logging;
+namespace RevoProfit.Core.Logging;
 
 public class HeightBaseLoggerProvider : ILoggerProvider
 {

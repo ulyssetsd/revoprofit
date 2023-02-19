@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
-namespace RevoProfit.Logging;
+namespace RevoProfit.Core.Logging;
 
 public class HeightBaseLogger : ILogger
 {
@@ -12,10 +12,10 @@ public class HeightBaseLogger : ILogger
 
     public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-#if (DEBUG == false)
-        await LogToApi(logLevel, eventId, state);
-#else
+#if DEBUG
         await Task.CompletedTask;
+#else
+        await LogToApi(logLevel, eventId, state);
 #endif
     }
 

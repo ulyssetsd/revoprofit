@@ -118,7 +118,7 @@ public class RevolutService : IRevolutService
             var retrait = retraits.First();
             var depot = depots.First();
             var totalFee = retrait.Fee + depot.Fee;
-            var sourceCurrencyPrice = retrait.FiatAmountIncludingFees / retrait.Amount;
+            var sourceCurrencyPrice = retrait.FiatAmount / retrait.Amount;
             var targetCurrencyPrice = depot.FiatAmount / depot.Amount;
 
             return new[]

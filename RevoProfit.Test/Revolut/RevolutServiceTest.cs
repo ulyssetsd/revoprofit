@@ -189,8 +189,8 @@ public class RevolutServiceTest
                 CompletedDate = dateTimeOfTransfer,
                 Currency = "BTC",
                 Amount = -1.1m,
-                FiatAmount = -100,
-                FiatAmountIncludingFees = -110,
+                FiatAmount = -110,
+                FiatAmountIncludingFees = -100,
                 Fee = 10,
             },
             Transaction() with
@@ -466,6 +466,64 @@ public class RevolutServiceTest
                 MontantEnEuros = 1000,
                 Montant = 0.1m,
             },
+        });
+    }
+
+    [Test]
+    public void Process_when_exchange_with_fees_should_store_fees_infos_for_both_currencies()
+    {
+        // Type,Product,Started Date,Completed Date,Description,Amount,Currency,Fiat amount,Fiat amount (inc. fees),Fee,Base currency,State,Balance
+        // EXCHANGE,Current,2021-07-29 8:54:43,2021-07-29 8:54:43,Exchanged to DOGE,40,DOGE,6.9,7,0.11,EUR,COMPLETED,395.1784378
+        // EXCHANGE,Current,2021-08-06 18:38:11,2021-08-06 18:38:11,Exchanged to ETH,-408.43876,DOGE,-71.28,-70.21,1.06,EUR,COMPLETED,0
+        // Arrange
+        var transactions = new[]
+        {
+            Tran("BTC", 1, 1),
+            new RevolutTransaction
+            {
+                CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
+                Description = string.Empty,
+                Amount = -1,
+                Currency = "BTC",
+                FiatAmount = -1,
+                FiatAmountIncludingFees = -0.9m,
+                Fee = 0.1m,
+                BaseCurrency = "EUR",
+            },
+            new RevolutTransaction
+            {
+                CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
+                Description = string.Empty,
+                Amount = 0.8m,
+                Currency = "ETH",
+                FiatAmount = 0.8m,
+                FiatAmountIncludingFees = 0.9m,
+                Fee = 0.1m,
+                BaseCurrency = "EUR",
+            },
+        };
+
+        // Act
+        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        retraits.Should().BeEmpty();
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 0,
+                Montant = 0,
+                Frais = 0.1m,
+            },
+            new CryptoAsset
+            {
+                Jeton = "ETH",
+                MontantEnEuros = 0.8m,
+                Montant = 0.8m,
+                Frais = 0.1m,
+            }
         });
     }
 

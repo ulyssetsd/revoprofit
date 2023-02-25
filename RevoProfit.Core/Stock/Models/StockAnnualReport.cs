@@ -1,6 +1,4 @@
-﻿using RevoProfit.Core.Stock.Services;
-
-namespace RevoProfit.Core.Stock.Models;
+﻿namespace RevoProfit.Core.Stock.Models;
 
 public record StockAnnualReport
 {

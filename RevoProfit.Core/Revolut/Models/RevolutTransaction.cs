@@ -8,6 +8,6 @@ public record RevolutTransaction
     public required string Currency { get; init; }
     public required decimal FiatAmount { get; init; }
     public required decimal FiatAmountIncludingFees { get; init; }
-    public required decimal Fee { get; init; }
+    public required decimal FiatFees { get; init; }
     public required string BaseCurrency { get; init; }
 }

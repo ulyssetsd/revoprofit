@@ -30,7 +30,7 @@ public class RevolutServiceTest
         Currency = "BTC",
         FiatAmount = 10,
         FiatAmountIncludingFees = 11,
-        Fee = 1,
+        FiatFees = 1,
         BaseCurrency = "EUR",
     };
 
@@ -104,7 +104,7 @@ public class RevolutServiceTest
                 Currency = "BTC",
                 FiatAmount = 100,
                 FiatAmountIncludingFees = 110,
-                Fee = 10,
+                FiatFees = 10,
                 BaseCurrency = "EUR",
             },
         };
@@ -147,7 +147,7 @@ public class RevolutServiceTest
                 Currency = "BTC",
                 FiatAmount = -110,
                 FiatAmountIncludingFees = -100,
-                Fee = 10,
+                FiatFees = 10,
                 BaseCurrency = "EUR",
             },
         };
@@ -184,23 +184,27 @@ public class RevolutServiceTest
         var dateTimeOfTransfer = new DateTime(2022, 05, 01, 12, 12, 30);
         var transactions = new[]
         {
-            Transaction() with
+            new RevolutTransaction
             {
                 CompletedDate = dateTimeOfTransfer,
                 Currency = "BTC",
                 Amount = -1.1m,
                 FiatAmount = -110,
                 FiatAmountIncludingFees = -100,
-                Fee = 10,
+                FiatFees = 10,
+                Description = string.Empty,
+                BaseCurrency = "EUR",
             },
-            Transaction() with
+            new RevolutTransaction
             {
                 CompletedDate = dateTimeOfTransfer, 
                 Currency = "ETH",
                 Amount = 9,
                 FiatAmount = 90,
                 FiatAmountIncludingFees = 100,
-                Fee = 10,
+                FiatFees = 10,
+                Description = string.Empty,
+                BaseCurrency = "EUR",
             },
         };
 
@@ -210,6 +214,23 @@ public class RevolutServiceTest
         // Assert
         results.Should().BeEquivalentTo(new CryptoTransaction[]
         {
+            new()
+            {
+                Type = CryptoTransactionType.FeesOnly,
+                Date = dateTimeOfTransfer,
+
+                MontantRecu = 0,
+                MonnaieOuJetonRecu = string.Empty,
+                PrixDuJetonDuMontantRecu = 0,
+
+                MontantEnvoye = 0,
+                MonnaieOuJetonEnvoye = string.Empty,
+                PrixDuJetonDuMontantEnvoye = 0,
+
+                Frais = 0.1m,
+                MonnaieOuJetonDesFrais = "BTC",
+                PrixDuJetonDesFrais = 100,
+            },
             new()
             {
                 Type = CryptoTransactionType.Echange,
@@ -223,7 +244,7 @@ public class RevolutServiceTest
                 MonnaieOuJetonEnvoye = "BTC",
                 PrixDuJetonDuMontantEnvoye = 100,
                 
-                Frais = 2,
+                Frais = 1,
                 MonnaieOuJetonDesFrais = "ETH",
                 PrixDuJetonDesFrais = 10,
             },
@@ -267,7 +288,7 @@ public class RevolutServiceTest
         Currency = currency,
         FiatAmount = price,
         FiatAmountIncludingFees = price,
-        Fee = 0,
+        FiatFees = 0,
         BaseCurrency = "EUR",
     };
 
@@ -462,12 +483,8 @@ public class RevolutServiceTest
     }
 
     [Test]
-    public void Process_when_exchange_with_fees_should_store_fees_infos_for_both_currencies()
+    public void Process_when_exchange_with_fees_should_store_fees_infos_on_both_currencies()
     {
-        // Type,Product,Started Date,Completed Date,Description,Amount,Currency,Fiat amount,Fiat amount (inc. fees),Fee,Base currency,State,Balance
-        // EXCHANGE,Current,2021-07-29 8:54:43,2021-07-29 8:54:43,Exchanged to DOGE,40,DOGE,6.9,7,0.11,EUR,COMPLETED,395.1784378
-        // EXCHANGE,Current,2021-08-06 18:38:11,2021-08-06 18:38:11,Exchanged to ETH,-408.43876,DOGE,-71.28,-70.21,1.06,EUR,COMPLETED,0
-        // Arrange
         var transactions = new[]
         {
             Tran("BTC", 1, 1),
@@ -475,22 +492,22 @@ public class RevolutServiceTest
             {
                 CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
                 Description = string.Empty,
-                Amount = -0.6m,
+                Amount = -1m,
                 Currency = "BTC",
-                FiatAmount = -0.6m,
-                FiatAmountIncludingFees = -0.5m,
-                Fee = 0.1m,
+                FiatAmount = -1m,
+                FiatAmountIncludingFees = -0.9m,
+                FiatFees = 0.1m,
                 BaseCurrency = "EUR",
             },
             new RevolutTransaction
             {
                 CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
                 Description = string.Empty,
-                Amount = 0.4m,
+                Amount = 0.8m,
                 Currency = "ETH",
-                FiatAmount = 0.4m,
-                FiatAmountIncludingFees = 0.5m,
-                Fee = 0.1m,
+                FiatAmount = 0.8m,
+                FiatAmountIncludingFees = 0.9m,
+                FiatFees = 0.1m,
                 BaseCurrency = "EUR",
             },
         };
@@ -505,16 +522,16 @@ public class RevolutServiceTest
             new CryptoAsset
             {
                 Jeton = "BTC",
-                MontantEnEuros = 0.4m,
-                Montant = 0.4m,
-                Frais = 0m,
+                MontantEnEuros = 0m,
+                Montant = 0m,
+                Frais = 0.1m,
             },
             new CryptoAsset
             {
                 Jeton = "ETH",
-                MontantEnEuros = 0.6m,
-                Montant = 0.4m,
-                Frais = 0.2m,
+                MontantEnEuros = 1m,
+                Montant = 0.8m,
+                Frais = 0.1m,
             },
         });
     }

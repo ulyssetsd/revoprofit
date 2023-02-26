@@ -5,4 +5,5 @@ public enum CryptoTransactionType
     Depot,
     Echange,
     Retrait,
+    FeesOnly,
 }

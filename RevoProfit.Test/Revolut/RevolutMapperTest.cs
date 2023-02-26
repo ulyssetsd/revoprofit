@@ -45,7 +45,7 @@ public class RevolutMapperTest
             Currency = string.Empty,
             FiatAmount = 0,
             FiatAmountIncludingFees = 0,
-            Fee = 0,
+            FiatFees = 0,
             BaseCurrency = string.Empty,
         });
     }

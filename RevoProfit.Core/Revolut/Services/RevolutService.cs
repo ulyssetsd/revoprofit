@@ -80,7 +80,7 @@ public class RevolutService : IRevolutService
                     MonnaieOuJetonEnvoye = string.Empty,
                     PrixDuJetonDuMontantEnvoye = 0,
 
-                    Frais = depot.Fee,
+                    Frais = depot.FiatFees,
                     MonnaieOuJetonDesFrais = depot.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
                 };
@@ -106,7 +106,7 @@ public class RevolutService : IRevolutService
                     MonnaieOuJetonEnvoye = retrait.Currency,
                     PrixDuJetonDuMontantEnvoye = currencyPrice,
 
-                    Frais = retrait.Fee,
+                    Frais = retrait.FiatFees,
                     MonnaieOuJetonDesFrais = retrait.BaseCurrency,
                     PrixDuJetonDesFrais = 1,
                 },
@@ -117,12 +117,25 @@ public class RevolutService : IRevolutService
         {
             var retrait = retraits.First();
             var depot = depots.First();
-            var totalFee = retrait.Fee + depot.Fee;
-            var sourceCurrencyPrice = retrait.FiatAmount / retrait.Amount;
-            var targetCurrencyPrice = depot.FiatAmount / depot.Amount;
+            var retraitCurrencyPrice = retrait.FiatAmount / retrait.Amount;
+            var depotCurrencyPrice = depot.FiatAmount / depot.Amount;
 
             return new[]
             {
+                new CryptoTransaction
+                {
+                    Type = CryptoTransactionType.FeesOnly,
+                    Date = retrait.CompletedDate,
+                    MontantRecu = 0,
+                    MonnaieOuJetonRecu = string.Empty,
+                    PrixDuJetonDuMontantRecu = 0,
+                    MontantEnvoye = 0,
+                    MonnaieOuJetonEnvoye = string.Empty,
+                    PrixDuJetonDuMontantEnvoye = 0,
+                    Frais = retrait.FiatFees / retraitCurrencyPrice,
+                    MonnaieOuJetonDesFrais = retrait.Currency,
+                    PrixDuJetonDesFrais = retraitCurrencyPrice,
+                },
                 new CryptoTransaction
                 {
                     Type = CryptoTransactionType.Echange,
@@ -130,15 +143,15 @@ public class RevolutService : IRevolutService
 
                     MontantRecu = depot.Amount,
                     MonnaieOuJetonRecu = depot.Currency,
-                    PrixDuJetonDuMontantRecu = targetCurrencyPrice,
+                    PrixDuJetonDuMontantRecu = depotCurrencyPrice,
 
                     MontantEnvoye = -retrait.Amount,
                     MonnaieOuJetonEnvoye = retrait.Currency,
-                    PrixDuJetonDuMontantEnvoye = sourceCurrencyPrice,
+                    PrixDuJetonDuMontantEnvoye = retraitCurrencyPrice,
 
-                    Frais = totalFee / targetCurrencyPrice,
+                    Frais = depot.FiatFees / depotCurrencyPrice,
                     MonnaieOuJetonDesFrais = depot.Currency,
-                    PrixDuJetonDesFrais = targetCurrencyPrice,
+                    PrixDuJetonDesFrais = depotCurrencyPrice,
                 },
             };
         }

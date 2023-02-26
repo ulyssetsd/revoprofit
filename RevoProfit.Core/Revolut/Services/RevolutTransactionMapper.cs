@@ -19,7 +19,7 @@ public class RevolutTransactionMapper : IRevolutTransactionMapper
                 Currency = source.Currency,
                 FiatAmount = ToDecimalNullable(source.FiatAmount),
                 FiatAmountIncludingFees = ToDecimalNullable(source.FiatAmountIncludingFees),
-                Fee = ToDecimal(source.Fee),
+                FiatFees = ToDecimal(source.Fee),
                 BaseCurrency = source.BaseCurrency,
             };
         }

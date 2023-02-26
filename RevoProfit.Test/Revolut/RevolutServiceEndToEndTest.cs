@@ -27,7 +27,7 @@ public class RevolutServiceEndToEndTest
         {
             await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2022.csv", FileMode.Open);
             var transactions = await _revolutCsvService.ReadCsv(memoryStream);
-            var (retraits, assets) = _revolutService.ProcessTransactions(transactions);
+            _revolutService.ProcessTransactions(transactions);
         };
 
         // Assert

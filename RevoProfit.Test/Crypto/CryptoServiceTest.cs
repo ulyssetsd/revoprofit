@@ -103,8 +103,6 @@ public class CryptoServiceTest
             GainsEnEuros = 50,
             Jeton = bitcoin,
             PrixDuJeton = 200,
-            Frais = 0,
-            FraisEnEuros = 0,
             Date = transactions[1].Date,
         }, opt => opt.Excluding(x => x.Date));
 

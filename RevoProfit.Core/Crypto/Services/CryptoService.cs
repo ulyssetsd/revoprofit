@@ -54,8 +54,7 @@ public class CryptoService : ICryptoService
             .Select(retraits => new CryptoReport
             {
                 Year = retraits.Key, 
-                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros), 
-                FraisEnEuros = retraits.Sum(retrait => retrait.FraisEnEuros),
+                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros),
             });
     }
 
@@ -98,19 +97,19 @@ public class CryptoService : ICryptoService
 
                 var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
 
-                var prixDuJetonEnvoyeMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
-                var ratioInsereEnvoye = prixDuJetonEnvoyeMoyen / transaction.PrixDuJetonDuMontantEnvoye;
-                var montantInsereEnvoye = transaction.MontantEnvoye * ratioInsereEnvoye;
-                var montantInsereEnvoyeEnDollars = transaction.PrixDuJetonDuMontantEnvoye * montantInsereEnvoye;
+                var prixDuJetonMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
+                var ratioInsere = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoye;
+                var montantInsere = transaction.MontantEnvoye * ratioInsere;
+                var montantInsereEnEuros = transaction.PrixDuJetonDuMontantEnvoye * montantInsere;
 
                 cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                cryptoEnvoye.MontantEnEuros -= Math.Round(montantInsereEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
                 ReinitialiseSiNul(cryptoEnvoye);
 
                 var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
 
                 cryptoRecu.Montant += transaction.MontantRecu;
-                cryptoRecu.MontantEnEuros += Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                cryptoRecu.MontantEnEuros += Math.Round(montantInsereEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
             }
 
             if (transaction.Type == CryptoTransactionType.Retrait)
@@ -122,28 +121,27 @@ public class CryptoService : ICryptoService
                 transaction.PrixDuJetonDuMontantEnvoye.Should().NotBe(0);
 
                 var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
+
                 var prixDuJetonMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
                 var ratioInsere = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoye;
-                var ratioPlusValue = 1 - ratioInsere;
+                var ratioGains = 1 - ratioInsere;
 
-                var gains = transaction.MontantEnvoye * ratioPlusValue;
+                var gains = transaction.MontantEnvoye * ratioGains;
                 var gainsEnEuros = gains * transaction.PrixDuJetonDuMontantEnvoye;
-                var montantEnvoyeEnEuros = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
+                var montantEnEuros = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
 
                 retraits.Add(new CryptoRetrait
                 {
                     Date = transaction.Date,
                     Jeton = transaction.MonnaieOuJetonEnvoye,
                     Montant = transaction.MontantEnvoye,
-                    MontantEnEuros = montantEnvoyeEnEuros,
+                    MontantEnEuros = Math.Round(montantEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
                     GainsEnEuros = Math.Round(gainsEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
                     PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
-                    Frais = transaction.Frais,
-                    FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,
                 });
 
                 cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= Math.Round(montantEnvoyeEnEuros * ratioInsere, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                cryptoEnvoye.MontantEnEuros -= Math.Round(montantEnEuros * ratioInsere, EuroDecimalsPrecision, MidpointRounding.ToEven);
                 ReinitialiseSiNul(cryptoEnvoye);
             }
         }

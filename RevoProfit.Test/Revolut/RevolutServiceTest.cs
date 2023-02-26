@@ -295,8 +295,6 @@ public class RevolutServiceTest
                 MontantEnEuros = 50,
                 GainsEnEuros = 0,
                 PrixDuJeton = 5000,
-                Frais = 0,
-                FraisEnEuros = 0,
             },
         });
         assets.Should().BeEquivalentTo(new[]
@@ -334,8 +332,6 @@ public class RevolutServiceTest
                 MontantEnEuros = 60,
                 GainsEnEuros = 10,
                 PrixDuJeton = 6000,
-                Frais = 0,
-                FraisEnEuros = 0,
             },
         });
         assets.Should().BeEquivalentTo(new[]
@@ -408,8 +404,6 @@ public class RevolutServiceTest
                 MontantEnEuros = 20,
                 GainsEnEuros = -55,
                 PrixDuJeton = 200,
-                Frais = 0,
-                FraisEnEuros = 0,
             },
         });
         assets.Should().BeEquivalentTo(new[]
@@ -454,8 +448,6 @@ public class RevolutServiceTest
                 MontantEnEuros = 100,
                 GainsEnEuros = 0,
                 PrixDuJeton = 5000,
-                Frais = 0,
-                FraisEnEuros = 0,
             },
         });
         assets.Should().BeEquivalentTo(new[]
@@ -483,10 +475,10 @@ public class RevolutServiceTest
             {
                 CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
                 Description = string.Empty,
-                Amount = -1,
+                Amount = -0.6m,
                 Currency = "BTC",
-                FiatAmount = -1,
-                FiatAmountIncludingFees = -0.9m,
+                FiatAmount = -0.6m,
+                FiatAmountIncludingFees = -0.5m,
                 Fee = 0.1m,
                 BaseCurrency = "EUR",
             },
@@ -494,10 +486,10 @@ public class RevolutServiceTest
             {
                 CompletedDate = new DateTime(2023, 02, 25, 01, 14, 30),
                 Description = string.Empty,
-                Amount = 0.8m,
+                Amount = 0.4m,
                 Currency = "ETH",
-                FiatAmount = 0.8m,
-                FiatAmountIncludingFees = 0.9m,
+                FiatAmount = 0.4m,
+                FiatAmountIncludingFees = 0.5m,
                 Fee = 0.1m,
                 BaseCurrency = "EUR",
             },
@@ -513,17 +505,17 @@ public class RevolutServiceTest
             new CryptoAsset
             {
                 Jeton = "BTC",
-                MontantEnEuros = 0,
-                Montant = 0,
-                Frais = 0.1m,
+                MontantEnEuros = 0.4m,
+                Montant = 0.4m,
+                Frais = 0m,
             },
             new CryptoAsset
             {
                 Jeton = "ETH",
-                MontantEnEuros = 0.8m,
-                Montant = 0.8m,
-                Frais = 0.1m,
-            }
+                MontantEnEuros = 0.6m,
+                Montant = 0.4m,
+                Frais = 0.2m,
+            },
         });
     }
 

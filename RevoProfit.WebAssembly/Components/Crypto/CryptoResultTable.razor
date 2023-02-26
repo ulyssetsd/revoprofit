@@ -11,14 +11,12 @@
             <tr>
                 <th scope="col">@Loc[nameof(Localization.Year)]</th>
                 <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
-                <th scope="col">@Loc[nameof(Localization.Fees)]</th>
             </tr>
             @foreach (var annualReport in CryptoService.MapToReports(AppState.CryptoRetraits))
             {
                 <tr>
                     <td>@annualReport.Year</td>
                     <td>@annualReport.GainsEnEuros.ToString("C", _fr)</td>
-                    <td>@annualReport.FraisEnEuros.ToString("C", _fr)</td>
                 </tr>
             }
         </table>

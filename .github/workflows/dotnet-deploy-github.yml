@@ -11,18 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PROJECT_PATH: RevoProfit.WebAssembly/RevoProfit.WebAssembly.csproj
-      OUTPUT_DIRECTORY: output
 
     steps:
     - uses: actions/checkout@v2
-    - run: dotnet publish $GITHUB_WORKSPACE/$PROJECT_PATH -c Release -o $OUTPUT_DIRECTORY
-    - run: touch $OUTPUT_DIRECTORY/wwwroot/.nojekyll
-    - run: echo "revoprofit.fr" > $OUTPUT_DIRECTORY/wwwroot/CNAME
+    - run: dotnet publish $GITHUB_WORKSPACE/$PROJECT_PATH -c Release -o netapp
+    - run: touch netapp/wwwroot/.nojekyll
+    - run: echo "revoprofit.fr" > netapp/wwwroot/CNAME
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
         name: netapp
-        path: $OUTPUT_DIRECTORY
+        path: netapp
 
   deploy:
     runs-on: ubuntu-latest

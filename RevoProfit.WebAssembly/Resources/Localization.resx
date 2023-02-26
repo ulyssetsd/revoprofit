@@ -231,4 +231,7 @@
   <data name="StockLefts" xml:space="preserve">
     <value>🚀 Stock Lefts</value>
   </data>
+  <data name="FiatFees" xml:space="preserve">
+	  <value>Fees paid in € (exclude fees paid in crypto)</value>
+  </data>
 </root>

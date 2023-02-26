@@ -241,6 +241,15 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string FiatFees {
+            get {
+                return ResourceManager.GetString("FiatFees", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gains.
         /// </summary>
         public static string Gains {

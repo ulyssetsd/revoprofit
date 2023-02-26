@@ -1,4 +1,5 @@
 ﻿@using RevoProfit.Core.Crypto.Models
+@using RevoProfit.Core.Crypto.Services
 @inject ICryptoCsvService CryptoCsvService
 @inject ICryptoService CryptoService
 @inject IRevolutCsvService RevolutCsvService
@@ -65,10 +66,11 @@
 
         try
         {
-            var (cryptoAssets, cryptoRetraits) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream!);
+            var (cryptoAssets, cryptoRetraits, cryptoFiatFees) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream!);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
-            AppState.CryptoAssets = cryptoAssets;
+            AppState.CryptoAssets = cryptoAssets.ToList();
             AppState.CryptoRetraits = cryptoRetraits;
+            AppState.CryptoReports = CryptoService.MapToReports(cryptoRetraits, cryptoFiatFees).ToList();
         }
         catch (Exception exception)
         {
@@ -82,13 +84,13 @@
         }
     }
 
-    private async Task<(IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait> cryptoRetraits)> CryptoReport(Stream waltioCsvFileStream)
+    private async Task<(IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>)> CryptoReport(Stream waltioCsvFileStream)
     {
         var transactions = await CryptoCsvService.ReadCsv(waltioCsvFileStream);
         return CryptoService.ProcessTransactions(transactions);
     }
 
-    private async Task<(IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait> cryptoRetraits)> RevolutReport(Stream revolutCsvFileStream)
+    private async Task<(IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>)> RevolutReport(Stream revolutCsvFileStream)
     {
         var transactions = await RevolutCsvService.ReadCsv(revolutCsvFileStream);
         return RevolutService.ProcessTransactions(transactions);

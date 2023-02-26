@@ -49,7 +49,7 @@ internal class RevolutCsvServiceTest
                 Currency = "BTC",
                 FiatAmount = 0.01m,
                 FiatAmountIncludingFees = 0.01m,
-                Fee = 0,
+                FiatFees = 0,
                 BaseCurrency = "EUR",
             },
             new()
@@ -60,7 +60,7 @@ internal class RevolutCsvServiceTest
                 Currency = "ETH",
                 FiatAmount = 4318.84m,
                 FiatAmountIncludingFees = 4318.84m,
-                Fee = 0,
+                FiatFees = 0,
                 BaseCurrency = "EUR",
             },
             new()
@@ -71,7 +71,7 @@ internal class RevolutCsvServiceTest
                 Currency = "WLUNA",
                 FiatAmount = -190.44m,
                 FiatAmountIncludingFees = -187.58m,
-                Fee = 2.85m,
+                FiatFees = 2.85m,
                 BaseCurrency = "EUR",
             },
             new()
@@ -82,7 +82,7 @@ internal class RevolutCsvServiceTest
                 Currency = "BTC",
                 FiatAmount = -56.53m,
                 FiatAmountIncludingFees = -56.53m,
-                Fee = 0,
+                FiatFees = 0,
                 BaseCurrency = "EUR",
             },
             new()
@@ -93,7 +93,7 @@ internal class RevolutCsvServiceTest
                 Currency = "BTC",
                 FiatAmount = 50.01m,
                 FiatAmountIncludingFees = 50.01m,
-                Fee = 0,
+                FiatFees = 0,
                 BaseCurrency = "EUR",
             },
             new()
@@ -104,7 +104,7 @@ internal class RevolutCsvServiceTest
                 Currency = "BTC",
                 FiatAmount = 0m,
                 FiatAmountIncludingFees = 0m,
-                Fee = 0,
+                FiatFees = 0,
                 BaseCurrency = "EUR",
             },
         });

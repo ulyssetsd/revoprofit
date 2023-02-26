@@ -24,7 +24,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private static void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos)
+    private static void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
     {
         if (transaction.Frais == 0)
         {
@@ -34,8 +34,19 @@ public class CryptoService : ICryptoService
         transaction.Frais.Should().NotBe(0);
         transaction.MonnaieOuJetonDesFrais.Should().NotBeEmpty();
 
-        var cryptoFrais = GetOrCreate(cryptos, transaction.MonnaieOuJetonDesFrais);
-        cryptoFrais.Frais += transaction.Frais;
+        if (transaction.MonnaieOuJetonDesFrais == "EUR")
+        {
+            fiatFees.Add(new CryptoFiatFee
+            {
+                Date = transaction.Date,
+                FraisEnEuros = transaction.Frais,
+            });
+        }
+        else
+        {
+            var cryptoFrais = GetOrCreate(cryptos, transaction.MonnaieOuJetonDesFrais);
+            cryptoFrais.Frais += transaction.Frais;
+        }
     }
 
     private static void ReinitialiseSiNul(CryptoAsset crypto)
@@ -47,107 +58,112 @@ public class CryptoService : ICryptoService
         }
     }
 
-    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits)
+    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits, IEnumerable<CryptoFiatFee> cryptoFiatFees)
     {
-        return cryptoRetraits
-            .GroupBy(retrait => retrait.Date.Year)
-            .Select(retraits => new CryptoReport
+        var feesGroupByYear = cryptoFiatFees.GroupBy(fee => fee.Date.Year);
+        var retraitsGroupByYear = cryptoRetraits.GroupBy(retrait => retrait.Date.Year);
+
+        return feesGroupByYear
+            .Join(retraitsGroupByYear, fees => fees.Key, retraits => retraits.Key, (fees, retraits) => (year: fees.Key, fees, retraits))
+            .Select(joinGroupByYear => new CryptoReport
             {
-                Year = retraits.Key, 
-                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros), 
-                FraisEnEuros = retraits.Sum(retrait => retrait.FraisEnEuros),
+                Year = joinGroupByYear.year,
+                GainsEnEuros = joinGroupByYear.retraits.Sum(retrait => retrait.GainsEnEuros),
+                FraisEnEuros = joinGroupByYear.fees.Sum(fee => fee.FraisEnEuros),
             });
     }
 
-    public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
+    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();
         var retraits = new List<CryptoRetrait>();
+        var fiatFees = new List<CryptoFiatFee>();
 
         foreach (var transaction in transactions)
         {
-            if (transaction == null)
+            switch (transaction.Type)
             {
-                continue;
-            }
-
-            if (transaction.Type == CryptoTransactionType.Depot)
-            {
-                GereLesFrais(transaction, cryptos);
-
-                transaction.MontantRecu.Should().NotBe(0);
-                transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
-
-                var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
-                cryptoRecu.MontantEnEuros += transaction.PrixDuJetonDuMontantRecu * transaction.MontantRecu;
-                cryptoRecu.Montant += transaction.MontantRecu;
-            }
-
-            if (transaction.Type == CryptoTransactionType.Echange)
-            {
-                GereLesFrais(transaction, cryptos);
-
-                transaction.MontantRecu.Should().NotBe(0);
-                transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
-
-                transaction.MontantEnvoye.Should().NotBe(0);
-                transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantEnvoye.Should().NotBe(0);
-
-                var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
-
-                var prixDuJetonEnvoyeMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
-                var ratioInsereEnvoye = prixDuJetonEnvoyeMoyen / transaction.PrixDuJetonDuMontantEnvoye;
-                var montantInsereEnvoye = transaction.MontantEnvoye * ratioInsereEnvoye;
-                var montantInsereEnvoyeEnDollars = transaction.PrixDuJetonDuMontantEnvoye * montantInsereEnvoye;
-
-                cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
-                ReinitialiseSiNul(cryptoEnvoye);
-
-                var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
-
-                cryptoRecu.Montant += transaction.MontantRecu;
-                cryptoRecu.MontantEnEuros += Math.Round(montantInsereEnvoyeEnDollars, EuroDecimalsPrecision, MidpointRounding.ToEven);
-            }
-
-            if (transaction.Type == CryptoTransactionType.Retrait)
-            {
-                GereLesFrais(transaction, cryptos);
-
-                transaction.MontantEnvoye.Should().NotBe(0);
-                transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();
-                transaction.PrixDuJetonDuMontantEnvoye.Should().NotBe(0);
-
-                var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
-                var prixDuJetonMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
-                var ratioInsere = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoye;
-                var ratioPlusValue = 1 - ratioInsere;
-
-                var gains = transaction.MontantEnvoye * ratioPlusValue;
-                var gainsEnEuros = gains * transaction.PrixDuJetonDuMontantEnvoye;
-                var montantEnvoyeEnEuros = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
-
-                retraits.Add(new CryptoRetrait
+                case CryptoTransactionType.Depot:
                 {
-                    Date = transaction.Date,
-                    Jeton = transaction.MonnaieOuJetonEnvoye,
-                    Montant = transaction.MontantEnvoye,
-                    MontantEnEuros = montantEnvoyeEnEuros,
-                    GainsEnEuros = Math.Round(gainsEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
-                    PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
-                    Frais = transaction.Frais,
-                    FraisEnEuros = transaction.Frais * transaction.PrixDuJetonDesFrais,
-                });
+                    GereLesFrais(transaction, cryptos, fiatFees);
 
-                cryptoEnvoye.Montant -= transaction.MontantEnvoye;
-                cryptoEnvoye.MontantEnEuros -= Math.Round(montantEnvoyeEnEuros * ratioInsere, EuroDecimalsPrecision, MidpointRounding.ToEven);
-                ReinitialiseSiNul(cryptoEnvoye);
+                    transaction.MontantRecu.Should().NotBe(0);
+                    transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
+                    transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
+
+                    var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
+                    cryptoRecu.MontantEnEuros += transaction.PrixDuJetonDuMontantRecu * transaction.MontantRecu;
+                    cryptoRecu.Montant += transaction.MontantRecu;
+                    break;
+                }
+                case CryptoTransactionType.Echange:
+                {
+                    GereLesFrais(transaction, cryptos, fiatFees);
+
+                    transaction.MontantRecu.Should().NotBe(0);
+                    transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
+                    transaction.PrixDuJetonDuMontantRecu.Should().NotBe(0);
+
+                    transaction.MontantEnvoye.Should().NotBe(0);
+                    transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();
+                    transaction.PrixDuJetonDuMontantEnvoye.Should().NotBe(0);
+
+                    var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
+
+                    var prixDuJetonMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
+                    var ratioInsere = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoye;
+                    var montantInsere = transaction.MontantEnvoye * ratioInsere;
+                    var montantInsereEnEuros = transaction.PrixDuJetonDuMontantEnvoye * montantInsere;
+
+                    cryptoEnvoye.Montant -= transaction.MontantEnvoye;
+                    cryptoEnvoye.MontantEnEuros -= Math.Round(montantInsereEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                    ReinitialiseSiNul(cryptoEnvoye);
+
+                    var cryptoRecu = GetOrCreate(cryptos, transaction.MonnaieOuJetonRecu);
+
+                    cryptoRecu.Montant += transaction.MontantRecu;
+                    cryptoRecu.MontantEnEuros += Math.Round(montantInsereEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                    break;
+                }
+                case CryptoTransactionType.Retrait:
+                {
+                    GereLesFrais(transaction, cryptos, fiatFees);
+
+                    transaction.MontantEnvoye.Should().NotBe(0);
+                    transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();
+                    transaction.PrixDuJetonDuMontantEnvoye.Should().NotBe(0);
+
+                    var cryptoEnvoye = GetOrCreate(cryptos, transaction.MonnaieOuJetonEnvoye);
+
+                    var prixDuJetonMoyen = cryptoEnvoye.MontantEnEuros / cryptoEnvoye.Montant;
+                    var ratioInsere = prixDuJetonMoyen / transaction.PrixDuJetonDuMontantEnvoye;
+                    var ratioGains = 1 - ratioInsere;
+
+                    var gains = transaction.MontantEnvoye * ratioGains;
+                    var gainsEnEuros = gains * transaction.PrixDuJetonDuMontantEnvoye;
+                    var montantEnEuros = transaction.MontantEnvoye * transaction.PrixDuJetonDuMontantEnvoye;
+
+                    retraits.Add(new CryptoRetrait
+                    {
+                        Date = transaction.Date,
+                        Jeton = transaction.MonnaieOuJetonEnvoye,
+                        Montant = transaction.MontantEnvoye,
+                        MontantEnEuros = Math.Round(montantEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
+                        GainsEnEuros = Math.Round(gainsEnEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
+                        PrixDuJeton = transaction.PrixDuJetonDuMontantEnvoye,
+                    });
+
+                    cryptoEnvoye.Montant -= transaction.MontantEnvoye;
+                    cryptoEnvoye.MontantEnEuros -= Math.Round(montantEnEuros * ratioInsere, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                    ReinitialiseSiNul(cryptoEnvoye);
+                    break;
+                }
+                case CryptoTransactionType.FeesOnly:
+                    GereLesFrais(transaction, cryptos, fiatFees);
+                    break;
             }
         }
 
-        return (cryptos, retraits.OrderBy(retrait => retrait.Date));
+        return (cryptos, retraits, fiatFees);
     }
 }

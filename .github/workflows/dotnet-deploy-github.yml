@@ -9,13 +9,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PROJECT_PATH: RevoProfit.WebAssembly/RevoProfit.WebAssembly.csproj
+
     steps:
     - uses: actions/checkout@v2
-
-    - run: dotnet publish -c Release -o netapp
+    - run: dotnet publish $GITHUB_WORKSPACE/$PROJECT_PATH -c Release -o netapp
     - run: touch netapp/wwwroot/.nojekyll
     - run: echo "revoprofit.fr" > netapp/wwwroot/CNAME
-
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
@@ -31,7 +32,6 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: netapp
-
     - name: GitHub Pages
       if: success()
       uses: crazy-max/ghaction-github-pages@v2.6.0

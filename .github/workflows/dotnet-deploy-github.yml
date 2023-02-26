@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      PROJECT_PATH: ${GITHUB_WORKSPACE}/RevoProfit.WebAssembly/RevoProfit.WebAssembly.csproj
+      PROJECT_PATH: $GITHUB_WORKSPACE/RevoProfit.WebAssembly/RevoProfit.WebAssembly.csproj
       OUTPUT_DIRECTORY: output
 
     steps:

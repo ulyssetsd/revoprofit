@@ -7,10 +7,11 @@ public class AppState
 {
     private bool _isCalculatingStock;
     private bool _isCalculatingCrypto;
-    private IEnumerable<StockAnnualReport> _stockAnnualReports = new List<StockAnnualReport>();
-    private IEnumerable<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
-    private IEnumerable<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
-    private IEnumerable<StockOwned> _stockOwneds = new List<StockOwned>();
+    private IReadOnlyCollection<StockAnnualReport> _stockAnnualReports = new List<StockAnnualReport>();
+    private IReadOnlyCollection<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
+    private IReadOnlyCollection<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
+    private IReadOnlyCollection<StockOwned> _stockOwneds = new List<StockOwned>();
+    private IReadOnlyCollection<CryptoReport> _cryptoReports = new List<CryptoReport>();
 
     public bool IsCalculatingStock
     {
@@ -32,7 +33,7 @@ public class AppState
         }
     }
 
-    public IEnumerable<StockAnnualReport> StockAnnualReports
+    public IReadOnlyCollection<StockAnnualReport> StockAnnualReports
     {
         get => _stockAnnualReports;
         set
@@ -42,7 +43,7 @@ public class AppState
         }
     }
 
-    public IEnumerable<CryptoAsset> CryptoAssets
+    public IReadOnlyCollection<CryptoAsset> CryptoAssets
     {
         get => _cryptoAssets;
         set
@@ -52,7 +53,7 @@ public class AppState
         }
     }
 
-    public IEnumerable<CryptoRetrait> CryptoRetraits
+    public IReadOnlyCollection<CryptoRetrait> CryptoRetraits
     {
         get => _cryptoRetraits;
         set
@@ -62,7 +63,17 @@ public class AppState
         }
     }
 
-    public IEnumerable<StockOwned> StockOwneds
+    public IReadOnlyCollection<CryptoReport> CryptoReports
+    {
+        get => _cryptoReports;
+        set
+        {
+            _cryptoReports = value;
+            NotifyStateChanged();
+        }
+    }
+
+    public IReadOnlyCollection<StockOwned> StockOwneds
     {
         get => _stockOwneds;
         set

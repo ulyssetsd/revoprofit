@@ -4,5 +4,5 @@ namespace RevoProfit.Core.Stock.Services.Interfaces;
 
 public interface IStockTransactionService
 {
-    (IEnumerable<StockAnnualReport> annualReports, IEnumerable<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions);
+    (IReadOnlyCollection<StockAnnualReport> annualReports, IReadOnlyCollection<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions);
 }

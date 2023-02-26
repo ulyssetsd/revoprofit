@@ -1,5 +1,4 @@
 ﻿@inject AppState AppState
-@inject ICryptoService CryptoService
 @inject IStringLocalizer<Localization> Loc
 @implements IDisposable
 
@@ -11,16 +10,21 @@
             <tr>
                 <th scope="col">@Loc[nameof(Localization.Year)]</th>
                 <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
+                <th scope="col">@Loc[nameof(Localization.FiatFees)]</th>
             </tr>
-            @foreach (var annualReport in CryptoService.MapToReports(AppState.CryptoRetraits))
+            @foreach (var annualReport in AppState.CryptoReports)
             {
                 <tr>
                     <td>@annualReport.Year</td>
                     <td>@annualReport.GainsEnEuros.ToString("C", _fr)</td>
+                    <td>@annualReport.FraisEnEuros.ToString("C", _fr)</td>
                 </tr>
             }
         </table>
     </div>
+}
+@if (AppState.CryptoRetraits.Any())
+{
     <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
     <div class="table-responsive">
         <table class="table">

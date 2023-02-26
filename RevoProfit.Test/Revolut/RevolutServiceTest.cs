@@ -303,7 +303,7 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, _) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
         retraits.Should().BeEquivalentTo(new[]
@@ -340,7 +340,7 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, _) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
         retraits.Should().BeEquivalentTo(new[]
@@ -378,7 +378,7 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, _) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
         retraits.Should().BeEmpty();
@@ -412,7 +412,7 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, _) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
         retraits.Should().BeEquivalentTo(new[]
@@ -456,7 +456,7 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, _) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
         retraits.Should().BeEquivalentTo(new[]
@@ -513,9 +513,10 @@ public class RevolutServiceTest
         };
 
         // Act
-        var (assets, retraits) = _revolutService.ProcessTransactions(transactions);
+        var (assets, retraits, fiatFees) = _revolutService.ProcessTransactions(transactions);
 
         // Assert
+        fiatFees.Should().BeEmpty();
         retraits.Should().BeEmpty();
         assets.Should().BeEquivalentTo(new[]
         {
@@ -533,6 +534,49 @@ public class RevolutServiceTest
                 Montant = 0.8m,
                 Frais = 0.1m,
             },
+        });
+    }
+
+    [Test]
+    public void Process_when_fees_for_depot_in_euros_should_be_reported_correctly()
+    {
+        var transactions = new[]
+        {
+            new RevolutTransaction
+            {
+                CompletedDate = new DateTime(2023, 02, 25, 01, 14, 15),
+                Description = string.Empty,
+                Amount = 1m,
+                Currency = "BTC",
+                FiatAmount = 100,
+                FiatAmountIncludingFees = 110,
+                FiatFees = 10,
+                BaseCurrency = "EUR",
+            },
+        };
+
+        // Act
+        var (assets, retraits, fiatFees) = _revolutService.ProcessTransactions(transactions);
+
+        // Assert
+        fiatFees.Should().BeEquivalentTo(new[]
+        {
+            new CryptoFiatFee
+            {
+                Date = new DateTime(2023, 02, 25, 01, 14, 15),
+                FraisEnEuros = 10,
+            },
+        });
+        retraits.Should().BeEmpty();
+        assets.Should().BeEquivalentTo(new[]
+        {
+            new CryptoAsset
+            {
+                Jeton = "BTC",
+                MontantEnEuros = 100,
+                Montant = 1,
+                Frais = 0,
+            }
         });
     }
 

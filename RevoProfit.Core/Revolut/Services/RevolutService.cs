@@ -15,7 +15,7 @@ public class RevolutService : IRevolutService
         _cryptoService = cryptoService;
     }
 
-    public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
+    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
     {
         var cryptoTransactions = ConvertToCryptoTransactions(transactions);
         return _cryptoService.ProcessTransactions(cryptoTransactions);

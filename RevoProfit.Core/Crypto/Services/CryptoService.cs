@@ -24,7 +24,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private static void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos)
+    private static void GereLesFrais(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
     {
         if (transaction.Frais == 0)
         {
@@ -34,8 +34,19 @@ public class CryptoService : ICryptoService
         transaction.Frais.Should().NotBe(0);
         transaction.MonnaieOuJetonDesFrais.Should().NotBeEmpty();
 
-        var cryptoFrais = GetOrCreate(cryptos, transaction.MonnaieOuJetonDesFrais);
-        cryptoFrais.Frais += transaction.Frais;
+        if (transaction.MonnaieOuJetonDesFrais == "EUR")
+        {
+            fiatFees.Add(new CryptoFiatFee
+            {
+                Date = transaction.Date,
+                FraisEnEuros = transaction.Frais,
+            });
+        }
+        else
+        {
+            var cryptoFrais = GetOrCreate(cryptos, transaction.MonnaieOuJetonDesFrais);
+            cryptoFrais.Frais += transaction.Frais;
+        }
     }
 
     private static void ReinitialiseSiNul(CryptoAsset crypto)
@@ -47,21 +58,26 @@ public class CryptoService : ICryptoService
         }
     }
 
-    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits)
+    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoRetrait> cryptoRetraits, IEnumerable<CryptoFiatFee> cryptoFiatFees)
     {
-        return cryptoRetraits
-            .GroupBy(retrait => retrait.Date.Year)
-            .Select(retraits => new CryptoReport
+        var feesGroupByYear = cryptoFiatFees.GroupBy(fee => fee.Date.Year);
+        var retraitsGroupByYear = cryptoRetraits.GroupBy(retrait => retrait.Date.Year);
+
+        return feesGroupByYear
+            .Join(retraitsGroupByYear, fees => fees.Key, retraits => retraits.Key, (fees, retraits) => (year: fees.Key, fees, retraits))
+            .Select(joinGroupByYear => new CryptoReport
             {
-                Year = retraits.Key, 
-                GainsEnEuros = retraits.Sum(retrait => retrait.GainsEnEuros),
+                Year = joinGroupByYear.year,
+                GainsEnEuros = joinGroupByYear.retraits.Sum(retrait => retrait.GainsEnEuros),
+                FraisEnEuros = joinGroupByYear.fees.Sum(fee => fee.FraisEnEuros),
             });
     }
 
-    public (IEnumerable<CryptoAsset>, IEnumerable<CryptoRetrait>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
+    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();
         var retraits = new List<CryptoRetrait>();
+        var fiatFees = new List<CryptoFiatFee>();
 
         foreach (var transaction in transactions)
         {
@@ -69,7 +85,7 @@ public class CryptoService : ICryptoService
             {
                 case CryptoTransactionType.Depot:
                 {
-                    GereLesFrais(transaction, cryptos);
+                    GereLesFrais(transaction, cryptos, fiatFees);
 
                     transaction.MontantRecu.Should().NotBe(0);
                     transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
@@ -82,7 +98,7 @@ public class CryptoService : ICryptoService
                 }
                 case CryptoTransactionType.Echange:
                 {
-                    GereLesFrais(transaction, cryptos);
+                    GereLesFrais(transaction, cryptos, fiatFees);
 
                     transaction.MontantRecu.Should().NotBe(0);
                     transaction.MonnaieOuJetonRecu.Should().NotBeEmpty();
@@ -111,7 +127,7 @@ public class CryptoService : ICryptoService
                 }
                 case CryptoTransactionType.Retrait:
                 {
-                    GereLesFrais(transaction, cryptos);
+                    GereLesFrais(transaction, cryptos, fiatFees);
 
                     transaction.MontantEnvoye.Should().NotBe(0);
                     transaction.MonnaieOuJetonEnvoye.Should().NotBeEmpty();
@@ -143,11 +159,11 @@ public class CryptoService : ICryptoService
                     break;
                 }
                 case CryptoTransactionType.FeesOnly:
-                    GereLesFrais(transaction, cryptos);
+                    GereLesFrais(transaction, cryptos, fiatFees);
                     break;
             }
         }
 
-        return (cryptos, retraits.OrderBy(retrait => retrait.Date));
+        return (cryptos, retraits, fiatFees);
     }
 }

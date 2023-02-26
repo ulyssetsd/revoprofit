@@ -9,7 +9,7 @@ public class StockTransactionService : IStockTransactionService
     private const int StockDecimalsPrecision = 14;
     private const int EuroDecimalsPrecision = 14;
 
-    public (IEnumerable<StockAnnualReport> annualReports, IEnumerable<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
+    public (IReadOnlyCollection<StockAnnualReport> annualReports, IReadOnlyCollection<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
     {
         var stocks = new List<StockOwned>();
         var stockSellOrders = new List<StockSellOrder>();
@@ -108,7 +108,8 @@ public class StockTransactionService : IStockTransactionService
                 StockSellOrders = stockSellOrders.Where(order => order.Date.Year == year).ToList(),
                 Gains = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
                 GainsInEuro = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => ConvertUsingFxRate(order.Gains, order.FxRate)), EuroDecimalsPrecision, MidpointRounding.ToEven),
-            });
+            })
+            .ToList();
 
         return (annualReports, stocks);
     }

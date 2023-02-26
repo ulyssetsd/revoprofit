@@ -94,7 +94,7 @@ public class CryptoServiceTest
             Bitcoin(CryptoTransactionType.Retrait, prix: 200, quantite: .5m),
         };
 
-        var (cryptoAssets, retraits) = _cryptoService.ProcessTransactions(transactions);
+        var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
         retraits.First(Bitcoin).Should().BeEquivalentTo(new CryptoRetrait
         {
@@ -125,7 +125,7 @@ public class CryptoServiceTest
             Ethereum(CryptoTransactionType.Retrait, prix: 100, quantite: .5m),
         };
 
-        var (cryptoAssets, retraits) = _cryptoService.ProcessTransactions(transactions);
+        var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
         retraits.First(Bitcoin).GainsEnEuros.Should().Be(50);
         retraits.First(Ethereum).GainsEnEuros.Should().Be(0);
@@ -145,7 +145,7 @@ public class CryptoServiceTest
             Ethereum(CryptoTransactionType.Retrait, prix: 200, quantite: 1),
         };
 
-        var (cryptoAssets, retraits) = _cryptoService.ProcessTransactions(transactions);
+        var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
         retraits.First(Ethereum).GainsEnEuros.Should().Be(150);
         cryptoAssets.First(Bitcoin).Montant.Should().Be(0.5m);
@@ -163,7 +163,7 @@ public class CryptoServiceTest
             Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantite: .5m),
         };
 
-        var (cryptoAssets, retraits) = _cryptoService.ProcessTransactions(transactions);
+        var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
         retraits.First(Bitcoin).GainsEnEuros.Should().Be(100);
         retraits.First(Ethereum).GainsEnEuros.Should().Be(150);
@@ -182,7 +182,7 @@ public class CryptoServiceTest
             Bitcoin(CryptoTransactionType.Retrait, prix: 300, quantite: .5m),
         };
 
-        var (cryptoAssets, retraits) = _cryptoService.ProcessTransactions(transactions);
+        var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
         retraits.First(Bitcoin).GainsEnEuros.Should().Be(100);
         retraits.First(Ethereum).GainsEnEuros.Should().Be(350);

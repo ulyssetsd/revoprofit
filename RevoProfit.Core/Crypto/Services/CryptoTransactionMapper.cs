@@ -12,15 +12,15 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
         {
             Type = ToCryptoTransactionType(source.Type),
             Date = DateTime.ParseExact(source.Date, "G", CultureInfo.GetCultureInfo("fr-FR"), DateTimeStyles.None),
-            MontantRecu = ToDecimal(source.MontantRecu),
-            MonnaieOuJetonRecu = source.MonnaieOuJetonRecu,
-            MontantEnvoye = ToDecimal(source.MontantEnvoye),
-            MonnaieOuJetonEnvoye = source.MonnaieOuJetonEnvoye,
-            Frais = ToDecimal(source.Frais),
-            MonnaieOuJetonDesFrais = source.MonnaieOuJetonDesFrais,
-            PrixDuJetonDuMontantEnvoye = ToDecimal(source.PrixDuJetonDuMontantEnvoye),
-            PrixDuJetonDuMontantRecu = ToDecimal(source.PrixDuJetonDuMontantRecu),
-            PrixDuJetonDesFrais = ToDecimal(source.PrixDuJetonDesFrais),
+            BuyAmount = ToDecimal(source.MontantRecu),
+            BuySymbol = source.MonnaieOuJetonRecu,
+            BuyPrice = ToDecimal(source.PrixDuJetonDuMontantRecu),
+            SellAmount = ToDecimal(source.MontantEnvoye),
+            SellSymbol = source.MonnaieOuJetonEnvoye,
+            SellPrice = ToDecimal(source.PrixDuJetonDuMontantEnvoye),
+            FeesAmount = ToDecimal(source.Frais),
+            FeesSymbol = source.MonnaieOuJetonDesFrais,
+            FeesPrice = ToDecimal(source.PrixDuJetonDesFrais),
         };
     }
 
@@ -34,9 +34,9 @@ public class CryptoTransactionMapper : ICryptoTransactionMapper
 
     private static CryptoTransactionType ToCryptoTransactionType(string source) => source switch
     {
-        "Dépôt" => CryptoTransactionType.Depot,
-        "Retrait" => CryptoTransactionType.Retrait,
-        "Échange" => CryptoTransactionType.Echange,
+        "Dépôt" => CryptoTransactionType.Buy,
+        "Retrait" => CryptoTransactionType.Sell,
+        "Échange" => CryptoTransactionType.Exchange,
         _ => throw new ArgumentOutOfRangeException(),
     };
 }

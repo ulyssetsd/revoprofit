@@ -16,8 +16,8 @@
             {
                 <tr>
                     <td>@annualReport.Year</td>
-                    <td>@annualReport.GainsEnEuros.ToString("C", _fr)</td>
-                    <td>@annualReport.FraisEnEuros.ToString("C", _fr)</td>
+                    <td>@annualReport.GainsInEuros.ToString("C", _fr)</td>
+                    <td>@annualReport.FeesInEuros.ToString("C", _fr)</td>
                 </tr>
             }
         </table>
@@ -39,10 +39,10 @@
             {
                 <tr>
                     <td>@cryptoRetrait.Date</td>
-                    <td>@cryptoRetrait.Jeton</td>
-                    <td>@Math.Round(cryptoRetrait.Montant, 10, MidpointRounding.ToEven)</td>
-                    <td>@cryptoRetrait.MontantEnEuros.ToString("C", _fr)</td>
-                    <td>@cryptoRetrait.GainsEnEuros.ToString("C", _fr)</td>
+                    <td>@cryptoRetrait.Symbol</td>
+                    <td>@Math.Round(cryptoRetrait.Amount, 10, MidpointRounding.ToEven)</td>
+                    <td>@cryptoRetrait.AmountInEuros.ToString("C", _fr)</td>
+                    <td>@cryptoRetrait.GainsInEuros.ToString("C", _fr)</td>
                 </tr>
             }
         </table>
@@ -62,10 +62,10 @@
             @foreach (var cryptoAsset in AppState.CryptoAssets)
             {
                 <tr>
-                    <td>@cryptoAsset.Jeton</td>
-                    <td>@Math.Round(cryptoAsset.Montant, 10, MidpointRounding.ToEven)</td>
-                    <td>@cryptoAsset.MontantEnEuros.ToString("C", _fr)</td>
-                    <td>@Math.Round(cryptoAsset.Frais, 10, MidpointRounding.ToEven)</td>
+                    <td>@cryptoAsset.Symbol</td>
+                    <td>@Math.Round(cryptoAsset.Amount, 10, MidpointRounding.ToEven)</td>
+                    <td>@cryptoAsset.AmountInEuros.ToString("C", _fr)</td>
+                    <td>@Math.Round(cryptoAsset.Fees, 10, MidpointRounding.ToEven)</td>
                 </tr>
             }
         </table>

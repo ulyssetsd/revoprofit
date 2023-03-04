@@ -9,7 +9,7 @@ public class AppState
     private bool _isCalculatingCrypto;
     private IReadOnlyCollection<StockAnnualReport> _stockAnnualReports = new List<StockAnnualReport>();
     private IReadOnlyCollection<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
-    private IReadOnlyCollection<CryptoRetrait> _cryptoRetraits = new List<CryptoRetrait>();
+    private IReadOnlyCollection<CryptoSell> _cryptoRetraits = new List<CryptoSell>();
     private IReadOnlyCollection<StockOwned> _stockOwneds = new List<StockOwned>();
     private IReadOnlyCollection<CryptoReport> _cryptoReports = new List<CryptoReport>();
 
@@ -53,7 +53,7 @@ public class AppState
         }
     }
 
-    public IReadOnlyCollection<CryptoRetrait> CryptoRetraits
+    public IReadOnlyCollection<CryptoSell> CryptoRetraits
     {
         get => _cryptoRetraits;
         set

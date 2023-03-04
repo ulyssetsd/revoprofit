@@ -202,7 +202,7 @@
     <value>Amout in €</value>
   </data>
   <data name="CryptoSymbol" xml:space="preserve">
-    <value>Jeton</value>
+    <value>Symbol</value>
   </data>
   <data name="Fees" xml:space="preserve">
     <value>Fees</value>

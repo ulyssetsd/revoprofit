@@ -15,7 +15,7 @@ public class RevolutService : IRevolutService
         _cryptoService = cryptoService;
     }
 
-    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
+    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<RevolutTransaction> transactions)
     {
         var cryptoTransactions = ConvertToCryptoTransactions(transactions);
         return _cryptoService.ProcessTransactions(cryptoTransactions);
@@ -37,19 +37,18 @@ public class RevolutService : IRevolutService
 
     private static IEnumerable<CryptoTransaction> HandleTransactionsGroupedByDate(IEnumerable<RevolutTransaction> revolutTransactions)
     {
-        var retraits = new List<RevolutTransaction>();
-        var depots = new List<RevolutTransaction>();
-        var count = 0;
+        var sells = new List<RevolutTransaction>();
+        var buys = new List<RevolutTransaction>();
+
         foreach (var transaction in revolutTransactions)
         {
-            count++;
             if (transaction.Amount < 0)
             {
-                retraits.Add(transaction);
+                sells.Add(transaction);
             }
             if (transaction.Amount > 0)
             {
-                depots.Add(transaction);
+                buys.Add(transaction);
             }
             if (transaction.Amount == 0)
             {
@@ -57,101 +56,101 @@ public class RevolutService : IRevolutService
             }
         }
 
-        if (retraits.Count > 1 || retraits.Count == 1 && depots.Count > 1)
+        if (sells.Count > 1 || sells.Count == 1 && buys.Count > 1)
         {
             throw new ProcessException("More than two transactions on the same date time");
         }
 
-        if (retraits.Count == 0 && depots.Count > 0)
+        if (sells.Count == 0 && buys.Count > 0)
         {
-            return depots.Select(depot =>
+            return buys.Select(buy =>
             {
-                var currencyPrice = depot.FiatAmount / depot.Amount;
+                var buyPrice = buy.FiatAmount / buy.Amount;
                 return new CryptoTransaction
                 {
-                    Type = CryptoTransactionType.Depot,
-                    Date = depot.CompletedDate,
+                    Type = CryptoTransactionType.Buy,
+                    Date = buy.CompletedDate,
 
-                    MontantRecu = depot.Amount,
-                    MonnaieOuJetonRecu = depot.Currency,
-                    PrixDuJetonDuMontantRecu = currencyPrice,
+                    BuyAmount = buy.Amount,
+                    BuySymbol = buy.Currency,
+                    BuyPrice = buyPrice,
 
-                    MontantEnvoye = 0,
-                    MonnaieOuJetonEnvoye = string.Empty,
-                    PrixDuJetonDuMontantEnvoye = 0,
+                    SellAmount = 0,
+                    SellSymbol = string.Empty,
+                    SellPrice = 0,
 
-                    Frais = depot.FiatFees,
-                    MonnaieOuJetonDesFrais = depot.BaseCurrency,
-                    PrixDuJetonDesFrais = 1,
+                    FeesAmount = buy.FiatFees,
+                    FeesSymbol = buy.BaseCurrency,
+                    FeesPrice = 1,
                 };
             });
         }
 
-        if (retraits.Count == 1 && depots.Count == 0)
+        if (sells.Count == 1 && buys.Count == 0)
         {
-            var retrait = retraits.First();
-            var currencyPrice = retrait.FiatAmount / retrait.Amount;
+            var sell = sells.First();
+            var sellPrice = sell.FiatAmount / sell.Amount;
             return new[]
             {
                 new CryptoTransaction
                 {
-                    Type = CryptoTransactionType.Retrait,
-                    Date = retrait.CompletedDate,
+                    Type = CryptoTransactionType.Sell,
+                    Date = sell.CompletedDate,
 
-                    MontantRecu = 0,
-                    PrixDuJetonDuMontantRecu = 0,
-                    MonnaieOuJetonRecu = string.Empty,
+                    BuyAmount = 0,
+                    BuyPrice = 0,
+                    BuySymbol = string.Empty,
 
-                    MontantEnvoye = -retrait.Amount,
-                    MonnaieOuJetonEnvoye = retrait.Currency,
-                    PrixDuJetonDuMontantEnvoye = currencyPrice,
+                    SellAmount = -sell.Amount,
+                    SellSymbol = sell.Currency,
+                    SellPrice = sellPrice,
 
-                    Frais = retrait.FiatFees,
-                    MonnaieOuJetonDesFrais = retrait.BaseCurrency,
-                    PrixDuJetonDesFrais = 1,
+                    FeesAmount = sell.FiatFees,
+                    FeesSymbol = sell.BaseCurrency,
+                    FeesPrice = 1,
                 },
             };
         }
 
-        if (retraits.Count == 1 && depots.Count == 1)
+        if (sells.Count == 1 && buys.Count == 1)
         {
-            var retrait = retraits.First();
-            var depot = depots.First();
-            var retraitCurrencyPrice = retrait.FiatAmount / retrait.Amount;
-            var depotCurrencyPrice = depot.FiatAmount / depot.Amount;
+            var sell = sells.First();
+            var buy = buys.First();
+            var sellPrice = sell.FiatAmount / sell.Amount;
+            var buyPrice = buy.FiatAmount / buy.Amount;
 
             return new[]
             {
                 new CryptoTransaction
                 {
                     Type = CryptoTransactionType.FeesOnly,
-                    Date = retrait.CompletedDate,
-                    MontantRecu = 0,
-                    MonnaieOuJetonRecu = string.Empty,
-                    PrixDuJetonDuMontantRecu = 0,
-                    MontantEnvoye = 0,
-                    MonnaieOuJetonEnvoye = string.Empty,
-                    PrixDuJetonDuMontantEnvoye = 0,
-                    Frais = retrait.FiatFees / retraitCurrencyPrice,
-                    MonnaieOuJetonDesFrais = retrait.Currency,
-                    PrixDuJetonDesFrais = retraitCurrencyPrice,
+                    Date = sell.CompletedDate,
+                    BuyAmount = 0,
+                    BuySymbol = string.Empty,
+                    BuyPrice = 0,
+                    SellAmount = 0,
+                    SellSymbol = string.Empty,
+                    SellPrice = 0,
+                    FeesAmount = sell.FiatFees / sellPrice,
+                    FeesSymbol = sell.Currency,
+                    FeesPrice = sellPrice,
                 },
                 new CryptoTransaction
                 {
-                    Type = CryptoTransactionType.Echange,
-                    Date = retrait.CompletedDate,
+                    Type = CryptoTransactionType.Exchange,
+                    Date = sell.CompletedDate,
 
-                    MontantRecu = depot.Amount,
-                    MonnaieOuJetonRecu = depot.Currency,
-                    PrixDuJetonDuMontantRecu = depotCurrencyPrice,
+                    BuyAmount = buy.Amount,
+                    BuySymbol = buy.Currency,
+                    BuyPrice = buyPrice,
 
-                    MontantEnvoye = -retrait.Amount,
-                    MonnaieOuJetonEnvoye = retrait.Currency,
-                    PrixDuJetonDuMontantEnvoye = retraitCurrencyPrice,
+                    SellAmount = -sell.Amount,
+                    SellSymbol = sell.Currency,
+                    SellPrice = sellPrice,
 
-                    Frais = depot.FiatFees / depotCurrencyPrice,
-                    MonnaieOuJetonDesFrais = depot.Currency,
-                    PrixDuJetonDesFrais = depotCurrencyPrice,
+                    FeesAmount = buy.FiatFees / buyPrice,
+                    FeesSymbol = buy.Currency,
+                    FeesPrice = buyPrice,
                 },
             };
         }

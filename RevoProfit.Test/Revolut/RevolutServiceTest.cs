@@ -86,7 +86,7 @@ public class RevolutServiceTest
         var results = _revolutService.ConvertToCryptoTransactions(transactions);
 
         // Assert
-        results.Should().HaveCount(3).And.AllSatisfy(transaction => transaction.Type.Should().Be(CryptoTransactionType.Depot));
+        results.Should().HaveCount(3).And.AllSatisfy(transaction => transaction.Type.Should().Be(CryptoTransactionType.Buy));
     }
 
     [Test]
@@ -117,17 +117,17 @@ public class RevolutServiceTest
         {
             new()
             {
-                Type = CryptoTransactionType.Depot,
+                Type = CryptoTransactionType.Buy,
                 Date = new DateTime(2022, 02, 05, 12, 30, 50),
-                MontantRecu = 10,
-                MonnaieOuJetonRecu = "BTC",
-                PrixDuJetonDuMontantRecu = 10,
-                MontantEnvoye = 0m,
-                PrixDuJetonDuMontantEnvoye = 0,
-                Frais = 10,
-                MonnaieOuJetonDesFrais = "EUR",
-                PrixDuJetonDesFrais = 1,
-                MonnaieOuJetonEnvoye = string.Empty,
+                BuyAmount = 10,
+                BuySymbol = "BTC",
+                BuyPrice = 10,
+                SellAmount = 0m,
+                SellPrice = 0,
+                FeesAmount = 10,
+                FeesSymbol = "EUR",
+                FeesPrice = 1,
+                SellSymbol = string.Empty,
             },
         });
     }
@@ -160,17 +160,17 @@ public class RevolutServiceTest
         {
             new()
             {
-                Type = CryptoTransactionType.Retrait,
+                Type = CryptoTransactionType.Sell,
                 Date = new DateTime(2022, 02, 05, 12, 30, 50),
-                MontantRecu = 0,
-                PrixDuJetonDuMontantRecu = 0,
-                MontantEnvoye = 11m,
-                MonnaieOuJetonEnvoye = "BTC",
-                PrixDuJetonDuMontantEnvoye = 10,
-                Frais = 10,
-                MonnaieOuJetonDesFrais = "EUR",
-                PrixDuJetonDesFrais = 1,
-                MonnaieOuJetonRecu = string.Empty,
+                BuyAmount = 0,
+                BuyPrice = 0,
+                SellAmount = 11m,
+                SellSymbol = "BTC",
+                SellPrice = 10,
+                FeesAmount = 10,
+                FeesSymbol = "EUR",
+                FeesPrice = 1,
+                BuySymbol = string.Empty,
             },
         });
     }
@@ -219,34 +219,34 @@ public class RevolutServiceTest
                 Type = CryptoTransactionType.FeesOnly,
                 Date = dateTimeOfTransfer,
 
-                MontantRecu = 0,
-                MonnaieOuJetonRecu = string.Empty,
-                PrixDuJetonDuMontantRecu = 0,
+                BuyAmount = 0,
+                BuySymbol = string.Empty,
+                BuyPrice = 0,
 
-                MontantEnvoye = 0,
-                MonnaieOuJetonEnvoye = string.Empty,
-                PrixDuJetonDuMontantEnvoye = 0,
+                SellAmount = 0,
+                SellSymbol = string.Empty,
+                SellPrice = 0,
 
-                Frais = 0.1m,
-                MonnaieOuJetonDesFrais = "BTC",
-                PrixDuJetonDesFrais = 100,
+                FeesAmount = 0.1m,
+                FeesSymbol = "BTC",
+                FeesPrice = 100,
             },
             new()
             {
-                Type = CryptoTransactionType.Echange,
+                Type = CryptoTransactionType.Exchange,
                 Date = dateTimeOfTransfer,
 
-                MontantRecu = 9,
-                MonnaieOuJetonRecu = "ETH",
-                PrixDuJetonDuMontantRecu = 10,
+                BuyAmount = 9,
+                BuySymbol = "ETH",
+                BuyPrice = 10,
 
-                MontantEnvoye = 1.1m,
-                MonnaieOuJetonEnvoye = "BTC",
-                PrixDuJetonDuMontantEnvoye = 100,
+                SellAmount = 1.1m,
+                SellSymbol = "BTC",
+                SellPrice = 100,
                 
-                Frais = 1,
-                MonnaieOuJetonDesFrais = "ETH",
-                PrixDuJetonDesFrais = 10,
+                FeesAmount = 1,
+                FeesSymbol = "ETH",
+                FeesPrice = 10,
             },
         });
     }
@@ -308,23 +308,23 @@ public class RevolutServiceTest
         // Assert
         retraits.Should().BeEquivalentTo(new[]
         {
-            new CryptoRetrait
+            new CryptoSell
             {
                 Date = transactions[1].CompletedDate,
-                Jeton = "BTC",
-                Montant = 0.01m,
-                MontantEnEuros = 50,
-                GainsEnEuros = 0,
-                PrixDuJeton = 5000,
+                Symbol = "BTC",
+                Amount = 0.01m,
+                AmountInEuros = 50,
+                GainsInEuros = 0,
+                Price = 5000,
             },
         });
         assets.Should().BeEquivalentTo(new[]
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 50,
-                Montant = 0.01m,
+                Symbol = "BTC",
+                AmountInEuros = 50,
+                Amount = 0.01m,
             },
         });
     }
@@ -345,23 +345,23 @@ public class RevolutServiceTest
         // Assert
         retraits.Should().BeEquivalentTo(new[]
         {
-            new CryptoRetrait
+            new CryptoSell
             {
                 Date = transactions[1].CompletedDate,
-                Jeton = "BTC",
-                Montant = 0.01m,
-                MontantEnEuros = 60,
-                GainsEnEuros = 10,
-                PrixDuJeton = 6000,
+                Symbol = "BTC",
+                Amount = 0.01m,
+                AmountInEuros = 60,
+                GainsInEuros = 10,
+                Price = 6000,
             },
         });
         assets.Should().BeEquivalentTo(new[]
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 50,
-                Montant = 0.01m,
+                Symbol = "BTC",
+                AmountInEuros = 50,
+                Amount = 0.01m,
             },
         });
     }
@@ -386,15 +386,15 @@ public class RevolutServiceTest
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 25,
-                Montant = 0.005m,
+                Symbol = "BTC",
+                AmountInEuros = 25,
+                Amount = 0.005m,
             },
             new CryptoAsset
             {
-                Jeton = "ETH",
-                MontantEnEuros = 75,
-                Montant = 0.1m,
+                Symbol = "ETH",
+                AmountInEuros = 75,
+                Amount = 0.1m,
             },
         });
     }
@@ -417,29 +417,29 @@ public class RevolutServiceTest
         // Assert
         retraits.Should().BeEquivalentTo(new[]
         {
-            new CryptoRetrait
+            new CryptoSell
             {
                 Date = transactions[3].CompletedDate,
-                Jeton = "ETH",
-                Montant = 0.1m,
-                MontantEnEuros = 20,
-                GainsEnEuros = -55,
-                PrixDuJeton = 200,
+                Symbol = "ETH",
+                Amount = 0.1m,
+                AmountInEuros = 20,
+                GainsInEuros = -55,
+                Price = 200,
             },
         });
         assets.Should().BeEquivalentTo(new[]
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 25,
-                Montant = 0.005m,
+                Symbol = "BTC",
+                AmountInEuros = 25,
+                Amount = 0.005m,
             },
             new CryptoAsset
             {
-                Jeton = "ETH",
-                MontantEnEuros = 0,
-                Montant = 0,
+                Symbol = "ETH",
+                AmountInEuros = 0,
+                Amount = 0,
             },
         });
     }
@@ -461,23 +461,23 @@ public class RevolutServiceTest
         // Assert
         retraits.Should().BeEquivalentTo(new[]
         {
-            new CryptoRetrait
+            new CryptoSell
             {
                 Date = transactions[1].CompletedDate,
-                Jeton = "BTC",
-                Montant = 0.02m,
-                MontantEnEuros = 100,
-                GainsEnEuros = 0,
-                PrixDuJeton = 5000,
+                Symbol = "BTC",
+                Amount = 0.02m,
+                AmountInEuros = 100,
+                GainsInEuros = 0,
+                Price = 5000,
             },
         });
         assets.Should().BeEquivalentTo(new[]
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 1000,
-                Montant = 0.1m,
+                Symbol = "BTC",
+                AmountInEuros = 1000,
+                Amount = 0.1m,
             },
         });
     }
@@ -522,17 +522,17 @@ public class RevolutServiceTest
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 0m,
-                Montant = 0m,
-                Frais = 0.1m,
+                Symbol = "BTC",
+                AmountInEuros = 0m,
+                Amount = 0m,
+                Fees = 0.1m,
             },
             new CryptoAsset
             {
-                Jeton = "ETH",
-                MontantEnEuros = 1m,
-                Montant = 0.8m,
-                Frais = 0.1m,
+                Symbol = "ETH",
+                AmountInEuros = 1m,
+                Amount = 0.8m,
+                Fees = 0.1m,
             },
         });
     }
@@ -564,7 +564,7 @@ public class RevolutServiceTest
             new CryptoFiatFee
             {
                 Date = new DateTime(2023, 02, 25, 01, 14, 15),
-                FraisEnEuros = 10,
+                FeesInEuros = 10,
             },
         });
         retraits.Should().BeEmpty();
@@ -572,10 +572,10 @@ public class RevolutServiceTest
         {
             new CryptoAsset
             {
-                Jeton = "BTC",
-                MontantEnEuros = 100,
-                Montant = 1,
-                Frais = 0,
+                Symbol = "BTC",
+                AmountInEuros = 100,
+                Amount = 1,
+                Fees = 0,
             }
         });
     }

@@ -31,9 +31,9 @@ public class CryptoMapperTest
         Type = type,
     };
 
-    [TestCase("Dépôt", CryptoTransactionType.Depot)]
-    [TestCase("Retrait", CryptoTransactionType.Retrait)]
-    [TestCase("Échange", CryptoTransactionType.Echange)]
+    [TestCase("Dépôt", CryptoTransactionType.Buy)]
+    [TestCase("Retrait", CryptoTransactionType.Sell)]
+    [TestCase("Échange", CryptoTransactionType.Exchange)]
     public void TestCryptoTransactionTypeEnumMapping(string type, CryptoTransactionType expectedType)
     {
         var transaction = _cryptoTransactionMapper.Map(GetDummyCryptoTransactionCsvLine(type));

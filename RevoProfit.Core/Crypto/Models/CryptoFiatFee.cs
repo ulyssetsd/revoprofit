@@ -3,5 +3,5 @@
 public record CryptoFiatFee
 {
     public required DateTime Date { get; init; }
-    public required decimal FraisEnEuros { get; init; }
+    public required decimal FeesInEuros { get; init; }
 }

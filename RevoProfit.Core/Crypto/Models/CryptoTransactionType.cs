@@ -2,8 +2,8 @@
 
 public enum CryptoTransactionType
 {
-    Depot,
-    Echange,
-    Retrait,
+    Buy,
+    Exchange,
+    Sell,
     FeesOnly,
 }

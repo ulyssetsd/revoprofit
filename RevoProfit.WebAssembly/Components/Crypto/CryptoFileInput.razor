@@ -9,8 +9,6 @@
 @inject IStringLocalizer<Localization> Loc
 
 <div class="mb-3">
-    <label class="form-label">@Loc[nameof(Localization.CryptoFile)]</label>
-    <InputFile class="form-control mb-2" OnChange="@LoadWaltioFile" required />
     <label class="form-label">@Loc[nameof(Localization.RevolutFile)]</label>
     <InputFile class="form-control" OnChange="@LoadRevolutFile" required />
 </div>
@@ -29,14 +27,8 @@
 }
 
 @code {
-    public Stream? WaltioCsvFileStream { get; set; }
     public Stream? RevolutCsvFileStream { get; set; }
     public string? ErrorMessage { get; set; }
-
-    private void LoadWaltioFile(InputFileChangeEventArgs e)
-    {
-        WaltioCsvFileStream = LoadFile(e);
-    }
 
     private void LoadRevolutFile(InputFileChangeEventArgs e)
     {
@@ -60,13 +52,14 @@
 
     private async Task SeeResults()
     {
-        if (WaltioCsvFileStream == null && RevolutCsvFileStream == null) return;
+        if (RevolutCsvFileStream == null) return;
         AppState.IsCalculatingCrypto = true;
         ErrorMessage = null;
 
         try
         {
-            var (cryptoAssets, cryptoRetraits, cryptoFiatFees) = WaltioCsvFileStream != null ? await CryptoReport(WaltioCsvFileStream) : await RevolutReport(RevolutCsvFileStream!);
+            var transactions = await RevolutCsvService.ReadCsv(RevolutCsvFileStream);
+            var (cryptoAssets, cryptoRetraits, cryptoFiatFees) = RevolutService.ProcessTransactions(transactions);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");
             AppState.CryptoAssets = cryptoAssets.ToList();
             AppState.CryptoRetraits = cryptoRetraits;
@@ -80,19 +73,6 @@
         finally
         {
             AppState.IsCalculatingCrypto = false;
-            WaltioCsvFileStream = null;
         }
-    }
-
-    private async Task<(IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>)> CryptoReport(Stream waltioCsvFileStream)
-    {
-        var transactions = await CryptoCsvService.ReadCsv(waltioCsvFileStream);
-        return CryptoService.ProcessTransactions(transactions);
-    }
-
-    private async Task<(IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoRetrait>, IReadOnlyCollection<CryptoFiatFee>)> RevolutReport(Stream revolutCsvFileStream)
-    {
-        var transactions = await RevolutCsvService.ReadCsv(revolutCsvFileStream);
-        return RevolutService.ProcessTransactions(transactions);
     }
 }

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.Crypto.Services.Interfaces;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -18,7 +20,7 @@ public class CryptoServiceTest
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService();
+        _cryptoService = new CryptoService(Mock.Of<ICryptoValidator>());
         _dateIncrement = 0;
     }
 

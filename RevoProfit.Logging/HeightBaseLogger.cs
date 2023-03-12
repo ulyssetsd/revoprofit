@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
-namespace RevoProfit.Core.Logging;
+namespace RevoProfit.Logging;
 
 public class HeightBaseLogger : ILogger
 {

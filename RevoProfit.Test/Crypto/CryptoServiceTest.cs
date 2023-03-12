@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.Crypto.Services.Interfaces;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -18,7 +19,7 @@ public class CryptoServiceTest
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService();
+        _cryptoService = new CryptoService(new CryptoValidator());
         _dateIncrement = 0;
     }
 

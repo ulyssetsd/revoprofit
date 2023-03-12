@@ -1,11 +1,17 @@
-﻿using FluentAssertions;
-using RevoProfit.Core.Crypto.Models;
+﻿using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
 
 namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
+    private readonly ICryptoValidator _cryptoValidator;
+
+    public CryptoService(ICryptoValidator cryptoValidator)
+    {
+        _cryptoValidator = cryptoValidator;
+    }
+
     private const int EuroDecimalsPrecision = 24;
 
     private static CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string symbol)
@@ -30,9 +36,6 @@ public class CryptoService : ICryptoService
         {
             return;
         }
-
-        transaction.FeesAmount.Should().NotBe(0);
-        transaction.FeesSymbol.Should().NotBeEmpty();
 
         if (transaction.FeesSymbol == "EUR")
         {
@@ -73,38 +76,6 @@ public class CryptoService : ICryptoService
             });
     }
 
-    private static void Validate(CryptoTransaction transaction)
-    {
-        if (transaction.FeesAmount != 0)
-        {
-            transaction.FeesAmount.Should().NotBe(0);
-            transaction.FeesSymbol.Should().NotBeEmpty();
-        }
-
-        switch (transaction.Type)
-        {
-            case CryptoTransactionType.Buy:
-                transaction.BuyAmount.Should().NotBe(0);
-                transaction.BuySymbol.Should().NotBeEmpty();
-                transaction.BuyPrice.Should().NotBe(0);
-                break;
-            case CryptoTransactionType.Exchange:
-                transaction.BuyAmount.Should().NotBe(0);
-                transaction.BuySymbol.Should().NotBeEmpty();
-                transaction.BuyPrice.Should().NotBe(0);
-
-                transaction.SellAmount.Should().NotBe(0);
-                transaction.SellSymbol.Should().NotBeEmpty();
-                transaction.SellPrice.Should().NotBe(0);
-                break;
-            case CryptoTransactionType.Sell:
-                transaction.SellAmount.Should().NotBe(0);
-                transaction.SellSymbol.Should().NotBeEmpty();
-                transaction.SellPrice.Should().NotBe(0);
-                break;
-        }
-    }
-
     public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<CryptoTransaction> transactions)
     {
         var cryptos = new List<CryptoAsset>();
@@ -113,7 +84,7 @@ public class CryptoService : ICryptoService
 
         foreach (var transaction in transactions)
         {
-            Validate(transaction);
+            _cryptoValidator.Validate(transaction);
 
             switch (transaction.Type)
             {

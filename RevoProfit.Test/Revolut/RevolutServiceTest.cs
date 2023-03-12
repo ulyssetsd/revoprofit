@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
@@ -17,7 +18,7 @@ public class RevolutServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutService = new RevolutService(new CryptoService(new CryptoValidator()));
+        _revolutService = new RevolutService(new CryptoService(Mock.Of<ICryptoValidator>()));
         _incrementHours = 0;
     }
 

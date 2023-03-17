@@ -14,8 +14,8 @@ public class CryptoServiceTest
 {
     private CryptoService _cryptoService = null!;
     private int _dateIncrement;
-    private const string bitcoin = "BTC";
-    private const string ethereum = "ETH";
+    private const string Bitcoin = "BTC";
+    private const string Ethereum = "ETH";
 
     [SetUp]
     public void Setup()
@@ -24,18 +24,13 @@ public class CryptoServiceTest
         _dateIncrement = 0;
     }
 
-    private bool Bitcoin(CryptoSell cryptoSell) => cryptoSell.Symbol == bitcoin;
-    private bool Bitcoin(CryptoAsset cryptoAsset) => cryptoAsset.Symbol == bitcoin;
-    private bool Ethereum(CryptoSell cryptoSell) => cryptoSell.Symbol == ethereum;
-    private bool Ethereum(CryptoAsset cryptoAsset) => cryptoAsset.Symbol == ethereum;
+    private CryptoTransaction Btc(CryptoTransactionType cryptoTransactionType, decimal price, decimal quantity = 1, int yearIncrement = 0, decimal ethPrice = 1) =>
+        CryptoTransaction(cryptoTransactionType, price, quantity, yearIncrement, ethPrice, Bitcoin, Ethereum);
 
-    private CryptoTransaction Ethereum(CryptoTransactionType cryptoTransactionType, decimal prix, decimal quantite = 1, int yearIncrement = 0, decimal prixBitcoin = 1) =>
-        CryptoTransaction(cryptoTransactionType, prix, quantite, yearIncrement, prixBitcoin, ethereum, bitcoin);
+    private CryptoTransaction Eth(CryptoTransactionType cryptoTransactionType, decimal price, decimal quantity = 1, int yearIncrement = 0, decimal btcPrice = 1) =>
+        CryptoTransaction(cryptoTransactionType, price, quantity, yearIncrement, btcPrice, Ethereum, Bitcoin);
 
-    private CryptoTransaction Bitcoin(CryptoTransactionType cryptoTransactionType, decimal prix, decimal quantite = 1, int yearIncrement = 0, decimal prixEthereum = 1) =>
-        CryptoTransaction(cryptoTransactionType, prix, quantite, yearIncrement, prixEthereum, bitcoin, ethereum);
-
-    private CryptoTransaction CryptoTransaction(CryptoTransactionType cryptoTransactionType, decimal prix, decimal quantite = 1, int yearIncrement = 0, decimal prixDestination = 1, string source = bitcoin, string destination = ethereum)
+    private CryptoTransaction CryptoTransaction(CryptoTransactionType cryptoTransactionType, decimal prix, decimal quantity, int yearIncrement, decimal prixDestination, string source, string destination)
     {
         var date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement);
 
@@ -47,7 +42,7 @@ public class CryptoServiceTest
                 Type = cryptoTransactionType,
                 BuySymbol = source,
                 BuyPrice = prix,
-                BuyAmount = quantite,
+                BuyAmount = quantity,
                 SellAmount = 0,
                 SellSymbol = string.Empty,
                 SellPrice = 0,
@@ -61,7 +56,7 @@ public class CryptoServiceTest
                 Type = cryptoTransactionType,
                 SellSymbol = source,
                 SellPrice = prix,
-                SellAmount = quantite,
+                SellAmount = quantity,
                 BuyAmount = 0,
                 BuySymbol = string.Empty,
                 BuyPrice = 0,
@@ -75,10 +70,10 @@ public class CryptoServiceTest
                 Type = cryptoTransactionType,
                 SellSymbol = source,
                 SellPrice = prix,
-                SellAmount = quantite,
+                SellAmount = quantity,
                 BuySymbol = destination,
                 BuyPrice = prixDestination,
-                BuyAmount = quantite * prix / prixDestination,
+                BuyAmount = quantity * prix / prixDestination,
                 FeesAmount = 0,
                 FeesSymbol = string.Empty,
                 FeesPrice = 0,
@@ -92,25 +87,25 @@ public class CryptoServiceTest
     {
         var transactions = new List<CryptoTransaction>
         {
-            Bitcoin(CryptoTransactionType.Buy, prix: 100, quantite: 1),
-            Bitcoin(CryptoTransactionType.Sell, prix: 200, quantite: .5m),
+            Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m),
         };
 
         var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
-        retraits.First(Bitcoin).Should().BeEquivalentTo(new CryptoSell
+        retraits.Single().Should().BeEquivalentTo(new CryptoSell
         {
             Amount = 0.5m,
             AmountInEuros = 100,
             GainsInEuros = 50,
-            Symbol = bitcoin,
+            Symbol = Bitcoin,
             Price = 200,
             Date = transactions[1].Date,
-        }, opt => opt.Excluding(x => x.Date));
+        });
 
-        cryptoAssets.First(Bitcoin).Should().BeEquivalentTo(new CryptoAsset
+        cryptoAssets.Single().Should().BeEquivalentTo(new CryptoAsset
         {
-            Symbol = bitcoin,
+            Symbol = Bitcoin,
             Amount = 0.5m,
             AmountInEuros = 50,
         });
@@ -121,20 +116,51 @@ public class CryptoServiceTest
     {
         var transactions = new List<CryptoTransaction>
         {
-            Bitcoin(CryptoTransactionType.Buy, prix: 100),
-            Bitcoin(CryptoTransactionType.Exchange, prix: 100, quantite: .5m, prixEthereum: 100),
-            Bitcoin(CryptoTransactionType.Sell, prix: 200, quantite: .5m),
-            Ethereum(CryptoTransactionType.Sell, prix: 100, quantite: .5m),
+            Btc(CryptoTransactionType.Buy, price: 100),
+            Btc(CryptoTransactionType.Exchange, price: 100, quantity: .5m, ethPrice: 100),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m),
+            Eth(CryptoTransactionType.Sell, price: 100, quantity: .5m),
         };
 
         var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
-        retraits.First(Bitcoin).GainsInEuros.Should().Be(50);
-        retraits.First(Ethereum).GainsInEuros.Should().Be(0);
-        cryptoAssets.First(Bitcoin).AmountInEuros.Should().Be(0);
-        cryptoAssets.First(Bitcoin).Amount.Should().Be(0);
-        cryptoAssets.First(Ethereum).AmountInEuros.Should().Be(0);
-        cryptoAssets.First(Ethereum).Amount.Should().Be(0);
+        retraits.Should().BeEquivalentTo(new List<CryptoSell>
+        {
+            new()
+            {
+                Amount = 0.5m,
+                AmountInEuros = 100,
+                GainsInEuros = 50,
+                Symbol = Bitcoin,
+                Price = 200,
+                Date = transactions[2].Date,
+            },
+            new()
+            {
+                Amount = 0.5m,
+                AmountInEuros = 50,
+                GainsInEuros = 0,
+                Symbol = Ethereum,
+                Price = 100,
+                Date = transactions[3].Date,
+            },
+        });
+
+        cryptoAssets.Should().BeEquivalentTo(new List<CryptoAsset>
+        {
+            new()
+            {
+                Symbol = Bitcoin,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+            new()
+            {
+                Symbol = Ethereum,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+        });
     }
 
     [Test]
@@ -142,16 +168,40 @@ public class CryptoServiceTest
     {
         var transactions = new List<CryptoTransaction>
         {
-            Bitcoin(CryptoTransactionType.Buy, prix: 100),
-            Bitcoin(CryptoTransactionType.Exchange, prix: 200, quantite: .5m, prixEthereum: 100),
-            Ethereum(CryptoTransactionType.Sell, prix: 200, quantite: 1),
+            Btc(CryptoTransactionType.Buy, price: 100),
+            Btc(CryptoTransactionType.Exchange, price: 200, quantity: .5m, ethPrice: 100),
+            Eth(CryptoTransactionType.Sell, price: 200, quantity: 1),
         };
 
         var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
 
-        retraits.First(Ethereum).GainsInEuros.Should().Be(150);
-        cryptoAssets.First(Bitcoin).Amount.Should().Be(0.5m);
-        cryptoAssets.First(Bitcoin).AmountInEuros.Should().Be(50);
+        retraits.Should().BeEquivalentTo(new List<CryptoSell>
+        {
+            new()
+            {
+                Amount = 1,
+                AmountInEuros = 200,
+                GainsInEuros = 150,
+                Symbol = Ethereum,
+                Price = 200,
+                Date = transactions[2].Date,
+            },
+        });
+        cryptoAssets.Should().BeEquivalentTo(new List<CryptoAsset>
+        {
+            new()
+            {
+                Symbol = Bitcoin,
+                Amount = 0.5m,
+                AmountInEuros = 50,
+            },
+            new()
+            {
+                Symbol = Ethereum,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+        });
     }
 
     [Test]
@@ -159,17 +209,50 @@ public class CryptoServiceTest
     {
         var transactions = new List<CryptoTransaction>
         {
-            Bitcoin(CryptoTransactionType.Buy, prix: 100),
-            Bitcoin(CryptoTransactionType.Exchange, prix: 200, quantite: .5m, prixEthereum: 100),
-            Ethereum(CryptoTransactionType.Sell, prix: 200, quantite: 1),
-            Bitcoin(CryptoTransactionType.Sell, prix: 300, quantite: .5m),
+            Btc(CryptoTransactionType.Buy, price: 100),
+            Btc(CryptoTransactionType.Exchange, price: 200, quantity: .5m, ethPrice: 100),
+            Eth(CryptoTransactionType.Sell, price: 200, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 300, quantity: .5m),
         };
 
         var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
-
-        retraits.First(Bitcoin).GainsInEuros.Should().Be(100);
-        retraits.First(Ethereum).GainsInEuros.Should().Be(150);
-        cryptoAssets.First(Bitcoin).AmountInEuros.Should().Be(0);
+        
+        retraits.Should().BeEquivalentTo(new List<CryptoSell>
+        {
+            new()
+            {
+                Amount = 0.5m,
+                AmountInEuros = 150,
+                GainsInEuros = 100,
+                Symbol = Bitcoin,
+                Price = 300,
+                Date = transactions[3].Date,
+            },
+            new()
+            {
+                Amount = 1,
+                AmountInEuros = 200,
+                GainsInEuros = 150,
+                Symbol = Ethereum,
+                Price = 200,
+                Date = transactions[2].Date,
+            },
+        });
+        cryptoAssets.Should().BeEquivalentTo(new List<CryptoAsset>
+        {
+            new()
+            {
+                Symbol = Bitcoin,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+            new()
+            {
+                Symbol = Ethereum,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+        });
     }
 
     [Test]
@@ -177,18 +260,50 @@ public class CryptoServiceTest
     {
         var transactions = new List<CryptoTransaction>
         {
-            Bitcoin(CryptoTransactionType.Buy, prix: 100),
-            Bitcoin(CryptoTransactionType.Exchange, prix: 200, quantite: .5m, prixEthereum: 100),
-            Ethereum(CryptoTransactionType.Buy, prix: 200, quantite: 1),
-            Ethereum(CryptoTransactionType.Sell, prix: 300, quantite: 2),
-            Bitcoin(CryptoTransactionType.Sell, prix: 300, quantite: .5m),
+            Btc(CryptoTransactionType.Buy, price: 100),
+            Btc(CryptoTransactionType.Exchange, price: 200, quantity: .5m, ethPrice: 100),
+            Eth(CryptoTransactionType.Buy, price: 200, quantity: 1),
+            Eth(CryptoTransactionType.Sell, price: 300, quantity: 2),
+            Btc(CryptoTransactionType.Sell, price: 300, quantity: .5m),
         };
 
         var (cryptoAssets, retraits, _) = _cryptoService.ProcessTransactions(transactions);
-
-        retraits.First(Bitcoin).GainsInEuros.Should().Be(100);
-        retraits.First(Ethereum).GainsInEuros.Should().Be(350);
-        cryptoAssets.First(Bitcoin).AmountInEuros.Should().Be(0);
-        cryptoAssets.First(Ethereum).AmountInEuros.Should().Be(0);
+        
+        retraits.Should().BeEquivalentTo(new List<CryptoSell>
+            {
+                new()
+                {
+                    Amount = 0.5m,
+                    AmountInEuros = 150,
+                    GainsInEuros = 100,
+                    Symbol = Bitcoin,
+                    Price = 300,
+                    Date = transactions[4].Date,
+                },
+                new()
+                {
+                    Amount = 2,
+                    AmountInEuros = 600,
+                    GainsInEuros = 350,
+                    Symbol = Ethereum,
+                    Price = 300,
+                    Date = transactions[3].Date,
+                },
+            });
+        cryptoAssets.Should().BeEquivalentTo(new List<CryptoAsset>
+        {
+            new()
+            {
+                Symbol = Bitcoin,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+            new()
+            {
+                Symbol = Ethereum,
+                Amount = 0,
+                AmountInEuros = 0,
+            },
+        });
     }
 }

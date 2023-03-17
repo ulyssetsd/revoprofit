@@ -113,11 +113,12 @@ internal class RevolutCsvServiceTest
     [Test]
     public async Task Read_csv_with_a_massive_input_should_not_throw_any_exception()
     {
-        // Arrange
-        await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2022.csv", FileMode.Open);
-
-        // Act
-        var act = async () => (await _revolutCsvService.ReadCsv(memoryStream)).ToArray();
+        // Arrange & Act
+        var act = async () =>
+        {
+            await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2022.csv", FileMode.Open);
+            return (await _revolutCsvService.ReadCsv(memoryStream)).ToArray();
+        };
 
         // Assert
         await act.Should().NotThrowAsync();

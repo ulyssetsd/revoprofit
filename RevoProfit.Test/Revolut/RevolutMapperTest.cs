@@ -53,8 +53,7 @@ public class RevolutMapperTest
     [Test]
     public void Test_revolut_mapping_when_double_fields_are_empty_should_throw_exception()
     {
-        Func<RevolutTransaction> act;
-        act = () => _revolutTransactionMapper.Map(GetDefault() with { Amount = string.Empty });
+        var act = () => _revolutTransactionMapper.Map(GetDefault() with { Amount = string.Empty });
         act.Should().Throw<Exception>();
         act = () => _revolutTransactionMapper.Map(GetDefault() with { FiatAmount = string.Empty });
         act.Should().NotThrow<Exception>();

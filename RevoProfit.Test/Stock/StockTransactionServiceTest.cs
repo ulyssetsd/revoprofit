@@ -64,7 +64,7 @@ public class StockTransactionServiceTest
             }));
         stocks.Should().BeEquivalentTo(new[]
         {
-            new StockOwned
+            new OwnedStock
             {
                 Ticker = "TSLA",
                 Quantity = 0,
@@ -115,7 +115,7 @@ public class StockTransactionServiceTest
             Gains = 0,
             GainsInEuro = 0,
         });
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 2,
@@ -156,7 +156,7 @@ public class StockTransactionServiceTest
             Gains = 10,
             GainsInEuro = 10,
         });
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -208,7 +208,7 @@ public class StockTransactionServiceTest
             Gains = 25,
             GainsInEuro = 25,
         });
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -270,7 +270,7 @@ public class StockTransactionServiceTest
             Gains = 20, 
             GainsInEuro = 20,
         });
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 0,
@@ -292,7 +292,7 @@ public class StockTransactionServiceTest
         var (_, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
         // Assert
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 1,
@@ -319,7 +319,7 @@ public class StockTransactionServiceTest
         (_, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
 
         // Assert
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 10,
@@ -353,7 +353,7 @@ public class StockTransactionServiceTest
             Gains = 0,
             GainsInEuro = 0,
         });
-        stocks.First().Should().BeEquivalentTo(new StockOwned
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
         {
             Ticker = "TSLA",
             Quantity = 0,

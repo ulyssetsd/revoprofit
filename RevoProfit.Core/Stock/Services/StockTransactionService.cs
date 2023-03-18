@@ -9,9 +9,9 @@ public class StockTransactionService : IStockTransactionService
     private const int StockDecimalsPrecision = 14;
     private const int EuroDecimalsPrecision = 14;
 
-    public (IReadOnlyCollection<StockAnnualReport> annualReports, IReadOnlyCollection<StockOwned> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
+    public (IReadOnlyCollection<StockAnnualReport> annualReports, IReadOnlyCollection<OwnedStock> stockOwneds) GetAnnualReports(IEnumerable<StockTransaction> stockTransactions)
     {
-        var stocks = new List<StockOwned>();
+        var stocks = new List<OwnedStock>();
         var stockSellOrders = new List<StockSellOrder>();
         var dividends = new List<StockTransaction>();
         var cashTopUps = new List<StockTransaction>();
@@ -119,12 +119,12 @@ public class StockTransactionService : IStockTransactionService
         return (annualReports, stocks);
     }
 
-    private static StockOwned GetStockOrCreate(string ticker, ICollection<StockOwned> stocks)
+    private static OwnedStock GetStockOrCreate(string ticker, ICollection<OwnedStock> stocks)
     {
         var stock = stocks.FirstOrDefault(s => s.Ticker == ticker);
         if (stock == null)
         {
-            stock = new StockOwned { Ticker = ticker };
+            stock = new OwnedStock { Ticker = ticker };
             stocks.Add(stock);
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace RevoProfit.Core.Stock.Models;
 
-public class StockOwned
+public class OwnedStock
 {
     public required string Ticker { get; init; }
     public decimal Quantity { get; set; }

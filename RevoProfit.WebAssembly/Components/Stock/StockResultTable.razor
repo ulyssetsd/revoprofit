@@ -85,7 +85,7 @@
     }
 }
 
-@if (AppState.StockOwneds.Any())
+@if (AppState.OwnedStocks.Any())
 {
     <h3 class="mt-5">@Loc[nameof(Localization.StockLefts)]</h3>
     <div class="table-responsive">
@@ -97,7 +97,7 @@
                 <th scope="col">@Loc[nameof(Localization.Dividends)]</th>
                 <th scope="col">@Loc[nameof(Localization.AmountInDollars)]</th>
             </tr>
-            @foreach (var stockOwned in AppState.StockOwneds.Where(IsNotEmpty))
+            @foreach (var stockOwned in AppState.OwnedStocks.Where(IsNotEmpty))
             {
                 <tr>
                     <td>@stockOwned.Ticker</td>
@@ -126,7 +126,7 @@
         AppState.OnChange -= StateHasChanged;
     }
 
-    private static bool IsNotEmpty(StockOwned owned)
+    private static bool IsNotEmpty(OwnedStock owned)
     {
         return !(owned.Quantity == 0 &&
                owned.TotalDividend == 0 &&

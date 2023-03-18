@@ -30,7 +30,7 @@ public class CryptoServiceTest
     private CryptoTransaction Eth(CryptoTransactionType cryptoTransactionType, decimal price, decimal quantity = 1, int yearIncrement = 0, decimal btcPrice = 1) =>
         CryptoTransaction(cryptoTransactionType, price, quantity, yearIncrement, btcPrice, Ethereum, Bitcoin);
 
-    private CryptoTransaction CryptoTransaction(CryptoTransactionType cryptoTransactionType, decimal prix, decimal quantity, int yearIncrement, decimal prixDestination, string source, string destination)
+    private CryptoTransaction CryptoTransaction(CryptoTransactionType cryptoTransactionType, decimal price, decimal quantity, int yearIncrement, decimal destinationPrice, string source, string destination)
     {
         var date = DateTime.Today.AddYears(yearIncrement).AddDays(++_dateIncrement);
 
@@ -41,7 +41,7 @@ public class CryptoServiceTest
                 Date = date,
                 Type = cryptoTransactionType,
                 BuySymbol = source,
-                BuyPrice = prix,
+                BuyPrice = price,
                 BuyAmount = quantity,
                 SellAmount = 0,
                 SellSymbol = string.Empty,
@@ -55,7 +55,7 @@ public class CryptoServiceTest
                 Date = date,
                 Type = cryptoTransactionType,
                 SellSymbol = source,
-                SellPrice = prix,
+                SellPrice = price,
                 SellAmount = quantity,
                 BuyAmount = 0,
                 BuySymbol = string.Empty,
@@ -69,11 +69,11 @@ public class CryptoServiceTest
                 Date = date,
                 Type = cryptoTransactionType,
                 SellSymbol = source,
-                SellPrice = prix,
+                SellPrice = price,
                 SellAmount = quantity,
                 BuySymbol = destination,
-                BuyPrice = prixDestination,
-                BuyAmount = quantity * prix / prixDestination,
+                BuyPrice = destinationPrice,
+                BuyAmount = quantity * price / destinationPrice,
                 FeesAmount = 0,
                 FeesSymbol = string.Empty,
                 FeesPrice = 0,

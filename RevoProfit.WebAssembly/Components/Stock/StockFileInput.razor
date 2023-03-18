@@ -49,10 +49,10 @@
         try
         {
             var transactions = await CsvService.ReadCsv(CsvFileStream);
-            var (annualReports, stockOwneds) = StockTransactionService.GetAnnualReports(transactions);
+            var (annualReports, ownedStocks) = StockTransactionService.GetAnnualReports(transactions);
             Logger.LogInformation(LogEvents.GenerateAnnualReports, "Generate annual reports");
             AppState.StockAnnualReports = annualReports;
-            AppState.StockOwneds = stockOwneds;
+            AppState.OwnedStocks = ownedStocks;
         }
         catch (Exception exception)
         {

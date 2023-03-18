@@ -10,7 +10,7 @@ public class AppState
     private IReadOnlyCollection<StockAnnualReport> _stockAnnualReports = new List<StockAnnualReport>();
     private IReadOnlyCollection<CryptoAsset> _cryptoAssets = new List<CryptoAsset>();
     private IReadOnlyCollection<CryptoSell> _cryptoRetraits = new List<CryptoSell>();
-    private IReadOnlyCollection<StockOwned> _stockOwneds = new List<StockOwned>();
+    private IReadOnlyCollection<OwnedStock> _ownedStocks = new List<OwnedStock>();
     private IReadOnlyCollection<CryptoReport> _cryptoReports = new List<CryptoReport>();
 
     public bool IsCalculatingStock
@@ -73,12 +73,12 @@ public class AppState
         }
     }
 
-    public IReadOnlyCollection<StockOwned> StockOwneds
+    public IReadOnlyCollection<OwnedStock> OwnedStocks
     {
-        get => _stockOwneds;
+        get => _ownedStocks;
         set
         {
-            _stockOwneds = value;
+            _ownedStocks = value;
             NotifyStateChanged();
         }
     }

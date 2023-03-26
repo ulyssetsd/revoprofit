@@ -5,11 +5,11 @@ namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
-    private readonly ICryptoValidator _cryptoValidator;
+    private readonly ICryptoTransactionValidator _cryptoTransactionValidator;
 
-    public CryptoService(ICryptoValidator cryptoValidator)
+    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator)
     {
-        _cryptoValidator = cryptoValidator;
+        _cryptoTransactionValidator = cryptoTransactionValidator;
     }
 
     private const int EuroDecimalsPrecision = 24;
@@ -84,7 +84,7 @@ public class CryptoService : ICryptoService
 
         foreach (var transaction in transactions)
         {
-            _cryptoValidator.Validate(transaction);
+            _cryptoTransactionValidator.ValidateAndThrow(transaction);
 
             switch (transaction.Type)
             {

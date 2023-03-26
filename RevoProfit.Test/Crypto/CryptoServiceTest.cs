@@ -20,7 +20,7 @@ public class CryptoServiceTest
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(Mock.Of<ICryptoValidator>());
+        _cryptoService = new CryptoService(Mock.Of<ICryptoTransactionValidator>());
         _dateIncrement = 0;
     }
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Revolut.Services;
 
 namespace RevoProfit.Test.Revolut;
@@ -17,7 +16,7 @@ public class RevolutServiceEndToEndTest
     public void Setup()
     {
         _revolutCsvService = new RevolutCsvService(new RevolutTransactionMapper());
-        _revolutService = new RevolutService(new CryptoService(new CryptoValidator()));
+        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionValidator()));
     }
 
     [Test]

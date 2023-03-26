@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICryptoCsvService, CryptoCsvService>();
         services.AddScoped<ICryptoService, CryptoService>();
         services.AddScoped<ICryptoTransactionMapper, CryptoTransactionMapper>();
-        services.AddScoped<ICryptoTransactionValidator, CryptoTransactionValidator>();
+        services.AddScoped<ICryptoTransactionValidator, CryptoTransactionFluentValidator>();
         services.AddScoped<IRevolutCsvService, RevolutCsvService>();
         services.AddScoped<IRevolutService, RevolutService>();
         services.AddScoped<IRevolutTransactionMapper, RevolutTransactionMapper>();

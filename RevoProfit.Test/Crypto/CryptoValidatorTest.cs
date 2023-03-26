@@ -9,12 +9,12 @@ namespace RevoProfit.Test.Crypto;
 public class CryptoValidatorTest
 {
     private CryptoTransaction _transaction = null!;
-    private CryptoTransactionValidator _validator = null!;
+    private CryptoTransactionFluentValidator _validator = null!;
 
     [SetUp]
     public void Setup()
     {
-        _validator = new CryptoTransactionValidator();
+        _validator = new CryptoTransactionFluentValidator();
         _transaction = new CryptoTransaction
         {
             Type = CryptoTransactionType.Buy,

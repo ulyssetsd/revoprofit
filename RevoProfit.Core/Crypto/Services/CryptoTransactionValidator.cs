@@ -1,11 +1,12 @@
 ﻿using RevoProfit.Core.Crypto.Models;
+using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
 
-namespace RevoProfit.Core.Crypto.Services.Interfaces;
+namespace RevoProfit.Core.Crypto.Services;
 
-public class CryptoValidator : ICryptoValidator
+public class CryptoTransactionValidator : ICryptoTransactionValidator
 {
-    public void Validate(CryptoTransaction transaction)
+    public void ValidateAndThrow(CryptoTransaction transaction)
     {
         if (!IsValid(transaction)) throw new ProcessException($"Invalid transaction: {transaction}");
     }
@@ -33,7 +34,7 @@ public class CryptoValidator : ICryptoValidator
         transaction.SellPrice > 0 &&
         !string.IsNullOrEmpty(transaction.SellSymbol);
 
-    private static bool IsValidFees(CryptoTransaction transaction) => 
+    private static bool IsValidFees(CryptoTransaction transaction) =>
         transaction.FeesPrice > 0 &&
         !string.IsNullOrEmpty(transaction.FeesSymbol);
 }

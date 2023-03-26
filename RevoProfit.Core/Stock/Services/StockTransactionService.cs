@@ -112,7 +112,7 @@ public class StockTransactionService : IStockTransactionService
                     StockSellOrders = stockSellOrders.Where(order => order.Date.Year == year).ToList(),
                     Gains = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.Gains), EuroDecimalsPrecision, MidpointRounding.ToEven),
                     GainsInEuro = Math.Round(stockSellOrders.Where(order => order.Date.Year == year).Sum(order => order.GainsInEuros), EuroDecimalsPrecision, MidpointRounding.ToEven),
-                }
+                },
             })
             .ToList();
 

@@ -18,7 +18,7 @@ public class RevolutServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutService = new RevolutService(new CryptoService(Mock.Of<ICryptoValidator>()));
+        _revolutService = new RevolutService(new CryptoService(Mock.Of<ICryptoTransactionValidator>()));
         _incrementHours = 0;
     }
 
@@ -578,7 +578,7 @@ public class RevolutServiceTest
                 AmountInEuros = 100,
                 Amount = 1,
                 Fees = 0,
-            }
+            },
         });
     }
 

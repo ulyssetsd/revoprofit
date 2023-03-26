@@ -2,19 +2,19 @@
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.Crypto.Services;
 
 namespace RevoProfit.Test.Crypto;
 
 public class CryptoValidatorTest
 {
     private CryptoTransaction _transaction = null!;
-    private CryptoValidator _validator = null!;
+    private CryptoTransactionValidator _validator = null!;
 
     [SetUp]
     public void Setup()
     {
-        _validator = new CryptoValidator();
+        _validator = new CryptoTransactionValidator();
         _transaction = new CryptoTransaction
         {
             Type = CryptoTransactionType.Buy,

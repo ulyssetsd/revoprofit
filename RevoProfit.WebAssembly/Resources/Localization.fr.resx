@@ -130,7 +130,7 @@
     <value>Non, nous ne stockons aucune donnée personnelle, aucune donnée commerciale et n'utilisons pas de cookies.</value>
   </data>
   <data name="Answer3" xml:space="preserve">
-    <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevés" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de juin 2017 à {0}.</value>
+	  <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevés" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de la plus ancienne à {0}.</value>
   </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>☕ Offrez-moi un café</value>
@@ -139,7 +139,7 @@
     <value>Recharge en espèces</value>
   </data>
   <data name="CryptoFile" xml:space="preserve">
-    <value>Votre fichier d'exportation "Relevé de compte" Waltio (.csv)</value>
+	  <value>Votre fichier d'exportation "Relevé de compte" Revolut Crypto (.csv)</value>
   </data>
   <data name="CustodyFee" xml:space="preserve">
     <value>Frais de garde</value>
@@ -187,13 +187,10 @@
     <value>Calculez vos gains ou pertes de trading sur votre compte de trading Revolut Stocks.</value>
   </data>
   <data name="Ticker" xml:space="preserve">
-    <value>Symbole boursier</value>
-  </data>
-  <data name="WaltProfit" xml:space="preserve">
-    <value>WaltProfit</value>
+	  <value>Symbole</value>
   </data>
   <data name="WaltProfitSubtitle" xml:space="preserve">
-    <value>Calculez vos gains ou pertes de trading crypto via votre export waltio.co</value>
+	  <value>Calculez vos gains ou pertes de trading crypto sur votre compte de trading Revolut Crypto.</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Année</value>
@@ -209,9 +206,6 @@
   </data>
   <data name="GainsInEuros" xml:space="preserve">
     <value>Gains en €</value>
-  </data>
-  <data name="RevoProfit" xml:space="preserve">
-    <value>RevoProfit</value>
   </data>
   <data name="CryptoLefts" xml:space="preserve">
     <value>🪙 Cryptos restantes</value>
@@ -232,6 +226,18 @@
     <value>🚀 Stock restants</value>
   </data>
   <data name="FiatFees" xml:space="preserve">
-	  <value>Frais payé en € (exclu frais payé en crypto)</value>
+    <value>Frais payé en € (exclu frais payé en crypto)</value>
+  </data>
+  <data name="Answer4" xml:space="preserve">
+    <value>Pour générer un relevé de vos comptes crypto sur Revolut, veuillez suivre ces étapes :
+Lancez l’application Revolut et accédez à la section “Crypto”.
+Appuyez sur n’importe quel compte crypto puis appuyez sur “Relevé”.
+Sur la page Relevé, appuyez sur les filtres de comptes en haut et sélectionnez tous vos comptes crypto.
+Appuyez sur excel et choisissez la date de début la plus ancienne et n’importe quelle date de fin.
+Appuyez sur “Générer” et attendez que le relevé soit prêt. Si cela prend trop de temps, vous pouvez essayer d’appuyer à nouveau sur “Générer” après quelques minutes.
+Une fois le relevé généré, vous pouvez le télécharger et le téléverser sur ce site web pour calculer vos gains.</value>
+  </data>
+  <data name="Question4" xml:space="preserve">
+    <value>Comment générer un relevé de mes comptes crypto sur Revolut au format .csv ?</value>
   </data>
 </root>

@@ -124,6 +124,20 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To generate a statement of your crypto accounts on Revolut, please follow these steps:
+        ///Launch the Revolut app and navigate to the “Crypto” section.
+        ///Tap on any crypto account and then tap on “Statement”.
+        ///On the Statement page, tap on the accounts filters at the top and select all your crypto accounts.
+        ///Tap on excel and choose the earliest “Starting on” date and any “Ending on” date that you want.
+        ///Tap on “Generate” and wait for the statement to be ready. If it takes too long, you can try tapping on “Gener [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Answer4 {
+            get {
+                return ResourceManager.GetString("Answer4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average stock price.
         /// </summary>
         public static string AveragePrice {
@@ -178,7 +192,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jeton.
+        ///   Looks up a localized string similar to Symbol.
         /// </summary>
         public static string CryptoSymbol {
             get {
@@ -241,7 +255,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Fees paid in € (exclude fees paid in crypto).
         /// </summary>
         public static string FiatFees {
             get {
@@ -309,6 +323,15 @@ namespace RevoProfit.WebAssembly.Resources {
         public static string Question3 {
             get {
                 return ResourceManager.GetString("Question3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Question4 {
+            get {
+                return ResourceManager.GetString("Question4", resourceCulture);
             }
         }
         

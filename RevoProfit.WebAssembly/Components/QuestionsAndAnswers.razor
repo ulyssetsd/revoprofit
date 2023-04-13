@@ -1,22 +1,36 @@
 ﻿@inject IStringLocalizer<Localization> Loc
 
 <h3 class="mt-5">Q&A</h3>
-<p><strong>
-    @Loc[nameof(Localization.Question1)]
-</strong></p>
+<p>
+    <strong>
+        @Loc[nameof(Localization.Question1)]
+    </strong>
+</p>
 <p>
     @Loc[nameof(Localization.Answer1)]
     <a href="https://www.impots.gouv.fr/particulier/les-cessions-mobilieres">https://www.impots.gouv.fr/particulier/les-cessions-mobilieres</a>
 </p>
-<p><strong>
-    @Loc[nameof(Localization.Question2)]
-</strong></p>
+<p>
+    <strong>
+        @Loc[nameof(Localization.Question2)]
+    </strong>
+</p>
 <p>
     @Loc[nameof(Localization.Answer2)]
 </p>
-<p><strong>
-    @Loc[nameof(Localization.Question3)]
-</strong></p>
+<p>
+    <strong>
+        @Loc[nameof(Localization.Question3)]
+    </strong>
+</p>
 <p>
     @string.Format(Loc[nameof(Localization.Answer3)], DateTime.Now.ToString("MMMM yyyy", CultureInfo.CurrentCulture))
+</p>
+<p>
+    <strong>
+        @Loc[nameof(Localization.Question4)]
+    </strong>
+</p>
+<p>
+    @Loc[nameof(Localization.Answer4)]
 </p>

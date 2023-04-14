@@ -61,10 +61,10 @@ public class CryptoService : ICryptoService
         }
     }
 
-    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoSell> cryptoRetraits, IEnumerable<CryptoFiatFee> cryptoFiatFees)
+    public IEnumerable<CryptoReport> MapToReports(IEnumerable<CryptoSell> cryptoSells, IEnumerable<CryptoFiatFee> cryptoFiatFees)
     {
         var feesGroupByYear = cryptoFiatFees.GroupBy(fee => fee.Date.Year);
-        var retraitsGroupByYear = cryptoRetraits.GroupBy(retrait => retrait.Date.Year);
+        var retraitsGroupByYear = cryptoSells.GroupBy(retrait => retrait.Date.Year);
 
         return feesGroupByYear
             .Join(retraitsGroupByYear, fees => fees.Key, retraits => retraits.Key, (fees, sells) => (year: fees.Key, fees, sells))

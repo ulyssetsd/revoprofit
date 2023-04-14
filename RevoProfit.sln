@@ -9,13 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.Core", "RevoProf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RevoProfit.WebAssembly", "RevoProfit.WebAssembly\RevoProfit.WebAssembly.csproj", "{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{DF891819-DB0D-48E7-AABE-9EF9C42CF5D3}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql.yml = .github\workflows\codeql.yml
-		.github\workflows\dotnet-deploy-github.yml = .github\workflows\dotnet-deploy-github.yml
-		.github\workflows\dotnet-test.yml = .github\workflows\dotnet-test.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".csv", ".csv", "{85E69B12-DF0D-4623-AEDE-FA313802F28D}"
 	ProjectSection(SolutionItems) = preProject
 		.csv\crypto_input_revolut_2022.csv = .csv\crypto_input_revolut_2022.csv

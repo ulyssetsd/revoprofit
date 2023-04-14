@@ -1,0 +1,88 @@
+{
+  "cacheBootResources": true,
+  "config": [ ],
+  "debugBuild": false,
+  "entryAssembly": "RevoProfit.WebAssembly",
+  "icuDataMode": 0,
+  "linkerEnabled": true,
+  "resources": {
+    "assembly": {
+      "CsvHelper.dll": "sha256-oh395MqwHOdv87ggl0L2cpWEDZZGFYe3CVUXnzSo8rY=",
+      "FluentValidation.dll": "sha256-02wkCPGd8TaMH4HAfKIFj6VG5WDxggTnuZVzW2lCJGE=",
+      "Microsoft.AspNetCore.Components.dll": "sha256-3GHT560LIxVRcS7Ac0Is9Qz1SrGB+HxSNdZHRA6fyxA=",
+      "Microsoft.AspNetCore.Components.Web.dll": "sha256-n0xul0zpxPR0CHb\/7T1Iukk4XgeHwnk9lkhRklB6Smc=",
+      "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-qwEvd4oTR1Adf\/3Zoc00bRQvu0\/1Wi4SOxeggwKjPD8=",
+      "Microsoft.CSharp.dll": "sha256-MFnVqKPgfQ66KZUHlSBz3AkR\/as9+NRSnh\/1roVq8lg=",
+      "Microsoft.Extensions.Configuration.Abstractions.dll": "sha256-X\/f4fDl2cuIRXeWHhK\/f2UqQbFioD+RU4a4CEh0zrrQ=",
+      "Microsoft.Extensions.Configuration.dll": "sha256-DBOKSPriP2JDxVbbWrLXyD3K4\/x3RBifNBWk\/q1I39M=",
+      "Microsoft.Extensions.Configuration.Json.dll": "sha256-nTqLKuydttqLtE3VT3p6XhPmLxuaJDd0cL3Qzt8D4Ro=",
+      "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "sha256-kd+T5NYqSdLbo3rnn8EGbxf3bWy30Hl1550WuHjBqzA=",
+      "Microsoft.Extensions.DependencyInjection.dll": "sha256-qi0kE7rp0kdsNqdL6DyPZEeimjUGvcLT4iWQX0YnRus=",
+      "Microsoft.Extensions.Localization.Abstractions.dll": "sha256-PxK6V1+2uSNDHmEubr9aSnBj2qd0\/f1KkjF6DWiuz6o=",
+      "Microsoft.Extensions.Localization.dll": "sha256-9MDqoPhA\/vNB14+ysntYEZf8wIbUwGCUr9ptBth6HQg=",
+      "Microsoft.Extensions.Logging.Abstractions.dll": "sha256-aSlSrbE+6ml3ML2UkDP9DpfBDsAD1eu\/4mRyObPAZ1M=",
+      "Microsoft.Extensions.Logging.dll": "sha256-oEPPw1EPpaOHv+EHwoT2WcgDiRbjEXxigiW7V44cIYE=",
+      "Microsoft.Extensions.Options.dll": "sha256-wre+hKKXkMGMevyOJFZjGvHYCrTSOFu4So3qzesaeIA=",
+      "Microsoft.Extensions.Primitives.dll": "sha256-eXvGx2jcjpTPEJoAHBsW\/VuMPbNyyU+AsuhPmkzSSRY=",
+      "Microsoft.JSInterop.dll": "sha256-0FMD8kfTGW4NuGohnZYA1nnWndvtTon9HtRA7jYV0Pw=",
+      "Microsoft.JSInterop.WebAssembly.dll": "sha256-hUxOrW0i2d4N\/3At6wRqsDMpya9fFCtdE6YcQJb8d40=",
+      "RevoProfit.Core.dll": "sha256-kQ2dXN9jF7nYHkNmjGpoX7XuXvdN6G\/t2nmv2SZMcLQ=",
+      "RevoProfit.Logging.dll": "sha256-B+7sgUePbgGqBDwUv3JyDTkMKLAhQyxr1Y86imRCBy8=",
+      "RevoProfit.WebAssembly.dll": "sha256-zaXZqDeo849a5pjOqOf96TGT\/4LmtfCqpSxsN5W\/DkE=",
+      "System.Collections.Concurrent.dll": "sha256-K4r+G4ztxKhJ0ybjsNg45ZNXQ9qqcnz2BToR61hhI6Y=",
+      "System.Collections.dll": "sha256-dMAylCvgC6bN51Dl6QKLONCtfax25+iOhqpyMC4EY1s=",
+      "System.Collections.NonGeneric.dll": "sha256-1mxz5AtxTSG5UatSKz+EC13KIekFci8vbmi73tLRWOo=",
+      "System.Collections.Specialized.dll": "sha256-24r8\/23uomTj8BCqCInI0PUNtMviMQDoDMjPZMBXUu0=",
+      "System.ComponentModel.dll": "sha256-0VKeeJIKsXTvb1OzQacTDmqeaJnc3tA7xfJMWsRoghE=",
+      "System.ComponentModel.Primitives.dll": "sha256-hW2CGY8LjVZYMLBbi9BWrQSWct+IeJ5oMvDqxv1PL6Y=",
+      "System.ComponentModel.TypeConverter.dll": "sha256-+b5zscbiAr2GrpOr\/DDzK0JmqIzSmBu5EQHUwNKtmgQ=",
+      "System.Data.Common.dll": "sha256-BU9edLyZllgsW9wZwpyGVYKcSeuMewgPZrZThkwksNk=",
+      "System.Diagnostics.TraceSource.dll": "sha256-kKR2euh7YOrAYLuXKQ+GICEDn2kChfofmW6SvzsjAag=",
+      "System.dll": "sha256-vjZqvG\/RsRoxqfMsGr8fUYGm1eNLleWvkorGBcJV5k8=",
+      "System.Drawing.dll": "sha256-GZKQ\/Gq\/hj9W0xJv\/3vMbSyX80AUy8f+4WynQPDkptk=",
+      "System.Drawing.Primitives.dll": "sha256-F4jFnZgHNIeWzWXMOZjfle2Pbc9zeaCXz2DTAEeU9io=",
+      "System.Linq.dll": "sha256-xEDNl7gkv3vKnf2OkyAtbUx0IX+3YAoc+g7hKxnaw7I=",
+      "System.Linq.Expressions.dll": "sha256-fOL\/CptDzsljobePnFGgGZiymw+uzieckvj6Pnamz9Y=",
+      "System.Memory.dll": "sha256-CHRY4rJZzbctkbBjQPbVxr3bocOAW0QI6q\/0xpu5FFM=",
+      "System.Net.Http.dll": "sha256-pVJp3j31jqUd+YhW+ruoO3+D646MBzXFqDiP3N5Ibe8=",
+      "System.Net.Primitives.dll": "sha256-HhruHWHcMXImNmJZIQosacEKScVZ9y9z2SgZLQFEnFI=",
+      "System.ObjectModel.dll": "sha256-nXwnGk8MNIHffTGCzq856b1kY23Y1b4qY38W193UJG0=",
+      "System.Private.CoreLib.dll": "sha256-tJFF78URrSl3wBb5q9Iz4zj5BpThBMKXstMxQyklXtM=",
+      "System.Private.Uri.dll": "sha256-czaTS5cAbBUjhc6sWludCSzp55b7YTlpL05A50gPAjM=",
+      "System.Private.Xml.dll": "sha256-p7JJ3U2o9zoWnmcUBoWIhoe\/oRZkmSMJbaXVhR59ZY0=",
+      "System.Runtime.dll": "sha256-DlcI940HD7VicAgIzDhn9AzSA+LvaX90MrpVzmcpmRw=",
+      "System.Runtime.InteropServices.JavaScript.dll": "sha256-lZNDJmCZjUCPBkc8yiASvRb9kYy34iHR8ptuOTmGMP0=",
+      "System.Runtime.Numerics.dll": "sha256-iJKWEZG4MRHOF2rpJyZZnWbxoqLWRXL569Gd822IWEg=",
+      "System.Runtime.Serialization.Formatters.dll": "sha256-goFnyKkK80d13IjQ1Jn\/lwNFyig+6Cm75UXBNOxkWRQ=",
+      "System.Security.Cryptography.dll": "sha256-1BFKPYgxhZDRxcig1AQZj\/CRjwXTiK2STOZ725MHDlU=",
+      "System.Text.Encodings.Web.dll": "sha256-UEjjfXMneHaPyug9JKLS2e67fa3O+GSBW4uCeGJTTLk=",
+      "System.Text.Json.dll": "sha256-H+U6lS3YMp+VoAki6FgQJmUdfG8eUAWjTlqf9Q7URj0=",
+      "System.Text.RegularExpressions.dll": "sha256-zYiKrdYmkxY4gkuoCSDNI7seMOLrGRuyvsKKskAIDt4=",
+      "System.Threading.dll": "sha256-Pzz0b\/YJPqkVwuI8Vsrc01F4zJuDo8dn1SvTrY0mmC4="
+    },
+    "extensions": null,
+    "lazyAssembly": null,
+    "libraryInitializers": null,
+    "pdb": null,
+    "runtime": {
+      "dotnet.7.0.4.n8uw76titq.js": "sha256-3l+4ZYRWpGMbBjNqeIqO9T\/65euaOzIvRlVX2SySvFQ=",
+      "dotnet.timezones.blat": "sha256-UEt3EzX1Ts6UAzZ8vHZJ3Nb0gAVPqeNmtxuFnUvzxVI=",
+      "dotnet.wasm": "sha256-zid5tE3Ge1c9yj2qDXbbzJKSSfLh1U4A6wpu3rTqgn8=",
+      "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
+      "icudt_EFIGS.dat": "sha256-8fItetYY8kQ0ww6oxwTLiT3oXlBwHKumbeP2pRF4yTc=",
+      "icudt_no_CJK.dat": "sha256-L7sV7NEYP37\/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs=",
+      "icudt.dat": "sha256-tO5O5YzMTVSaKBboxAqezOQL9ewmupzV2JrB5Rkc8a4="
+    },
+    "runtimeAssets": {
+      "dotnet.wasm": {
+        "behavior": "dotnetwasm",
+        "hash": "sha256-zid5tE3Ge1c9yj2qDXbbzJKSSfLh1U4A6wpu3rTqgn8="
+      }
+    },
+    "satelliteResources": {
+      "fr": {
+        "fr\/RevoProfit.WebAssembly.resources.dll": "sha256-tJWvSPf0\/d9At3HV8cDvanhUfYmlpxdEGeXowB4cLCY="
+      }
+    }
+  }
+}

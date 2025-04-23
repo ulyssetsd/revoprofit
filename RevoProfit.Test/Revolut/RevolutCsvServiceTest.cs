@@ -17,7 +17,7 @@ internal class RevolutCsvServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService = new RevolutCsvService(new RevolutTransactionMapper());
+        _revolutCsvService = new RevolutCsvService();
     }
 
     [Test]

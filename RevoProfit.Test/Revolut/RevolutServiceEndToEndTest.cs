@@ -15,7 +15,7 @@ public class RevolutServiceEndToEndTest
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService = new RevolutCsvService(new RevolutTransactionMapper());
+        _revolutCsvService = new RevolutCsvService();
         _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator()));
     }
 

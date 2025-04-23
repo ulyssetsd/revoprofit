@@ -43,20 +43,7 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
             return new RevolutTransaction2025
             {
                 Date = ToDateTime(source.Date),
-                Type = source.Type switch
-                {
-                    "Buy" => RevolutTransactionType.Buy,
-                    "Sell" => RevolutTransactionType.Sell,
-                    "Send" => RevolutTransactionType.Send,
-                    "Payment" => RevolutTransactionType.Payment,
-                    "Receive" => RevolutTransactionType.Receive,
-                    "Stake" => RevolutTransactionType.Stake,
-                    "Unstake" => RevolutTransactionType.Unstake,
-                    "Learn reward" => RevolutTransactionType.LearnReward,
-                    "Staking reward" => RevolutTransactionType.StakingReward,
-                    "Other" => RevolutTransactionType.Other,
-                    _ => throw new ProcessException($"Unknown transaction type: {source.Type}")
-                },
+                Type = ToType(source.Type),
                 Symbol = source.Symbol,
                 Quantity = ToDecimal(source.Quantity),
                 Price = ToNullableDecimalWithCurrency(source.Price),
@@ -71,10 +58,25 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
         }
     }
 
-    private static string? GetBaseCurrency(string price) => 
+    private static RevolutTransactionType ToType(string type) => type switch
+    {
+        "Buy" => RevolutTransactionType.Buy,
+        "Sell" => RevolutTransactionType.Sell,
+        "Send" => RevolutTransactionType.Send,
+        "Payment" => RevolutTransactionType.Payment,
+        "Receive" => RevolutTransactionType.Receive,
+        "Stake" => RevolutTransactionType.Stake,
+        "Unstake" => RevolutTransactionType.Unstake,
+        "Learn reward" => RevolutTransactionType.LearnReward,
+        "Staking reward" => RevolutTransactionType.StakingReward,
+        "Other" => RevolutTransactionType.Other,
+        _ => throw new ProcessException($"Unknown transaction type: {type}")
+    };
+
+    private static string? GetBaseCurrency(string price) =>
         string.IsNullOrWhiteSpace(price) ? null :
-        price.StartsWith('€') ? "EUR" : 
-        price.StartsWith('$') ? "USD" : 
+        price.StartsWith('€') ? "EUR" :
+        price.StartsWith('$') ? "USD" :
         throw new ProcessException($"Unknown currency symbol in price: {price}");
 
     private static DateTime ToDateTime(string source)

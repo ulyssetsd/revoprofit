@@ -1,48 +1,17 @@
 using System.Globalization;
-using CsvHelper.Configuration.Attributes;
 using RevoProfit.Core.Exceptions;
+using RevoProfit.Core.Revolut2025.Models;
+using RevoProfit.Core.Revolut2025.Services.Interfaces;
 
 namespace RevoProfit.Core.Revolut2025.Services;
 
-public record RevolutTransaction2025CsvLine
+public class Revolut2025TransactionMapper : IRevolut2025TransactionMapper
 {
-    [Name("Date")] public required string Date { get; init; }
-    [Name("Type")] public required string Type { get; init; }
-    [Name("Symbol")] public required string Symbol { get; init; }
-    [Name("Quantity")] public required string Quantity { get; init; }
-    [Name("Price")] public required string Price { get; init; }
-    [Name("Value")] public required string Value { get; init; }
-    [Name("Fees")] public required string Fees { get; init; }
-}
-
-public enum RevolutTransactionType { Buy, Sell, Send, Payment, Receive, Stake, Unstake, LearnReward, StakingReward, Other }
-
-public record RevolutTransaction2025
-{
-    public required DateTime Date { get; init; }
-    public required RevolutTransactionType Type { get; init; }
-    public required string Symbol { get; init; }
-    public required decimal Quantity { get; init; }
-    public required decimal? Price { get; init; }
-    public required string? PriceCurrency { get; init; }
-    public required decimal? Value { get; init; }
-    public string? ValueCurrency { get; init; }
-    public required decimal? Fees { get; init; }
-    public string? FeesCurrency { get; init; }
-}
-
-public interface IRevolutTransaction2025Mapper
-{
-    RevolutTransaction2025 Map(RevolutTransaction2025CsvLine source);
-}
-
-public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
-{
-    public RevolutTransaction2025 Map(RevolutTransaction2025CsvLine source)
+    public Revolut2025Transaction Map(Revolut2025TransactionCsvLine source)
     {
         try
         {
-            return new RevolutTransaction2025
+            return new Revolut2025Transaction
             {
                 Date = ToDateTime(source.Date),
                 Type = ToType(source.Type),
@@ -62,18 +31,18 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
         }
     }
 
-    private static RevolutTransactionType ToType(string type) => type switch
+    private static Revolut2025TransactionType ToType(string type) => type switch
     {
-        "Buy" => RevolutTransactionType.Buy,
-        "Sell" => RevolutTransactionType.Sell,
-        "Send" => RevolutTransactionType.Send,
-        "Payment" => RevolutTransactionType.Payment,
-        "Receive" => RevolutTransactionType.Receive,
-        "Stake" => RevolutTransactionType.Stake,
-        "Unstake" => RevolutTransactionType.Unstake,
-        "Learn reward" => RevolutTransactionType.LearnReward,
-        "Staking reward" => RevolutTransactionType.StakingReward,
-        "Other" => RevolutTransactionType.Other,
+        "Buy" => Revolut2025TransactionType.Buy,
+        "Sell" => Revolut2025TransactionType.Sell,
+        "Send" => Revolut2025TransactionType.Send,
+        "Payment" => Revolut2025TransactionType.Payment,
+        "Receive" => Revolut2025TransactionType.Receive,
+        "Stake" => Revolut2025TransactionType.Stake,
+        "Unstake" => Revolut2025TransactionType.Unstake,
+        "Learn reward" => Revolut2025TransactionType.LearnReward,
+        "Staking reward" => Revolut2025TransactionType.StakingReward,
+        "Other" => Revolut2025TransactionType.Other,
         _ => throw new ProcessException($"Unknown transaction type: {type}")
     };
 

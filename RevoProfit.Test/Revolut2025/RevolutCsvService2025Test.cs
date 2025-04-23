@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using RevoProfit.Core.Revolut2025.Models;
 using RevoProfit.Core.Revolut2025.Services;
 
 namespace RevoProfit.Test.Revolut2025;
 
 internal class RevolutCsvService2025Test
 {
-    private RevolutCsvService2025 _revolutCsvService2025 = null!;
+    private Revolut2025CsvService _revolutCsvService2025 = null!;
 
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService2025 = new RevolutCsvService2025(new RevolutTransaction2025Mapper());
+        _revolutCsvService2025 = new Revolut2025CsvService(new Revolut2025TransactionMapper());
     }
 
     [Test]
@@ -44,10 +45,10 @@ internal class RevolutCsvService2025Test
 
         // Assert
         revolutTransactions.Should().BeEquivalentTo([
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2018, 6, 12, 16, 16, 32),
-                Type = RevolutTransactionType.Buy,
+                Type = Revolut2025TransactionType.Buy,
                 Symbol = "BTC",
                 Quantity = 0.01713112m,
                 Price = 5837.33m,
@@ -57,10 +58,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2018, 7, 20, 7, 28, 14),
-                Type = RevolutTransactionType.Payment,
+                Type = Revolut2025TransactionType.Payment,
                 Symbol = "BTC",
                 Quantity = 0.00893541m,
                 Price = 7252.05m,
@@ -70,10 +71,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "USD",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2018, 8, 19, 22, 43, 55),
-                Type = RevolutTransactionType.Sell,
+                Type = Revolut2025TransactionType.Sell,
                 Symbol = "BTC",
                 Quantity = 0.00819571m,
                 Price = 5504.07m,
@@ -83,10 +84,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2018, 8, 21, 21, 20, 13),
-                Type = RevolutTransactionType.Other,
+                Type = Revolut2025TransactionType.Other,
                 Symbol = "BTC",
                 Quantity = 0.00893541m,
                 Price = 7252.05m,
@@ -96,10 +97,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "USD",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2021, 12, 10, 9, 50, 53),
-                Type = RevolutTransactionType.Send,
+                Type = Revolut2025TransactionType.Send,
                 Symbol = "DOT",
                 Quantity = 12.19389828m,
                 Price = 23.67m,
@@ -109,10 +110,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2021, 12, 10, 9, 50, 53),
-                Type = RevolutTransactionType.Receive,
+                Type = Revolut2025TransactionType.Receive,
                 Symbol = "DOT",
                 Quantity = 12.19389828m,
                 Price = 23.67m,
@@ -122,10 +123,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2023, 2, 5, 13, 34, 35),
-                Type = RevolutTransactionType.Stake,
+                Type = Revolut2025TransactionType.Stake,
                 Symbol = "ETH",
                 Quantity = 1.26217815m,
                 Price = 1545.19m,
@@ -135,10 +136,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2023, 12, 11, 0, 17, 22),
-                Type = RevolutTransactionType.Unstake,
+                Type = Revolut2025TransactionType.Unstake,
                 Symbol = "ETH",
                 Quantity = 0.2m,
                 Price = 2211.73m,
@@ -148,10 +149,10 @@ internal class RevolutCsvService2025Test
                 Fees = 0.00m,
                 FeesCurrency = "EUR",
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2022, 4, 27, 11, 15, 59),
-                Type = RevolutTransactionType.LearnReward,
+                Type = Revolut2025TransactionType.LearnReward,
                 Symbol = "DOT",
                 Quantity = 0.06188988m,
                 Price = null,
@@ -161,10 +162,10 @@ internal class RevolutCsvService2025Test
                 Fees = null,
                 FeesCurrency = null,
             },
-            new RevolutTransaction2025
+            new Revolut2025Transaction
             {
                 Date = new DateTime(2023, 7, 30, 1, 21, 56),
-                Type = RevolutTransactionType.StakingReward,
+                Type = Revolut2025TransactionType.StakingReward,
                 Symbol = "ETH",
                 Quantity = 0.00002715m,
                 Price = null,

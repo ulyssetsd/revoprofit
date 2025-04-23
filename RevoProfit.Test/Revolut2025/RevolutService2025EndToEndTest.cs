@@ -10,14 +10,14 @@ namespace RevoProfit.Test.Revolut2025;
 
 public class RevolutService2025EndToEndTest
 {
-    private RevolutService2025 _revolutService2025 = null!;
-    private RevolutCsvService2025 _revolutCsvService2025 = null!;
+    private Revolut2025Service _revolutService2025 = null!;
+    private Revolut2025CsvService _revolutCsvService2025 = null!;
 
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService2025 = new RevolutCsvService2025(new RevolutTransaction2025Mapper());
-        _revolutService2025 = new RevolutService2025(new CryptoService(new CryptoTransactionFluentValidator()));
+        _revolutCsvService2025 = new Revolut2025CsvService(new Revolut2025TransactionMapper());
+        _revolutService2025 = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator()));
     }
 
     [Test]

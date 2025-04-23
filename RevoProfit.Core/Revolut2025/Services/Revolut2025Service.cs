@@ -1,30 +1,27 @@
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
+using RevoProfit.Core.Revolut2025.Models;
+using RevoProfit.Core.Revolut2025.Services.Interfaces;
 
 namespace RevoProfit.Core.Revolut2025.Services;
 
-public interface IRevolutService2025
-{
-    (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<RevolutTransaction2025> transactions);
-}
-
-public class RevolutService2025 : IRevolutService2025
+public class Revolut2025Service : IRevolut2025Service
 {
     private readonly ICryptoService _cryptoService;
 
-    public RevolutService2025(ICryptoService cryptoService)
+    public Revolut2025Service(ICryptoService cryptoService)
     {
         _cryptoService = cryptoService;
     }
 
-    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<RevolutTransaction2025> transactions)
+    public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<Revolut2025Transaction> transactions)
     {
         var cryptoTransactions = ConvertToCryptoTransactions(transactions);
         return _cryptoService.ProcessTransactions(cryptoTransactions);
     }
 
-    private IEnumerable<CryptoTransaction> ConvertToCryptoTransactions(IEnumerable<RevolutTransaction2025> transactions)
+    private IEnumerable<CryptoTransaction> ConvertToCryptoTransactions(IEnumerable<Revolut2025Transaction> transactions)
     {
         var result = new List<CryptoTransaction>();
 
@@ -36,7 +33,7 @@ public class RevolutService2025 : IRevolutService2025
             {
                 switch (transaction.Type)
                 {
-                    case RevolutTransactionType.LearnReward:
+                    case Revolut2025TransactionType.LearnReward:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Buy,
@@ -56,7 +53,7 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.StakingReward:
+                    case Revolut2025TransactionType.StakingReward:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Buy,
@@ -76,7 +73,7 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Buy:
+                    case Revolut2025TransactionType.Buy:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Buy,
@@ -96,8 +93,8 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Sell:
-                    case RevolutTransactionType.Payment:
+                    case Revolut2025TransactionType.Sell:
+                    case Revolut2025TransactionType.Payment:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Sell,
@@ -117,7 +114,7 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Stake:
+                    case Revolut2025TransactionType.Stake:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Exchange,
@@ -137,7 +134,7 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Unstake:
+                    case Revolut2025TransactionType.Unstake:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Exchange,
@@ -157,7 +154,7 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Other:
+                    case Revolut2025TransactionType.Other:
                         result.Add(new CryptoTransaction
                         {
                             Type = CryptoTransactionType.Buy,
@@ -177,8 +174,8 @@ public class RevolutService2025 : IRevolutService2025
                         });
                         break;
 
-                    case RevolutTransactionType.Send:
-                    case RevolutTransactionType.Receive:
+                    case Revolut2025TransactionType.Send:
+                    case Revolut2025TransactionType.Receive:
                         // Ignore send and receive transactions
                         break;
                 }

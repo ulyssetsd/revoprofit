@@ -45,7 +45,7 @@
         catch (Exception exception)
         {
             ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
-            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+            Logger.LogError(exception, exception.Message);
             return null;
         }
     }
@@ -68,7 +68,7 @@
         catch (Exception exception)
         {
             ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
-            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+            Logger.LogError(exception, exception.Message);
         }
         finally
         {

@@ -1,7 +1,8 @@
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
-using RevoProfit.Core.Revolut2025.Services;
+
+namespace RevoProfit.Core.Revolut2025.Services;
 
 public interface IRevolutService2025
 {

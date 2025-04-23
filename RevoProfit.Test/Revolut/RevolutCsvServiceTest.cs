@@ -17,7 +17,7 @@ internal class RevolutCsvServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService = new RevolutCsvService();
+        _revolutCsvService = new RevolutCsvService(new RevolutTransactionMapper());
     }
 
     [Test]
@@ -117,20 +117,6 @@ internal class RevolutCsvServiceTest
         var act = async () =>
         {
             await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2022.csv", FileMode.Open);
-            return (await _revolutCsvService.ReadCsv(memoryStream)).ToArray();
-        };
-
-        // Assert
-        await act.Should().NotThrowAsync();
-    }
-
-    [Test]
-    public async Task Read_csv_with_a_massive_input_2025_format_should_not_throw_any_exception()
-    {
-        // Arrange & Act
-        var act = async () =>
-        {
-            await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2025.csv", FileMode.Open);
             return (await _revolutCsvService.ReadCsv(memoryStream)).ToArray();
         };
 

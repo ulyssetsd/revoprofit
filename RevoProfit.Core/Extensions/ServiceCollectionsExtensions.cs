@@ -2,6 +2,7 @@
 using RevoProfit.Core.Crypto.Services;
 using RevoProfit.Core.Revolut.Services.Interfaces;
 using RevoProfit.Core.Revolut.Services;
+using RevoProfit.Core.Revolut2025.Services;
 using RevoProfit.Core.Stock.Services.Interfaces;
 using RevoProfit.Core.Stock.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,5 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRevolutCsvService, RevolutCsvService>();
         services.AddScoped<IRevolutService, RevolutService>();
         services.AddScoped<IRevolutTransactionMapper, RevolutTransactionMapper>();
+        services.AddScoped<IRevolutCsvService2025, RevolutCsvService2025>();
+        services.AddScoped<IRevolutTransaction2025Mapper, RevolutTransaction2025Mapper>();
     }
 }

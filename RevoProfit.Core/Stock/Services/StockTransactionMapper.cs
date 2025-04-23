@@ -53,6 +53,8 @@ public class StockTransactionMapper : IStockTransactionMapper
         "SELL" => StockTransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
         "STOCK SPLIT" => StockTransactionType.StockSplit,
         "CASH WITHDRAWAL" => StockTransactionType.CashWithdrawal,
+        "TRANSFER FROM REVOLUT TRADING LTD TO REVOLUT SECURITIES EUROPE UAB" or
+        "TRANSFER FROM REVOLUT BANK UAB TO REVOLUT SECURITIES EUROPE UAB" => StockTransactionType.AccountTransfer,
         _ => throw new ProcessException($"fail to parse StockTransactionType: {source}"),
     };
 }

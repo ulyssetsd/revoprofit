@@ -5,9 +5,10 @@ public enum StockTransactionType
     Buy,
     Sell,
     CashTopUp,
-    CashWithdrawal, 
+    CashWithdrawal,
     CustodyFee,
     CustodyFeeReversal,
     Dividend,
     StockSplit,
+    AccountTransfer,
 }

@@ -89,6 +89,10 @@ public class StockTransactionService : IStockTransactionService
                         stock.AveragePrice *= ratio;
                         break;
                     }
+                case StockTransactionType.AccountTransfer:
+                    // Stock transfers between Revolut entities are administrative 
+                    // and should not affect gains calculations or stock quantities
+                    break;
                 default:
                     throw new ProcessException($"StockTransactionType was incorrect: {stockTransaction.Type}");
             }

@@ -88,6 +88,8 @@ public class StockTransactionMapperTest
     [TestCase("SELL - STOP", StockTransactionType.Sell)]
     [TestCase("STOCK SPLIT", StockTransactionType.StockSplit)]
     [TestCase("CASH WITHDRAWAL", StockTransactionType.CashWithdrawal)]
+    [TestCase("TRANSFER FROM REVOLUT TRADING LTD TO REVOLUT SECURITIES EUROPE UAB", StockTransactionType.AccountTransfer)]
+    [TestCase("TRANSFER FROM REVOLUT BANK UAB TO REVOLUT SECURITIES EUROPE UAB", StockTransactionType.AccountTransfer)]
     public void TestEnumMapping(string type, StockTransactionType expectedType)
     {
         var csvLine = new StockTransactionCsvLine

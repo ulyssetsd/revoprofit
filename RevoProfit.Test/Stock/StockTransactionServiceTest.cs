@@ -648,4 +648,42 @@ public class StockTransactionServiceTest
             },
         });
     }
+
+    [Test]
+    public void Process_when_stock_transfer_between_entities_should_not_affect_gains_or_quantities()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
+        {
+            Tesla(StockTransactionType.Buy, 200),
+            new()
+            {
+                Date = DateTime.Today.AddDays(++_dateIncrement),
+                Ticker = "TSLA",
+                Type = StockTransactionType.AccountTransfer,
+                Quantity = 1,
+                PricePerShare = 0,
+                TotalAmount = 0,
+                FxRate = 1,
+            }
+        };
+
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = Array.Empty<StockSellOrder>(),
+            Gains = 0,
+            GainsInEuro = 0,
+        });
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
+        {
+            Ticker = "TSLA",
+            Quantity = 1,
+            ValueInserted = 200,
+            AveragePrice = 200,
+        });
+    }
 }

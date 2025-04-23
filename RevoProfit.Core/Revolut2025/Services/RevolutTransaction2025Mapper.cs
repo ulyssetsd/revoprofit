@@ -26,7 +26,9 @@ public record RevolutTransaction2025
     public required decimal? Price { get; init; }
     public required string? PriceCurrency { get; init; }
     public required decimal? Value { get; init; }
+    public string? ValueCurrency { get; init; }
     public required decimal? Fees { get; init; }
+    public string? FeesCurrency { get; init; }
 }
 
 public interface IRevolutTransaction2025Mapper
@@ -49,7 +51,9 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
                 Price = ToNullableDecimalWithCurrency(source.Price),
                 PriceCurrency = GetBaseCurrency(source.Price),
                 Value = ToNullableDecimalWithCurrency(source.Value),
+                ValueCurrency = GetBaseCurrency(source.Value),
                 Fees = ToNullableDecimalWithCurrency(source.Fees),
+                FeesCurrency = GetBaseCurrency(source.Fees),
             };
         }
         catch (ProcessException exception)

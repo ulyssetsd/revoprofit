@@ -53,7 +53,9 @@ internal class RevolutCsvService2025Test
                 Price = 5837.33m,
                 PriceCurrency = "EUR",
                 Value = 100.00m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -64,7 +66,9 @@ internal class RevolutCsvService2025Test
                 Price = 7252.05m,
                 PriceCurrency = "USD",
                 Value = 64.80m,
+                ValueCurrency = "USD",
                 Fees = 0.00m,
+                FeesCurrency = "USD",
             },
             new RevolutTransaction2025
             {
@@ -75,7 +79,9 @@ internal class RevolutCsvService2025Test
                 Price = 5504.07m,
                 PriceCurrency = "EUR",
                 Value = 45.10m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -86,7 +92,9 @@ internal class RevolutCsvService2025Test
                 Price = 7252.05m,
                 PriceCurrency = "USD",
                 Value = 64.80m,
+                ValueCurrency = "USD",
                 Fees = 0.00m,
+                FeesCurrency = "USD",
             },
             new RevolutTransaction2025
             {
@@ -97,7 +105,9 @@ internal class RevolutCsvService2025Test
                 Price = 23.67m,
                 PriceCurrency = "EUR",
                 Value = 288.61m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -108,7 +118,9 @@ internal class RevolutCsvService2025Test
                 Price = 23.67m,
                 PriceCurrency = "EUR",
                 Value = 288.61m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -119,7 +131,9 @@ internal class RevolutCsvService2025Test
                 Price = 1545.19m,
                 PriceCurrency = "EUR",
                 Value = 1950.30m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -130,7 +144,9 @@ internal class RevolutCsvService2025Test
                 Price = 2211.73m,
                 PriceCurrency = "EUR",
                 Value = 442.34m,
+                ValueCurrency = "EUR",
                 Fees = 0.00m,
+                FeesCurrency = "EUR",
             },
             new RevolutTransaction2025
             {
@@ -141,7 +157,9 @@ internal class RevolutCsvService2025Test
                 Price = null,
                 PriceCurrency = null,
                 Value = null,
+                ValueCurrency = null,
                 Fees = null,
+                FeesCurrency = null,
             },
             new RevolutTransaction2025
             {
@@ -152,7 +170,9 @@ internal class RevolutCsvService2025Test
                 Price = null,
                 PriceCurrency = null,
                 Value = null,
+                ValueCurrency = null,
                 Fees = null,
+                FeesCurrency = null,
             },
         ]);
     }

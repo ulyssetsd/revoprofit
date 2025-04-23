@@ -28,8 +28,92 @@ public class Revolut2025Service : IRevolut2025Service
         foreach (var groupedTransactions in transactions.GroupBy(t => t.Date))
         {
             var groupDate = groupedTransactions.Key;
+            var transactionsList = groupedTransactions.ToList();
 
-            foreach (var transaction in groupedTransactions)
+            var sells = transactionsList.Where(t => t.Type == Revolut2025TransactionType.Sell).ToList();
+            var buys = transactionsList.Where(t => t.Type == Revolut2025TransactionType.Buy).ToList();
+
+            var remainingTransactions = transactionsList.Where(t => t.Type != Revolut2025TransactionType.Sell && t.Type != Revolut2025TransactionType.Buy).ToList();
+
+            if (sells.Count == 1 && buys.Count == 1)
+            {
+                var sell = sells[0];
+                var buy = buys[0];
+
+                if (sell.Fees > 0)
+                {
+                    result.Add(new CryptoTransaction
+                    {
+                        Type = CryptoTransactionType.FeesOnly,
+                        Date = groupDate,
+
+                        BuyAmount = 0,
+                        BuySymbol = string.Empty,
+                        BuyPrice = 0,
+
+                        SellAmount = 0,
+                        SellSymbol = string.Empty,
+                        SellPrice = 0,
+
+                        FeesAmount = sell.Fees ?? 0,
+                        FeesSymbol = sell.FeesCurrency ?? throw new ProcessException("FeesCurrency cannot be null for sell fees"),
+                        FeesPrice = 1
+                    });
+                }
+
+                if (buy.Fees > 0)
+                {
+                    result.Add(new CryptoTransaction
+                    {
+                        Type = CryptoTransactionType.FeesOnly,
+                        Date = groupDate,
+
+                        BuyAmount = 0,
+                        BuySymbol = string.Empty,
+                        BuyPrice = 0,
+
+                        SellAmount = 0,
+                        SellSymbol = string.Empty,
+                        SellPrice = 0,
+
+                        FeesAmount = buy.Fees ?? 0,
+                        FeesSymbol = buy.FeesCurrency ?? throw new ProcessException("FeesCurrency cannot be null for buy fees"),
+                        FeesPrice = 1
+                    });
+                }
+
+                result.Add(new CryptoTransaction
+                {
+                    Type = CryptoTransactionType.Exchange,
+                    Date = groupDate,
+
+                    SellAmount = sell.Quantity,
+                    SellSymbol = sell.Symbol,
+                    SellPrice = sell.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+
+                    BuyAmount = buy.Quantity,
+                    BuySymbol = buy.Symbol,
+                    BuyPrice = buy.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+
+                    FeesAmount = 0,
+                    FeesSymbol = "EUR",
+                    FeesPrice = 1
+                });
+            }
+            else if (sells.Count > 0 && buys.Count == 0)
+            {
+                remainingTransactions.AddRange(sells);
+            }
+            else if (sells.Count == 0 && buys.Count > 0)
+            {
+                remainingTransactions.AddRange(buys);
+            }
+            else if (sells.Count > 1 || buys.Count > 1)
+            {
+                throw new ProcessException($"Multiple buy/sell transactions for the same date are not supported. Date: {groupDate:MMM d, yyyy, h:mm:ss tt}");
+            }
+
+            foreach (var transaction in remainingTransactions)
             {
                 switch (transaction.Type)
                 {

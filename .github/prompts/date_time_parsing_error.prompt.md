@@ -1,4 +1,4 @@
-I have this error when using my input file for the stock ()[../../.csv/trading-account-statement_2020-03-10_2024-12-31_en-us_891b6e.csv]: 
+I have this error when using my input file for the stock [stock input file](../../.csv/trading-account-statement_2020-03-10_2024-12-31_en-us_891b6e.csv): 
 ```log
 fail: RevoProfit.WebAssembly.Components.Stock.StockFileInput[0]
       Something went wrong while reading the csv

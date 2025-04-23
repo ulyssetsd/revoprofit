@@ -106,4 +106,33 @@ public class StockTransactionMapperTest
 
         transaction.Type.Should().Be(expectedType);
     }
+
+    [Test]
+    public void TestIso8601DateMapping()
+    {
+        var csvLine = new StockTransactionCsvLine
+        {
+            Date = "2023-02-02T18:32:06.250Z",
+            Ticker = "AMD",
+            Type = "SELL - MARKET",
+            Quantity = "1",
+            PricePerShare = "$88.12",
+            TotalAmount = "$88.10",
+            Currency = "USD",
+            FxRate = "1.0927",
+        };
+
+        var transaction = _mapper.Map(csvLine);
+
+        transaction.Should().BeEquivalentTo(new StockTransaction
+        {
+            Date = new DateTime(2023, 2, 2, 18, 32, 06, 250, DateTimeKind.Utc),
+            Ticker = "AMD",
+            Type = StockTransactionType.Sell,
+            Quantity = 1,
+            PricePerShare = 88.12m,
+            TotalAmount = 88.10m,
+            FxRate = 1.0927m,
+        });
+    }
 }

@@ -32,6 +32,7 @@ public class StockTransactionMapper : IStockTransactionMapper
     {
         if (DateTime.TryParseExact(source, "G", CultureInfo.GetCultureInfo("en-GB"), DateTimeStyles.None, out var gDate)) return gDate;
         if (DateTime.TryParseExact(source.Replace("Z", "0Z"), "o", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var oDate)) return oDate;
+        if (DateTimeOffset.TryParse(source, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var offsetDate)) return offsetDate.UtcDateTime;
         throw new ProcessException($"fail to parse date {source}");
     }
 

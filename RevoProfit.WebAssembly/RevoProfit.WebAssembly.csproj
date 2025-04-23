@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RevoProfit.Core\RevoProfit.Core.csproj" />
-    <ProjectReference Include="..\RevoProfit.Logging\RevoProfit.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

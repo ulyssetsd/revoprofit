@@ -69,6 +69,9 @@ public class StockTransactionService : IStockTransactionService
                 case StockTransactionType.CustodyFee:
                     custodyFees.Add(stockTransaction);
                     break;
+                case StockTransactionType.CustodyFeeReversal:
+                    custodyFees.Add(stockTransaction with { TotalAmount = -stockTransaction.TotalAmount });
+                    break;
                 case StockTransactionType.Dividend:
                     {
                         dividends.Add(stockTransaction);

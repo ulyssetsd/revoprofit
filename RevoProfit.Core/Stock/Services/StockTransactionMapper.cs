@@ -47,6 +47,7 @@ public class StockTransactionMapper : IStockTransactionMapper
         "CASH TOP-UP" => StockTransactionType.CashTopUp,
         "BUY" => StockTransactionType.Buy, // "BUY - MARKET" and "BUY - STOP"
         "CUSTODY_FEE" or "CUSTODY FEE" => StockTransactionType.CustodyFee,
+        "CUSTODY FEE REVERSAL" => StockTransactionType.CustodyFeeReversal,
         "DIVIDEND" => StockTransactionType.Dividend,
         "SELL" => StockTransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
         "STOCK SPLIT" => StockTransactionType.StockSplit,

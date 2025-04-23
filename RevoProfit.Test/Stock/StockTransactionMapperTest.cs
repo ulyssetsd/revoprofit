@@ -81,6 +81,7 @@ public class StockTransactionMapperTest
     [TestCase("CASH TOP-UP", StockTransactionType.CashTopUp)]
     [TestCase("CUSTODY_FEE" , StockTransactionType.CustodyFee)]
     [TestCase("CUSTODY FEE", StockTransactionType.CustodyFee)]
+    [TestCase("CUSTODY FEE REVERSAL", StockTransactionType.CustodyFeeReversal)]
     [TestCase("DIVIDEND", StockTransactionType.Dividend)]
     [TestCase("SELL", StockTransactionType.Sell)]
     [TestCase("SELL - MARKET", StockTransactionType.Sell)]

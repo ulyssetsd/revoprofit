@@ -15,7 +15,7 @@ public record RevolutTransaction2025CsvLine
     [Name("Fees")] public required string Fees { get; init; }
 }
 
-public enum RevolutTransactionType { Buy, Sell, Send, Payment, Receive, Exchange, Stake, Unstake, LearnReward, StakingReward, Other }
+public enum RevolutTransactionType { Buy, Sell, Send, Payment, Receive, Stake, Unstake, LearnReward, StakingReward, Other }
 
 public record RevolutTransaction2025
 {
@@ -23,10 +23,10 @@ public record RevolutTransaction2025
     public required RevolutTransactionType Type { get; init; }
     public required string Symbol { get; init; }
     public required decimal Quantity { get; init; }
-    public required decimal Price { get; init; }
+    public required decimal? Price { get; init; }
     public required string? PriceCurrency { get; init; }
-    public required decimal Value { get; init; }
-    public required decimal Fees { get; init; }
+    public required decimal? Value { get; init; }
+    public required decimal? Fees { get; init; }
 }
 
 public interface IRevolutTransaction2025Mapper
@@ -50,19 +50,19 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
                     "Send" => RevolutTransactionType.Send,
                     "Payment" => RevolutTransactionType.Payment,
                     "Receive" => RevolutTransactionType.Receive,
-                    "Exchange" => RevolutTransactionType.Exchange,
                     "Stake" => RevolutTransactionType.Stake,
                     "Unstake" => RevolutTransactionType.Unstake,
                     "Learn reward" => RevolutTransactionType.LearnReward,
                     "Staking reward" => RevolutTransactionType.StakingReward,
+                    "Other" => RevolutTransactionType.Other,
                     _ => throw new ProcessException($"Unknown transaction type: {source.Type}")
                 },
                 Symbol = source.Symbol,
                 Quantity = ToDecimal(source.Quantity),
-                Price = ToDecimalWithCurrency(source.Price),
+                Price = ToNullableDecimalWithCurrency(source.Price),
                 PriceCurrency = GetBaseCurrency(source.Price),
-                Value = ToDecimalWithCurrency(source.Value),
-                Fees = ToDecimalWithCurrency(source.Fees),
+                Value = ToNullableDecimalWithCurrency(source.Value),
+                Fees = ToNullableDecimalWithCurrency(source.Fees),
             };
         }
         catch (ProcessException exception)
@@ -71,25 +71,10 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
         }
     }
 
-    private static (string description, string type) GetDescriptionAndTransactionType(string type) => type switch
-    {
-        "Buy" => ("Buy crypto", type),
-        "Sell" => ("Sell crypto", type),
-        "Send" => ("Send crypto", type),
-        "Payment" => ("Crypto payment", type),
-        "Receive" => ("Receive crypto", type),
-        "Exchange" => ("Exchange crypto", type),
-        "Stake" => ("Stake crypto", type),
-        "Unstake" => ("Unstake crypto", type),
-        "Learn reward" => ("Crypto learn reward", type),
-        "Staking reward" => ("Crypto staking reward", type),
-        "Other" => ("Other crypto transaction", type),
-        _ => throw new ProcessException($"Unknown transaction type: {type}")
-    };
-
-    private static string GetBaseCurrency(string price) => 
-        price.StartsWith("€") ? "EUR" : 
-        price.StartsWith("$") ? "USD" : 
+    private static string? GetBaseCurrency(string price) => 
+        string.IsNullOrWhiteSpace(price) ? null :
+        price.StartsWith('€') ? "EUR" : 
+        price.StartsWith('$') ? "USD" : 
         throw new ProcessException($"Unknown currency symbol in price: {price}");
 
     private static DateTime ToDateTime(string source)
@@ -106,13 +91,13 @@ public class RevolutTransaction2025Mapper : IRevolutTransaction2025Mapper
         throw new ProcessException($"fail to parse decimal {source}");
     }
 
-    private static decimal ToDecimalWithCurrency(string source)
+    private static decimal? ToNullableDecimalWithCurrency(string source)
     {
-        if (string.IsNullOrWhiteSpace(source)) return 0;
-        
+        if (source is null) return null;
         var normalized = source.Replace("€", "").Replace("$", "").Replace(",", "").Trim();
+        if (string.IsNullOrWhiteSpace(normalized)) return null;
         if (decimal.TryParse(normalized, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
             return result;
-        throw new ProcessException($"fail to parse decimal with currency {source}");
+        throw new ProcessException($"fail to parse nullable decimal with currency {source}");
     }
 }

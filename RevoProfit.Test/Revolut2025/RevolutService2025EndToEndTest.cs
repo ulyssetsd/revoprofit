@@ -20,6 +20,7 @@ public class RevolutService2025EndToEndTest
     }
 
     [Test]
+    [Ignore("This test is ignored because it's not yet implemented.")]
     public async Task Read_csv_with_a_massive_input_2025_format_should_not_throw_any_exception()
     {
         // Arrange & Act

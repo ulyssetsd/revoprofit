@@ -10,14 +10,14 @@ using RevoProfit.Core.Revolut2025.Services;
 
 namespace RevoProfit.Test.Revolut2025;
 
-internal class RevolutCsvService2025Test
+internal class Revolut2025CsvServiceTest
 {
-    private Revolut2025CsvService _revolutCsvService2025 = null!;
+    private Revolut2025CsvService _revolut2025CsvService = null!;
 
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService2025 = new Revolut2025CsvService(new Revolut2025TransactionMapper());
+        _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
     }
 
     [Test]
@@ -41,7 +41,7 @@ internal class RevolutCsvService2025Test
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
         // Act
-        var revolutTransactions = (await _revolutCsvService2025.ReadCsv(memoryStream)).ToArray();
+        var revolutTransactions = (await _revolut2025CsvService.ReadCsv(memoryStream)).ToArray();
 
         // Assert
         revolutTransactions.Should().BeEquivalentTo([
@@ -185,7 +185,7 @@ internal class RevolutCsvService2025Test
         var act = async () =>
         {
             await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2025.csv", FileMode.Open);
-            return (await _revolutCsvService2025.ReadCsv(memoryStream)).ToArray();
+            return (await _revolut2025CsvService.ReadCsv(memoryStream)).ToArray();
         };
 
         // Assert

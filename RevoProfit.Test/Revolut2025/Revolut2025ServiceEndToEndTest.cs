@@ -8,16 +8,16 @@ using RevoProfit.Core.Revolut2025.Services;
 
 namespace RevoProfit.Test.Revolut2025;
 
-public class RevolutService2025EndToEndTest
+public class Revolut2025ServiceEndToEndTest
 {
-    private Revolut2025Service _revolutService2025 = null!;
-    private Revolut2025CsvService _revolutCsvService2025 = null!;
+    private Revolut2025Service _revolut2025Service = null!;
+    private Revolut2025CsvService _revolut2025CsvService = null!;
 
     [SetUp]
     public void Setup()
     {
-        _revolutCsvService2025 = new Revolut2025CsvService(new Revolut2025TransactionMapper());
-        _revolutService2025 = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator()));
+        _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
+        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator()));
     }
 
     [Test]
@@ -27,8 +27,8 @@ public class RevolutService2025EndToEndTest
         var act = async () =>
         {
             await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2025.csv", FileMode.Open);
-            var transactions = await _revolutCsvService2025.ReadCsv(memoryStream);
-            _revolutService2025.ProcessTransactions(transactions);
+            var transactions = await _revolut2025CsvService.ReadCsv(memoryStream);
+            _revolut2025Service.ProcessTransactions(transactions);
         };
 
         // Assert
@@ -51,8 +51,8 @@ public class RevolutService2025EndToEndTest
             BTC,Sell,0.00879132,"€5,687.43",€50.00,€0.00,"Aug 27, 2018, 10:09:18 AM"
             """;
             using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-            var transactions = await _revolutCsvService2025.ReadCsv(memoryStream);
-            _revolutService2025.ProcessTransactions(transactions);
+            var transactions = await _revolut2025CsvService.ReadCsv(memoryStream);
+            _revolut2025Service.ProcessTransactions(transactions);
         };
 
         // Assert

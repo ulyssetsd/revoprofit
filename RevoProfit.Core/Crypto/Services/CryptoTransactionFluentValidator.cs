@@ -23,7 +23,19 @@ public class CryptoTransactionFluentValidator : AbstractValidator<CryptoTransact
                 .NotEmpty();
         });
 
-        When(transaction => transaction.Type is CryptoTransactionType.Buy or CryptoTransactionType.Exchange, () =>
+        When(transaction => transaction.Type is CryptoTransactionType.Buy, () =>
+        {
+            RuleFor(transaction => transaction.BuyAmount)
+                .GreaterThan(0);
+
+            RuleFor(transaction => transaction.BuyPrice)
+                .GreaterThanOrEqualTo(0);
+
+            RuleFor(transaction => transaction.BuySymbol)
+                .NotEmpty();
+        });
+
+        When(transaction => transaction.Type is CryptoTransactionType.Exchange, () =>
         {
             RuleFor(transaction => transaction.BuyAmount)
                 .GreaterThan(0);

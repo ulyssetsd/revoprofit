@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using RevoProfit.Core.Crypto.Services.Interfaces;
 
 namespace RevoProfit.Test.Crypto;
@@ -15,5 +16,10 @@ public class MockExchangeRateProvider : IExchangeRateProvider
     public decimal GetUsdToEurRate(DateOnly date)
     {
         return _rate;
+    }
+
+    public Task InitializeAsync(bool webAssembly = true)
+    {
+        throw new NotImplementedException();
     }
 }

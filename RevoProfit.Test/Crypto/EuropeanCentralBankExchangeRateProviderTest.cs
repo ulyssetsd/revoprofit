@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Services;
@@ -10,9 +11,10 @@ public class EuropeanCentralBankExchangeRateProviderTest
     private EuropeanCentralBankExchangeRateProvider _target = null!;
     
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
         _target = new EuropeanCentralBankExchangeRateProvider();
+        await _target.InitializeAsync(webAssembly: false);
     }
     
     [Test]

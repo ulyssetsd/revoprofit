@@ -7,41 +7,18 @@ namespace RevoProfit.Core.Crypto.Services;
 public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _httpClient;
-    private Dictionary<DateOnly, decimal>? _historicalRatesCache;
+    private readonly Dictionary<DateOnly, decimal> _historicalRates = [];
     private const string EcbHistoricalUrl = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml";
+    private const string FallbackCorsProxyUrl = $"https://corsproxy.io/?url=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml";
 
     public EuropeanCentralBankExchangeRateProvider()
     {
         _httpClient = new HttpClient();
     }
 
-    public decimal GetUsdToEurRate(DateOnly date)
+    public async Task InitializeAsync(bool webAssembly = true)
     {
-        _historicalRatesCache ??= LoadHistoricalRates();
-
-        if (_historicalRatesCache.TryGetValue(date, out var rate))
-        {
-            return rate;
-        }
-
-        // Try to find the closest previous date if the exact date is not available
-        var closestDate = _historicalRatesCache.Keys
-            .Where(d => d <= date)
-            .OrderByDescending(d => d)
-            .FirstOrDefault();
-
-        if (closestDate != default && _historicalRatesCache.TryGetValue(closestDate, out var closestRate))
-        {
-            return closestRate;
-        }
-
-        throw new ProcessException($"Exchange rate not found for USD to EUR on date {date} or any previous date");
-    }
-
-    private Dictionary<DateOnly, decimal> LoadHistoricalRates()
-    {
-        var historicalRates = new Dictionary<DateOnly, decimal>();
-        string xmlContent = _httpClient.GetStringAsync(EcbHistoricalUrl).Result;
+        string xmlContent = await _httpClient.GetStringAsync(webAssembly ? FallbackCorsProxyUrl : EcbHistoricalUrl);
         var xdoc = XDocument.Parse(xmlContent);
 
         // Define the XML namespaces used in the document
@@ -63,11 +40,30 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
                 if (usdElement != null && decimal.TryParse(usdElement.Attribute("rate")?.Value, out decimal eurToUsd))
                 {
                     // Convert EUR to USD rate to USD to EUR rate (by taking the inverse)
-                    historicalRates[cubeDate] = 1 / eurToUsd;
+                    _historicalRates[cubeDate] = 1 / eurToUsd;
                 }
             }
         }
+    }
 
-        return historicalRates;
+    public decimal GetUsdToEurRate(DateOnly date)
+    {
+        if (_historicalRates!.TryGetValue(date, out var rate))
+        {
+            return rate;
+        }
+
+        // Try to find the closest previous date if the exact date is not available
+        var closestDate = _historicalRates.Keys
+            .Where(d => d <= date)
+            .OrderByDescending(d => d)
+            .FirstOrDefault();
+
+        if (closestDate != default && _historicalRates.TryGetValue(closestDate, out var closestRate))
+        {
+            return closestRate;
+        }
+
+        throw new ProcessException($"Exchange rate not found for USD to EUR on date {date} or any previous date");
     }
 }

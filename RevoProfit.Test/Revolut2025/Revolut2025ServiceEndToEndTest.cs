@@ -12,12 +12,15 @@ public class Revolut2025ServiceEndToEndTest
 {
     private Revolut2025Service _revolut2025Service = null!;
     private Revolut2025CsvService _revolut2025CsvService = null!;
+    private EuropeanCentralBankExchangeRateProvider _exchangeRateProvider = null!;
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
+        _exchangeRateProvider = new EuropeanCentralBankExchangeRateProvider();
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
-        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new EuropeanCentralBankExchangeRateProvider()));
+        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), _exchangeRateProvider));
+        await _exchangeRateProvider.InitializeAsync(webAssembly: false);
     }
 
     [Test]

@@ -16,7 +16,7 @@ public class RevolutServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator(), new DefaultExchangeRateProvider()));
+        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator(), new EuropeanCentralBankExchangeRateProvider()));
         _incrementHours = 0;
     }
 

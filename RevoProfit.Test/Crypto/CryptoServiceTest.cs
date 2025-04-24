@@ -19,7 +19,7 @@ public class CryptoServiceTest
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new DefaultExchangeRateProvider());
+        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new MockExchangeRateProvider(DefaultUsdToEurRate));
         _dateIncrement = 0;
     }
 

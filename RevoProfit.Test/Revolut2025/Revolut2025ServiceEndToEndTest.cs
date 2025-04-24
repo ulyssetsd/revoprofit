@@ -17,7 +17,7 @@ public class Revolut2025ServiceEndToEndTest
     public void Setup()
     {
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
-        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new DefaultExchangeRateProvider()));
+        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new EuropeanCentralBankExchangeRateProvider()));
     }
 
     [Test]

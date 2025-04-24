@@ -232,7 +232,7 @@
     <value>🚀 Stock Lefts</value>
   </data>
   <data name="FiatFees" xml:space="preserve">
-	  <value>Fees paid in € (exclude fees paid in crypto)</value>
+	  <value>Fees paid (include fees paid in crypto)</value>
   </data>
   <data name="Answer4" xml:space="preserve">
 	  <value>To generate a statement of your crypto accounts on Revolut, please follow these steps:

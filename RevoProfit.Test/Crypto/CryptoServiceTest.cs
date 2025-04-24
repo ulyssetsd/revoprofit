@@ -306,4 +306,60 @@ public class CryptoServiceTest
             },
         });
     }
+
+    [Test]
+    public void TestCalculDesFraisEnEuros()
+    {
+        var feeSymbol = "EUR";
+        var feeAmount = 10m;
+        IEnumerable<CryptoTransaction> transactions = [
+            Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m) with
+            {
+                FeesAmount = feeAmount,
+                FeesSymbol = feeSymbol,
+                FeesPrice = 1,
+            },
+        ];
+
+        var (_, _, fiatFees) = _cryptoService.ProcessTransactions(transactions);
+
+        fiatFees.Should().BeEquivalentTo(
+        [
+            new CryptoFiatFee()
+            {
+                Date = transactions.ElementAt(1).Date,
+                FeesInEuros = feeAmount,
+                FeesInDollars = null,
+            },
+        ]);
+    }
+
+    [Test]
+    public void TestCalculDesFraisEnUSD()
+    {
+        var feeSymbol = "USD";
+        var feeAmount = 10m;
+        IEnumerable<CryptoTransaction> transactions = [
+            Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m) with
+            {
+                FeesAmount = feeAmount,
+                FeesSymbol = feeSymbol,
+                FeesPrice = 1,
+            },
+        ];
+
+        var (_, _, fiatFees) = _cryptoService.ProcessTransactions(transactions);
+
+        fiatFees.Should().BeEquivalentTo(
+        [
+            new CryptoFiatFee()
+            {
+                Date = transactions.ElementAt(1).Date,
+                FeesInEuros = null,
+                FeesInDollars = feeAmount,
+            },
+        ]);
+    }
 }

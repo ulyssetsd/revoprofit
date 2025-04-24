@@ -567,6 +567,7 @@ public class RevolutServiceTest
             {
                 Date = new DateTime(2023, 02, 25, 01, 14, 15),
                 FeesInEuros = 10,
+                FeesInDollars = null,
             },
         });
         retraits.Should().BeEmpty();

@@ -13,6 +13,8 @@ public class CryptoService : ICryptoService
     }
 
     private const int EuroDecimalsPrecision = 24;
+    private const string EUR = "EUR";
+    private const string USD = "USD";
 
     private static CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string symbol)
     {
@@ -37,12 +39,22 @@ public class CryptoService : ICryptoService
             return;
         }
 
-        if (transaction.FeesSymbol == "EUR")
+        if (transaction.FeesSymbol == EUR)
         {
             fiatFees.Add(new CryptoFiatFee
             {
                 Date = transaction.Date,
                 FeesInEuros = transaction.FeesAmount,
+                FeesInDollars = null,
+            });
+        }
+        else if (transaction.FeesSymbol == USD)
+        {
+            fiatFees.Add(new CryptoFiatFee
+            {
+                Date = transaction.Date,
+                FeesInEuros = null,
+                FeesInDollars = transaction.FeesAmount,
             });
         }
         else
@@ -72,7 +84,8 @@ public class CryptoService : ICryptoService
             {
                 Year = joinGroupByYear.year,
                 GainsInEuros = joinGroupByYear.sells.Sum(retrait => retrait.GainsInEuros),
-                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros),
+                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros ?? 0),
+                FeesInDollars = joinGroupByYear.fees.Sum(fee => fee.FeesInDollars ?? 0),
             });
     }
 

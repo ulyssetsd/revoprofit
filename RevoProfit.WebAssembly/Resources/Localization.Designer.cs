@@ -255,7 +255,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fees paid in € (exclude fees paid in crypto).
+        ///   Looks up a localized string similar to Fees paid (include fees paid in crypto).
         /// </summary>
         public static string FiatFees {
             get {

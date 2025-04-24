@@ -11,6 +11,7 @@
                 <th scope="col">@Loc[nameof(Localization.Year)]</th>
                 <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
                 <th scope="col">@Loc[nameof(Localization.FiatFees)]</th>
+                <th scope="col">@Loc[nameof(Localization.FiatFees)]</th>
             </tr>
             @foreach (var annualReport in AppState.CryptoReports)
             {
@@ -18,6 +19,7 @@
                     <td>@annualReport.Year</td>
                     <td>@annualReport.GainsInEuros.ToString("C", _fr)</td>
                     <td>@annualReport.FeesInEuros.ToString("C", _fr)</td>
+                    <td>@annualReport.FeesInDollars.ToString("C", _us)</td>
                 </tr>
             }
         </table>
@@ -79,6 +81,7 @@
 }
 
 @code {
+    readonly CultureInfo _us = CultureInfo.GetCultureInfo("en-US");
     readonly CultureInfo _fr = CultureInfo.GetCultureInfo("fr-FR");
 
     protected override void OnInitialized()

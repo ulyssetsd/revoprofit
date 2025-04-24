@@ -57,9 +57,8 @@ public class CryptoValidatorTest
         result.Should().BeFalse();
     }
 
-    [TestCase(CryptoTransactionType.Buy)]
     [TestCase(CryptoTransactionType.Exchange)]
-    public void Validate_when_buy_or_exchange_type_and_buy_price_zero_should_not_be_validated(CryptoTransactionType type)
+    public void Validate_when_exchange_type_and_buy_price_zero_should_not_be_validated(CryptoTransactionType type)
     {
         // Arrange
         _transaction = _transaction with

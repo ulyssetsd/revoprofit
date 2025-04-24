@@ -2,8 +2,8 @@
 @using RevoProfit.Core.Crypto.Services
 @inject ICryptoCsvService CryptoCsvService
 @inject ICryptoService CryptoService
-@inject IRevolutCsvService RevolutCsvService
-@inject IRevolutService RevolutService
+@inject IRevolut2025CsvService RevolutCsvService
+@inject IRevolut2025Service RevolutService
 @inject ILogger<CryptoFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
@@ -45,7 +45,7 @@
         catch (Exception exception)
         {
             ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
-            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+            Logger.LogError(exception, exception.Message);
             return null;
         }
     }
@@ -68,7 +68,7 @@
         catch (Exception exception)
         {
             ErrorMessage = Loc[nameof(Localization.GeneralErrorMessage)];
-            Logger.LogError(exception, Loc[nameof(Localization.GeneralErrorMessage)]);
+            Logger.LogError(exception, exception.Message);
         }
         finally
         {

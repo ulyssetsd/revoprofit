@@ -32,6 +32,7 @@ public class StockTransactionMapper : IStockTransactionMapper
     {
         if (DateTime.TryParseExact(source, "G", CultureInfo.GetCultureInfo("en-GB"), DateTimeStyles.None, out var gDate)) return gDate;
         if (DateTime.TryParseExact(source.Replace("Z", "0Z"), "o", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var oDate)) return oDate;
+        if (DateTimeOffset.TryParse(source, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var offsetDate)) return offsetDate.UtcDateTime;
         throw new ProcessException($"fail to parse date {source}");
     }
 
@@ -47,10 +48,13 @@ public class StockTransactionMapper : IStockTransactionMapper
         "CASH TOP-UP" => StockTransactionType.CashTopUp,
         "BUY" => StockTransactionType.Buy, // "BUY - MARKET" and "BUY - STOP"
         "CUSTODY_FEE" or "CUSTODY FEE" => StockTransactionType.CustodyFee,
+        "CUSTODY FEE REVERSAL" => StockTransactionType.CustodyFeeReversal,
         "DIVIDEND" => StockTransactionType.Dividend,
         "SELL" => StockTransactionType.Sell, // "SELL - MARKET" and "SELL - STOP"
         "STOCK SPLIT" => StockTransactionType.StockSplit,
         "CASH WITHDRAWAL" => StockTransactionType.CashWithdrawal,
+        "TRANSFER FROM REVOLUT TRADING LTD TO REVOLUT SECURITIES EUROPE UAB" or
+        "TRANSFER FROM REVOLUT BANK UAB TO REVOLUT SECURITIES EUROPE UAB" => StockTransactionType.AccountTransfer,
         _ => throw new ProcessException($"fail to parse StockTransactionType: {source}"),
     };
 }

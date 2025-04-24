@@ -596,4 +596,94 @@ public class StockTransactionServiceTest
             },
         });
     }
+
+    [Test]
+    public void Process_when_custody_fee_reversal_should_subtract_from_custody_fee()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
+        {
+            new()
+            {
+                Date = DateTime.Today,
+                Type = StockTransactionType.CustodyFee,
+                TotalAmount = 100,
+                FxRate = 1,
+                Ticker = string.Empty,
+                Quantity = 0,
+                PricePerShare = 0,
+            },
+            new()
+            {
+                Date = DateTime.Today,
+                Type = StockTransactionType.CustodyFeeReversal,
+                TotalAmount = 20,
+                FxRate = 1,
+                Ticker = string.Empty,
+                Quantity = 0,
+                PricePerShare = 0,
+            },
+        };
+
+        // Act
+        var (reports, _) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().Should().BeEquivalentTo(new StockAnnualReport
+        {
+            Year = DateTime.Today.Year,
+            CustodyFee = 80, // 100 - 20
+            CustodyFeeInEuro = 80,
+            CashTopUp = 0,
+            CashWithdrawal = 0,
+            CashTopUpInEuro = 0,
+            CashWithdrawalInEuro = 0,
+            Dividends = 0,
+            DividendsInEuro = 0,
+            SellReport = new StockSellAnnualReport
+            {
+                StockSellOrders = Array.Empty<StockSellOrder>(),
+                Gains = 0,
+                GainsInEuro = 0,
+            },
+        });
+    }
+
+    [Test]
+    public void Process_when_stock_transfer_between_entities_should_not_affect_gains_or_quantities()
+    {
+        // Arrange
+        var stockTransactions = new List<StockTransaction>
+        {
+            Tesla(StockTransactionType.Buy, 200),
+            new()
+            {
+                Date = DateTime.Today.AddDays(++_dateIncrement),
+                Ticker = "TSLA",
+                Type = StockTransactionType.AccountTransfer,
+                Quantity = 1,
+                PricePerShare = 0,
+                TotalAmount = 0,
+                FxRate = 1,
+            }
+        };
+
+        // Act
+        var (reports, stocks) = _stockTransactionService.GetAnnualReports(stockTransactions);
+
+        // Assert
+        reports.First().SellReport.Should().BeEquivalentTo(new StockSellAnnualReport
+        {
+            StockSellOrders = Array.Empty<StockSellOrder>(),
+            Gains = 0,
+            GainsInEuro = 0,
+        });
+        stocks.First().Should().BeEquivalentTo(new OwnedStock
+        {
+            Ticker = "TSLA",
+            Quantity = 1,
+            ValueInserted = 200,
+            AveragePrice = 200,
+        });
+    }
 }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RevoProfit.Core.Extensions;
-using RevoProfit.Logging;
 using RevoProfit.WebAssembly;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -12,6 +11,5 @@ builder.Services.AddLocalization();
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<AppState>();
 builder.Services.AddCoreServices();
-builder.Logging.AddProvider(new HeightBaseLoggerProvider());
 
 await builder.Build().RunAsync();

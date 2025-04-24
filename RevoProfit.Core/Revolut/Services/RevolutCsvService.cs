@@ -19,7 +19,6 @@ public class RevolutCsvService : IRevolutCsvService
     {
         using var streamReader = new StreamReader(stream);
         using var csv = new CsvReader(streamReader, CultureInfo.InvariantCulture);
-
         var csvLines = await csv.GetRecordsAsync<RevolutTransactionCsvLine>().ToEnumerableAsync();
         return csvLines.Select(_revolutTransactionMapper.Map);
     }

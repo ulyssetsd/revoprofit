@@ -26,27 +26,33 @@
 @if (AppState.CryptoRetraits.Any())
 {
     <h3 class="mt-5">@Loc[nameof(Localization.SellOrderDetails)]</h3>
-    <div class="table-responsive">
-        <table class="table">
-            <tr>
-                <th scope="col">@Loc[nameof(Localization.Date)]</th>
-                <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
-                <th scope="col">@Loc[nameof(Localization.Amount)]</th>
-                <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
-                <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
-            </tr>
-            @foreach (var cryptoRetrait in AppState.CryptoRetraits)
-            {
+    @foreach (var year in AppState.CryptoRetraits.GroupBy(x => x.Date.Year).OrderBy(x => x.Key))
+    {
+        <div class="table-responsive">
+            <table class="table">
                 <tr>
-                    <td>@cryptoRetrait.Date</td>
-                    <td>@cryptoRetrait.Symbol</td>
-                    <td>@Math.Round(cryptoRetrait.Amount, 10, MidpointRounding.ToEven)</td>
-                    <td>@cryptoRetrait.AmountInEuros.ToString("C", _fr)</td>
-                    <td>@cryptoRetrait.GainsInEuros.ToString("C", _fr)</td>
+                    <th scope="col" colspan="5">@year.Key</th>
                 </tr>
-            }
-        </table>
-    </div>
+                <tr>
+                    <th scope="col">@Loc[nameof(Localization.Date)]</th>
+                    <th scope="col">@Loc[nameof(Localization.CryptoSymbol)]</th>
+                    <th scope="col">@Loc[nameof(Localization.Amount)]</th>
+                    <th scope="col">@Loc[nameof(Localization.AmountInEuros)]</th>
+                    <th scope="col">@Loc[nameof(Localization.GainsInEuros)]</th>
+                </tr>
+                @foreach (var cryptoRetrait in year)
+                {
+                    <tr>
+                        <td>@cryptoRetrait.Date</td>
+                        <td>@cryptoRetrait.Symbol</td>
+                        <td>@Math.Round(cryptoRetrait.Amount, 10, MidpointRounding.ToEven)</td>
+                        <td>@cryptoRetrait.AmountInEuros.ToString("C", _fr)</td>
+                        <td>@cryptoRetrait.GainsInEuros.ToString("C", _fr)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 }
 @if (AppState.CryptoAssets.Any())
 {

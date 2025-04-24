@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".csv", ".csv", "{85E69B12-D
 		.csv\stock_input_2022.csv = .csv\stock_input_2022.csv
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevoProfit.Logging", "RevoProfit.Logging\RevoProfit.Logging.csproj", "{9937574D-733C-4859-A6DE-9DC1CE4568AF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,10 +36,6 @@ Global
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7903CBFD-D809-4CA8-9D5E-E9CE325F486C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9937574D-733C-4859-A6DE-9DC1CE4568AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9937574D-733C-4859-A6DE-9DC1CE4568AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9937574D-733C-4859-A6DE-9DC1CE4568AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9937574D-733C-4859-A6DE-9DC1CE4568AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

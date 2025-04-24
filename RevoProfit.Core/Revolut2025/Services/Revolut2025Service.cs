@@ -76,8 +76,8 @@ public class Revolut2025Service : IRevolut2025Service
                     BuyPrice = buy.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
 
                     FeesAmount = 0,
-                    FeesSymbol = "EUR",
-                    FeesPrice = 1
+                    FeesSymbol = string.Empty,
+                    FeesPrice = 0
                 });
 
                 transactionsList.Remove(sell);
@@ -112,7 +112,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -132,7 +132,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -152,7 +152,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -173,7 +173,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -193,7 +193,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -213,7 +213,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 
@@ -233,7 +233,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
-                            FeesPrice = 1
+                            FeesPrice = 0
                         });
                         break;
 

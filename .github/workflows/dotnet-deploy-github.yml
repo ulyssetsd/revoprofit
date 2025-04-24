@@ -34,7 +34,7 @@ jobs:
         name: netapp
     - name: GitHub Pages
       if: success()
-      uses: crazy-max/ghaction-github-pages@v2.6.0
+      uses: crazy-max/ghaction-github-pages@v4
       with:
         build_dir: wwwroot
       env:

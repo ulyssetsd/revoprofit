@@ -1,10 +1,8 @@
 using System;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services;
 
@@ -18,7 +16,7 @@ public class RevolutServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutService = new RevolutService(new CryptoService(Mock.Of<ICryptoTransactionValidator>()));
+        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator(), new DefaultExchangeRateProvider()));
         _incrementHours = 0;
     }
 
@@ -567,7 +565,6 @@ public class RevolutServiceTest
             {
                 Date = new DateTime(2023, 02, 25, 01, 14, 15),
                 FeesInEuros = 10,
-                FeesInDollars = null,
             },
         });
         retraits.Should().BeEmpty();

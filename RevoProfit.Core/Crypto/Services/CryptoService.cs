@@ -6,10 +6,12 @@ namespace RevoProfit.Core.Crypto.Services;
 public class CryptoService : ICryptoService
 {
     private readonly ICryptoTransactionValidator _cryptoTransactionValidator;
+    private readonly IExchangeRateProvider _exchangeRateProvider;
 
-    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator)
+    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator, IExchangeRateProvider exchangeRateProvider)
     {
         _cryptoTransactionValidator = cryptoTransactionValidator;
+        _exchangeRateProvider = exchangeRateProvider;
     }
 
     private const int EuroDecimalsPrecision = 24;
@@ -32,7 +34,7 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private static void HandleFees(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
+    private void HandleFees(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
     {
         if (transaction.FeesAmount == 0)
         {
@@ -44,17 +46,16 @@ public class CryptoService : ICryptoService
             fiatFees.Add(new CryptoFiatFee
             {
                 Date = transaction.Date,
-                FeesInEuros = transaction.FeesAmount,
-                FeesInDollars = null,
+                FeesInEuros = transaction.FeesAmount
             });
         }
         else if (transaction.FeesSymbol == USD)
         {
+            var rate = _exchangeRateProvider.GetUsdToEurRate(DateOnly.FromDateTime(transaction.Date));
             fiatFees.Add(new CryptoFiatFee
             {
                 Date = transaction.Date,
-                FeesInEuros = null,
-                FeesInDollars = transaction.FeesAmount,
+                FeesInEuros = Math.Round(transaction.FeesAmount * rate, 2, MidpointRounding.ToEven)
             });
         }
         else
@@ -84,8 +85,7 @@ public class CryptoService : ICryptoService
             {
                 Year = joinGroupByYear.year,
                 GainsInEuros = joinGroupByYear.sells.Sum(retrait => retrait.GainsInEuros),
-                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros ?? 0),
-                FeesInDollars = joinGroupByYear.fees.Sum(fee => fee.FeesInDollars ?? 0),
+                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros ?? 0)
             });
     }
 

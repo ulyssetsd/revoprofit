@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -16,11 +14,12 @@ public class CryptoServiceTest
     private int _dateIncrement;
     private const string Bitcoin = "BTC";
     private const string Ethereum = "ETH";
+    private const decimal DefaultUsdToEurRate = 0.91m;
 
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(Mock.Of<ICryptoTransactionValidator>());
+        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new DefaultExchangeRateProvider());
         _dateIncrement = 0;
     }
 
@@ -330,7 +329,6 @@ public class CryptoServiceTest
             {
                 Date = transactions.ElementAt(1).Date,
                 FeesInEuros = feeAmount,
-                FeesInDollars = null,
             },
         ]);
     }
@@ -340,6 +338,8 @@ public class CryptoServiceTest
     {
         var feeSymbol = "USD";
         var feeAmount = 10m;
+        var expectedEuroAmount = Math.Round(feeAmount * DefaultUsdToEurRate, 2, MidpointRounding.ToEven);
+        var transactionDate = DateTime.Today;
         IEnumerable<CryptoTransaction> transactions = [
             Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
             Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m) with
@@ -347,6 +347,7 @@ public class CryptoServiceTest
                 FeesAmount = feeAmount,
                 FeesSymbol = feeSymbol,
                 FeesPrice = 1,
+                Date = transactionDate,
             },
         ];
 
@@ -357,8 +358,7 @@ public class CryptoServiceTest
             new CryptoFiatFee()
             {
                 Date = transactions.ElementAt(1).Date,
-                FeesInEuros = null,
-                FeesInDollars = feeAmount,
+                FeesInEuros = expectedEuroAmount,
             },
         ]);
     }

@@ -240,6 +240,8 @@ public class Revolut2025Service : IRevolut2025Service
                     case Revolut2025TransactionType.Send:
                     case Revolut2025TransactionType.Receive:
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(transaction.Type), transaction.Type, null);
                 }
             }
         }

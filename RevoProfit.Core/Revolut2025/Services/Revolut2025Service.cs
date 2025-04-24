@@ -33,8 +33,6 @@ public class Revolut2025Service : IRevolut2025Service
             var sells = transactionsList.Where(t => t.Type == Revolut2025TransactionType.Sell).ToList();
             var buys = transactionsList.Where(t => t.Type == Revolut2025TransactionType.Buy).ToList();
 
-            var remainingTransactions = transactionsList.Where(t => t.Type != Revolut2025TransactionType.Sell && t.Type != Revolut2025TransactionType.Buy).ToList();
-
             if (sells.Count == 1 && buys.Count == 1)
             {
                 var sell = sells[0];
@@ -99,21 +97,20 @@ public class Revolut2025Service : IRevolut2025Service
                     FeesSymbol = "EUR",
                     FeesPrice = 1
                 });
+
+                transactionsList.Remove(sell);
+                transactionsList.Remove(buy);
             }
-            else if (sells.Count > 0 && buys.Count == 0)
+            else if (sells.Count > 1 && buys.Count > 0)
             {
-                remainingTransactions.AddRange(sells);
+                throw new ProcessException($"Multiple sell transactions for the same date are not supported. Date: {groupDate:MMM d, yyyy, h:mm:ss tt}");
             }
-            else if (sells.Count == 0 && buys.Count > 0)
+            else if (sells.Count > 0 && buys.Count > 1)
             {
-                remainingTransactions.AddRange(buys);
-            }
-            else if (sells.Count > 1 || buys.Count > 1)
-            {
-                throw new ProcessException($"Multiple buy/sell transactions for the same date are not supported. Date: {groupDate:MMM d, yyyy, h:mm:ss tt}");
+                throw new ProcessException($"Multiple buy transactions for the same date are not supported. Date: {groupDate:MMM d, yyyy, h:mm:ss tt}");
             }
 
-            foreach (var transaction in remainingTransactions)
+            foreach (var transaction in transactionsList)
             {
                 switch (transaction.Type)
                 {
@@ -260,7 +257,6 @@ public class Revolut2025Service : IRevolut2025Service
 
                     case Revolut2025TransactionType.Send:
                     case Revolut2025TransactionType.Receive:
-                        // Ignore send and receive transactions
                         break;
                 }
             }

@@ -1,0 +1,20 @@
+/* /Components/Crypto/CryptoResultTable.razor.rz.scp.css */
+.blurry-text[b-f6c5qm6anl] {
+    color: transparent;
+    text-shadow: 0 0 5px #000000;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+td[b-f6c5qm6anl] {
+    white-space: nowrap;
+}
+/* /Components/Stock/StockResultTable.razor.rz.scp.css */
+.blurry-text[b-r0tufm29lq] {
+    color: transparent;
+    text-shadow: 0 0 5px #000000;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+td[b-r0tufm29lq] {
+    white-space: nowrap;
+}

@@ -2,6 +2,6 @@ namespace RevoProfit.Core.Crypto.Services.Interfaces;
 
 public interface IExchangeRateProvider
 {
-    Task InitializeAsync(bool webAssembly = true);
+    Task InitializeAsync();
     decimal GetUsdToEurRate(DateOnly date);
 }

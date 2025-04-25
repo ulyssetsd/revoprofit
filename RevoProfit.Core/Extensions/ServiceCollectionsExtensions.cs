@@ -32,5 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRevolut2025TransactionMapper, Revolut2025TransactionMapper>();
         services.AddScoped<IRevolut2025Service, Revolut2025Service>();
         services.AddSingleton<IExchangeRateProvider, EuropeanCentralBankExchangeRateProvider>();
+        services.AddSingleton(EuropeanCentralBankUrl.CorsProxy);
     }
 }

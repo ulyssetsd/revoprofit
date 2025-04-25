@@ -13,8 +13,8 @@ public class EuropeanCentralBankExchangeRateProviderTest
     [SetUp]
     public async Task Setup()
     {
-        _target = new EuropeanCentralBankExchangeRateProvider();
-        await _target.InitializeAsync(webAssembly: false);
+        _target = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
+        await _target.InitializeAsync();
     }
     
     [Test]

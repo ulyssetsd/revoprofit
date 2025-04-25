@@ -18,7 +18,7 @@ public class MockExchangeRateProvider : IExchangeRateProvider
         return _rate;
     }
 
-    public Task InitializeAsync(bool webAssembly = true)
+    public Task InitializeAsync()
     {
         throw new NotImplementedException();
     }

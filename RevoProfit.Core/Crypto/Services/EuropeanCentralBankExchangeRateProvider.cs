@@ -7,18 +7,25 @@ namespace RevoProfit.Core.Crypto.Services;
 public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _httpClient;
-    private readonly Dictionary<DateOnly, decimal> _historicalRates = [];
-    private const string EcbHistoricalUrl = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml";
-    private const string FallbackCorsProxyUrl = $"https://corsproxy.io/?url=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml";
+    private readonly EuropeanCentralBankUrl _europeanCentralBankUrl;
+    private Dictionary<DateOnly, decimal>? _historicalRates;
 
-    public EuropeanCentralBankExchangeRateProvider()
+    public EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl europeanCentralBankUrl)
     {
         _httpClient = new HttpClient();
+        _europeanCentralBankUrl = europeanCentralBankUrl;
     }
 
-    public async Task InitializeAsync(bool webAssembly = true)
+    public async Task InitializeAsync()
     {
-        string xmlContent = await _httpClient.GetStringAsync(webAssembly ? FallbackCorsProxyUrl : EcbHistoricalUrl);
+        _historicalRates ??= await GetHistoricalRates();
+    }
+
+    private async Task<Dictionary<DateOnly, decimal>> GetHistoricalRates()
+    {
+        Dictionary<DateOnly, decimal> historicalRates = new();
+
+        var xmlContent = await _httpClient.GetStringAsync(_europeanCentralBankUrl.Url);
         var xdoc = XDocument.Parse(xmlContent);
 
         // Define the XML namespaces used in the document
@@ -27,7 +34,7 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 
         // Find all the daily Cube elements that contain rate data
         var dailyCubes = xdoc.Descendants(ecb + "Cube")
-            .Where(x => x.Attribute("time") != null);
+        .Where(x => x.Attribute("time") != null);
 
         foreach (var dailyCube in dailyCubes)
         {
@@ -35,15 +42,17 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
             {
                 // Find the USD rate in this day's data
                 var usdElement = dailyCube.Elements(ecb + "Cube")
-                    .FirstOrDefault(x => x.Attribute("currency")?.Value == "USD");
+                .FirstOrDefault(x => x.Attribute("currency")?.Value == "USD");
 
                 if (usdElement != null && decimal.TryParse(usdElement.Attribute("rate")?.Value, out decimal eurToUsd))
                 {
                     // Convert EUR to USD rate to USD to EUR rate (by taking the inverse)
-                    _historicalRates[cubeDate] = 1 / eurToUsd;
+                    historicalRates[cubeDate] = 1 / eurToUsd;
                 }
             }
         }
+
+        return historicalRates;
     }
 
     public decimal GetUsdToEurRate(DateOnly date)

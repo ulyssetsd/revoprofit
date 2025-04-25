@@ -15,11 +15,12 @@ public class Revolut2025ServiceEndToEndTest
     private EuropeanCentralBankExchangeRateProvider _exchangeRateProvider = null!;
 
     [SetUp]
-    public void Setup()
+    public async Task Setup()
     {
         _exchangeRateProvider = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
         _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), _exchangeRateProvider));
+        await _exchangeRateProvider.InitializeAsync();
     }
 
     [Test]
@@ -30,7 +31,6 @@ public class Revolut2025ServiceEndToEndTest
         {
             await using var memoryStream = new FileStream("../../../../.csv/crypto_input_revolut_2025.csv", FileMode.Open);
             var transactions = await _revolut2025CsvService.ReadCsv(memoryStream);
-            await _exchangeRateProvider.InitializeAsync();
             _revolut2025Service.ProcessTransactions(transactions);
         };
 
@@ -55,7 +55,6 @@ public class Revolut2025ServiceEndToEndTest
             """;
             using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             var transactions = await _revolut2025CsvService.ReadCsv(memoryStream);
-            await _exchangeRateProvider.InitializeAsync();
             _revolut2025Service.ProcessTransactions(transactions);
         };
 

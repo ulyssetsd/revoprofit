@@ -32,26 +32,26 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
         XNamespace gesmes = "http://www.gesmes.org/xml/2002-08-01";
         XNamespace ecb = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref";
 
+        // Find the parent Cube element
+        var parentCube = xdoc.Descendants(ecb + "Cube").FirstOrDefault(e => e.Elements(ecb + "Cube").Any(x => x.Attribute("time") != null));
+        if (parentCube == null)
+            return historicalRates;
+
         // Find all the daily Cube elements that contain rate data
-        var dailyCubes = xdoc.Descendants(ecb + "Cube")
-        .Where(x => x.Attribute("time") != null);
+        var dailyCubes = parentCube.Elements(ecb + "Cube").Where(x => x.Attribute("time") != null);
 
         foreach (var dailyCube in dailyCubes)
         {
-            if (DateOnly.TryParse(dailyCube.Attribute("time")?.Value, out DateOnly cubeDate))
+            var timeAttr = dailyCube.Attribute("time")?.Value;
+            if (DateOnly.TryParse(timeAttr, out DateOnly cubeDate))
             {
-                // Find the USD rate in this day's data
-                var usdElement = dailyCube.Elements(ecb + "Cube")
-                .FirstOrDefault(x => x.Attribute("currency")?.Value == "USD");
-
-                if (usdElement != null && decimal.TryParse(usdElement.Attribute("rate")?.Value, out decimal eurToUsd))
+                var usdElement = dailyCube.Elements(ecb + "Cube").FirstOrDefault(x => x.Attribute("currency")?.Value == "USD");
+                if (usdElement != null && decimal.TryParse(usdElement.Attribute("rate")?.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal eurToUsd))
                 {
-                    // Convert EUR to USD rate to USD to EUR rate (by taking the inverse)
                     historicalRates[cubeDate] = 1 / eurToUsd;
                 }
             }
         }
-
         return historicalRates;
     }
 

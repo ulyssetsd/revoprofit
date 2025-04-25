@@ -85,7 +85,7 @@ public class CryptoService : ICryptoService
             {
                 Year = joinGroupByYear.year,
                 GainsInEuros = joinGroupByYear.sells.Sum(retrait => retrait.GainsInEuros),
-                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros ?? 0)
+                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros)
             });
     }
 

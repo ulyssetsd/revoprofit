@@ -15,7 +15,7 @@ public class Revolut2025ServiceEndToEndTest
     private EuropeanCentralBankExchangeRateProvider _exchangeRateProvider = null!;
 
     [SetUp]
-    public async Task Setup()
+    public void Setup()
     {
         _exchangeRateProvider = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());

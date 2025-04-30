@@ -21,6 +21,6 @@ public class MockExchangeRateProvider : IExchangeRateProvider
 
     public Task InitializeAsync()
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

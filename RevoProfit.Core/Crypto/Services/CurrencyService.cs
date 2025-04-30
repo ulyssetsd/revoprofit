@@ -14,6 +14,10 @@ public class CurrencyService : ICurrencyService
 
     public decimal ConvertToEur(decimal amount, Currency currency, DateOnly date)
     {
+        if (currency == Currency.EUR)
+        {
+            return amount;
+        }
         var rate = _exchangeRateProvider.GetEurRate(date, currency);
         return Math.Round(amount * rate, DecimalPrecision);
     }

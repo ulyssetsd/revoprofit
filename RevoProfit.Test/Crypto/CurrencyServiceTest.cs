@@ -18,6 +18,19 @@ public class CurrencyServiceTest
         _target = new CurrencyService(_mockExchangeRateProvider);
     }
 
+    public void ConvertToEur_Should_Return_Same_Amount_For_EUR()
+    {
+        // Arrange
+        var amount = 100m; // EUR
+        var date = new DateOnly(2025, 4, 24);
+
+        // Act
+        var result = _target.ConvertToEur(amount, Currency.EUR, date);
+
+        // Assert
+        result.Should().Be(100m); // 100 EUR = 100 EUR
+    }
+
     [Test]
     public void ConvertToEur_Should_Convert_USD_To_EUR()
     {

@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Xml.Linq;
 using RevoProfit.Core.Crypto.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
@@ -23,35 +24,23 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 
     private async Task<Dictionary<DateOnly, decimal>> GetHistoricalRates()
     {
-        Dictionary<DateOnly, decimal> historicalRates = new();
+        Dictionary<DateOnly, decimal> historicalRates = [];
 
         var xmlContent = await _httpClient.GetStringAsync(_europeanCentralBankUrl.Url);
         var xdoc = XDocument.Parse(xmlContent);
 
-        // Define the XML namespaces used in the document
-        XNamespace gesmes = "http://www.gesmes.org/xml/2002-08-01";
         XNamespace ecb = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref";
-
-        // Find the parent Cube element
-        var parentCube = xdoc.Descendants(ecb + "Cube").FirstOrDefault(e => e.Elements(ecb + "Cube").Any(x => x.Attribute("time") != null));
-        if (parentCube == null)
-            return historicalRates;
-
-        // Find all the daily Cube elements that contain rate data
-        var dailyCubes = parentCube.Elements(ecb + "Cube").Where(x => x.Attribute("time") != null);
-
-        foreach (var dailyCube in dailyCubes)
+        
+        foreach (var dailyRateNode in xdoc.Descendants(ecb + "Cube"))
         {
-            var timeAttr = dailyCube.Attribute("time")?.Value;
-            if (DateOnly.TryParse(timeAttr, out DateOnly cubeDate))
-            {
-                var usdElement = dailyCube.Elements(ecb + "Cube").FirstOrDefault(x => x.Attribute("currency")?.Value == "USD");
-                if (usdElement != null && decimal.TryParse(usdElement.Attribute("rate")?.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal eurToUsd))
-                {
-                    historicalRates[cubeDate] = 1 / eurToUsd;
-                }
-            }
+            var dateValue = dailyRateNode.Attribute("time")?.Value;
+            if (!DateOnly.TryParse(dateValue, out DateOnly date)) continue;
+            var usdRateElement = dailyRateNode.Elements(ecb + "Cube").FirstOrDefault(r => r.Attribute("currency")?.Value == "USD");
+            var usdRateValue = usdRateElement?.Attribute("rate")?.Value;
+            if (!decimal.TryParse(usdRateValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal eurToUsd)) continue;
+            historicalRates[date] = 1 / eurToUsd;
         }
+        
         return historicalRates;
     }
 

@@ -226,7 +226,7 @@
     <value>🚀 Stock restants</value>
   </data>
   <data name="FiatFees" xml:space="preserve">
-    <value>Frais payé en € (exclu frais payé en crypto)</value>
+    <value>Frais payé (inclus frais payé en crypto)</value>
   </data>
   <data name="Answer4" xml:space="preserve">
     <value>Pour générer un relevé de vos comptes crypto sur Revolut, veuillez suivre ces étapes :

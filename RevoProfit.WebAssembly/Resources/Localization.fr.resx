@@ -244,6 +244,6 @@ Une fois le relevé généré, vous pouvez le télécharger et le téléverser s
     <value>Pourquoi utilisez-vous les taux de change de la Banque Centrale Européenne pour les transactions crypto ?</value>
   </data>
   <data name="Answer5" xml:space="preserve">
-    <value>Pour les transactions crypto, Revolut ne fournit pas les taux de conversion des devises dans leurs fichiers d'exportation. Pour calculer précisément les gains en euros, nous utilisons les taux de change historiques de la Banque Centrale Européenne (BCE). La BCE est la banque centrale de l'euro et publie des taux de référence officiels quotidiens pour les principales devises (https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml).</value>
+    <value>Pour les transactions crypto, Revolut ne fournit pas les taux de conversion des devises dans leurs fichiers d'exportation. Pour calculer précisément les gains en euros, nous utilisons les taux de change historiques de la Banque Centrale Européenne (BCE). La BCE est la banque centrale de l'euro et publie des taux de référence officiels quotidiens pour les principales devises.</value>
   </data>
 </root>

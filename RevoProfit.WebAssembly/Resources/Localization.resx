@@ -250,6 +250,6 @@ Once the statement is generated, you can download it and upload it to this websi
     <value>Why do you use European Central Bank exchange rates for crypto transactions?</value>
   </data>
   <data name="Answer5" xml:space="preserve">
-    <value>For crypto transactions, Revolut does not provide currency conversion rates in their export files. To calculate gains in euros accurately, we use historical exchange rates from the European Central Bank (ECB). The ECB is the central bank for the euro and publishes official daily reference rates for major currencies (https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml).</value>
+    <value>For crypto transactions, Revolut does not provide currency conversion rates in their export files. To calculate gains in euros accurately, we use historical exchange rates from the European Central Bank (ECB). The ECB is the central bank for the euro and publishes official daily reference rates for major currencies.</value>
   </data>
 </root>

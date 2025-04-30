@@ -29,8 +29,8 @@ public class EuropeanCentralBankExchangeRateProviderTest
         var eurAmount = _target.GetEurRate(testDate, Currency.USD);
         
         // Assert
-        // For EUR to USD = 1.1376, 100 USD = 87.90 EUR approximately
-        eurAmount.Should().BeApproximately(87.90m, 0.01m);
+        // For EUR to USD = 1.1376, 100 EUR = 113.76 USD approximately
+        eurAmount.Should().BeApproximately(1.1376m, 0.0001m);
     }
 
     [Test]

@@ -14,12 +14,12 @@ public class CryptoServiceTest
     private int _dateIncrement;
     private const string Bitcoin = "BTC";
     private const string Ethereum = "ETH";
-    private const decimal DefaultUsdToEurRate = 0.91m;
+    private const decimal DefaultEurToAnyRate = 0.91m; // 1 EUR = 0.91 USD
 
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(new MockExchangeRateProvider(DefaultUsdToEurRate)));
+        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(new MockExchangeRateProvider(DefaultEurToAnyRate)));
         _dateIncrement = 0;
     }
 
@@ -337,8 +337,8 @@ public class CryptoServiceTest
     public void TestCalculDesFraisEnUSD()
     {
         var feeSymbol = "USD";
-        var feeAmount = 10m;
-        var expectedEuroAmount = Math.Round(feeAmount * DefaultUsdToEurRate, 2, MidpointRounding.ToEven);
+        var feeAmount = 0.91m;
+        var expectedEuroAmount = 1m;
         var transactionDate = DateTime.Today;
         IEnumerable<CryptoTransaction> transactions = [
             Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),

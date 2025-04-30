@@ -45,7 +45,7 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
                 if (Enum.TryParse<Currency>(currencyStr, out var currency) && 
                     decimal.TryParse(rateValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal eurToRate))
                 {
-                    rates[currency] = 1 / eurToRate;
+                    rates[currency] = eurToRate;
                 }
             }
 

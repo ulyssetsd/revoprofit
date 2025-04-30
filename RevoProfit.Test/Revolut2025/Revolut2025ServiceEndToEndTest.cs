@@ -19,7 +19,7 @@ public class Revolut2025ServiceEndToEndTest
     {
         _exchangeRateProvider = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
-        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(_exchangeRateProvider)));
+        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(_exchangeRateProvider)), new CurrencyService(_exchangeRateProvider));
         await _exchangeRateProvider.InitializeAsync();
     }
 

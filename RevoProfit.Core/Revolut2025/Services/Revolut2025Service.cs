@@ -9,10 +9,12 @@ namespace RevoProfit.Core.Revolut2025.Services;
 public class Revolut2025Service : IRevolut2025Service
 {
     private readonly ICryptoService _cryptoService;
+    private readonly ICurrencyService _currencyService;
 
-    public Revolut2025Service(ICryptoService cryptoService)
+    public Revolut2025Service(ICryptoService cryptoService, ICurrencyService currencyService)
     {
         _cryptoService = cryptoService;
+        _currencyService = currencyService;
     }
 
     public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<Revolut2025Transaction> transactions)
@@ -42,8 +44,8 @@ public class Revolut2025Service : IRevolut2025Service
                     SellSymbol = string.Empty,
                     SellPrice = 0,
 
-                    FeesAmount = transaction.Fees ?? throw new ProcessException("Fees cannot be null"),
-                    FeesSymbol = transaction.FeesCurrency ?? throw new ProcessException("Fees currency cannot be null"),
+                    FeesAmount = transaction.FeesInEur(_currencyService),
+                    FeesSymbol = "EUR",
                     FeesPrice = 1
                 });
             }
@@ -69,11 +71,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                     SellAmount = sell.Quantity,
                     SellSymbol = sell.Symbol,
-                    SellPrice = sell.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                    SellPrice = sell.PriceInEur(_currencyService),
 
                     BuyAmount = buy.Quantity,
                     BuySymbol = buy.Symbol,
-                    BuyPrice = buy.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                    BuyPrice = buy.PriceInEur(_currencyService),
 
                     FeesAmount = 0,
                     FeesSymbol = string.Empty,
@@ -144,7 +146,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for buy transactions"),
+                            BuyPrice = transaction.PriceInEur(_currencyService),
 
                             SellAmount = 0,
                             SellSymbol = string.Empty,
@@ -165,7 +167,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = transaction.Symbol,
-                            SellPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for sell transactions"),
+                            SellPrice = transaction.PriceInEur(_currencyService),
 
                             BuyAmount = 0,
                             BuySymbol = string.Empty,
@@ -185,11 +187,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = transaction.Symbol,
-                            SellPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                            SellPrice = transaction.PriceInEur(_currencyService),
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = $"{transaction.Symbol}_STAKE",
-                            BuyPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                            BuyPrice = transaction.PriceInEur(_currencyService),
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
@@ -205,11 +207,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = $"{transaction.Symbol}_STAKE",
-                            SellPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                            SellPrice = transaction.PriceInEur(_currencyService),
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for exchange transactions"),
+                            BuyPrice = transaction.PriceInEur(_currencyService),
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
@@ -225,7 +227,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.Price ?? throw new ProcessException("Price cannot be null for other transactions"),
+                            BuyPrice = transaction.PriceInEur(_currencyService),
 
                             SellAmount = 0,
                             SellSymbol = string.Empty,

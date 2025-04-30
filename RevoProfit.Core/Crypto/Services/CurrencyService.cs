@@ -19,12 +19,12 @@ public class CurrencyService : ICurrencyService
             return amount;
         }
         var rate = _exchangeRateProvider.GetEurRate(date, currency);
-        return Math.Round(amount * rate, DecimalPrecision);
+        return amount / rate;
     }
 
     public decimal ConvertFromEur(decimal amount, Currency currency, DateOnly date)
     {
         var rate = _exchangeRateProvider.GetEurRate(date, currency);
-        return Math.Round(amount / rate, DecimalPrecision);
+        return amount * rate;
     }
 }

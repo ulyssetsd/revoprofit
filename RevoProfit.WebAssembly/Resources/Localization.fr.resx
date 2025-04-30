@@ -121,7 +121,7 @@
     <value>Relevé de compte</value>
   </data>
   <data name="Amount" xml:space="preserve">
-    <value>Montante</value>
+    <value>Montant</value>
   </data>
   <data name="Answer1" xml:space="preserve">
     <value>Nous utilisons la méthode du coût moyen. C'est la méthode exigée par le gouvernement français pour le calcul des plus-values réalisées.</value>
@@ -220,7 +220,7 @@
     <value>Prix moyen</value>
   </data>
   <data name="AmountInDollars" xml:space="preserve">
-    <value>Montant insér</value>
+    <value>Montant inséré</value>
   </data>
   <data name="StockLefts" xml:space="preserve">
     <value>🚀 Stock restants</value>

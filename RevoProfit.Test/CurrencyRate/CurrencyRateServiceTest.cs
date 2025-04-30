@@ -1,23 +1,24 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
 
-namespace RevoProfit.Test.Crypto;
+namespace RevoProfit.Test.CurrencyRate;
 
-public class CurrencyServiceTest
+public class CurrencyRateServiceTest
 {
-    private CurrencyService _target = null!;
+    private CurrencyRateService _target = null!;
     private MockExchangeRateProvider _mockExchangeRateProvider = null!;
 
     [SetUp]
     public void Setup()
     {
         _mockExchangeRateProvider = new MockExchangeRateProvider(0.91m); // 1 EUR = 0.91 USD
-        _target = new CurrencyService(_mockExchangeRateProvider);
+        _target = new CurrencyRateService(_mockExchangeRateProvider);
     }
 
+    [Test]
     public void ConvertToEur_Should_Return_Same_Amount_For_EUR()
     {
         // Arrange

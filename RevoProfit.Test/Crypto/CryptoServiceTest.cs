@@ -5,6 +5,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.CurrencyRate.Services;
+using RevoProfit.Test.CurrencyRate;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -19,7 +21,7 @@ public class CryptoServiceTest
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(new MockExchangeRateProvider(DefaultEurToAnyRate)));
+        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyRateService(new MockExchangeRateProvider(DefaultEurToAnyRate)));
         _dateIncrement = 0;
     }
 

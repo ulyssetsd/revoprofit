@@ -1,5 +1,6 @@
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
 using RevoProfit.Core.Revolut2025.Models;
 using RevoProfit.Core.Revolut2025.Services.Interfaces;
@@ -9,12 +10,12 @@ namespace RevoProfit.Core.Revolut2025.Services;
 public class Revolut2025Service : IRevolut2025Service
 {
     private readonly ICryptoService _cryptoService;
-    private readonly ICurrencyService _currencyService;
+    private readonly ICurrencyRateService _currencyRateService;
 
-    public Revolut2025Service(ICryptoService cryptoService, ICurrencyService currencyService)
+    public Revolut2025Service(ICryptoService cryptoService, ICurrencyRateService currencyRateService)
     {
         _cryptoService = cryptoService;
-        _currencyService = currencyService;
+        _currencyRateService = currencyRateService;
     }
 
     public (IReadOnlyCollection<CryptoAsset>, IReadOnlyCollection<CryptoSell>, IReadOnlyCollection<CryptoFiatFee>) ProcessTransactions(IEnumerable<Revolut2025Transaction> transactions)
@@ -44,7 +45,7 @@ public class Revolut2025Service : IRevolut2025Service
                     SellSymbol = string.Empty,
                     SellPrice = 0,
 
-                    FeesAmount = transaction.FeesInEur(_currencyService),
+                    FeesAmount = transaction.FeesInEur(_currencyRateService),
                     FeesSymbol = "EUR",
                     FeesPrice = 1
                 });
@@ -71,11 +72,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                     SellAmount = sell.Quantity,
                     SellSymbol = sell.Symbol,
-                    SellPrice = sell.PriceInEur(_currencyService),
+                    SellPrice = sell.PriceInEur(_currencyRateService),
 
                     BuyAmount = buy.Quantity,
                     BuySymbol = buy.Symbol,
-                    BuyPrice = buy.PriceInEur(_currencyService),
+                    BuyPrice = buy.PriceInEur(_currencyRateService),
 
                     FeesAmount = 0,
                     FeesSymbol = string.Empty,
@@ -146,7 +147,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.PriceInEur(_currencyService),
+                            BuyPrice = transaction.PriceInEur(_currencyRateService),
 
                             SellAmount = 0,
                             SellSymbol = string.Empty,
@@ -167,7 +168,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = transaction.Symbol,
-                            SellPrice = transaction.PriceInEur(_currencyService),
+                            SellPrice = transaction.PriceInEur(_currencyRateService),
 
                             BuyAmount = 0,
                             BuySymbol = string.Empty,
@@ -187,11 +188,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = transaction.Symbol,
-                            SellPrice = transaction.PriceInEur(_currencyService),
+                            SellPrice = transaction.PriceInEur(_currencyRateService),
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = $"{transaction.Symbol}_STAKE",
-                            BuyPrice = transaction.PriceInEur(_currencyService),
+                            BuyPrice = transaction.PriceInEur(_currencyRateService),
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
@@ -207,11 +208,11 @@ public class Revolut2025Service : IRevolut2025Service
 
                             SellAmount = transaction.Quantity,
                             SellSymbol = $"{transaction.Symbol}_STAKE",
-                            SellPrice = transaction.PriceInEur(_currencyService),
+                            SellPrice = transaction.PriceInEur(_currencyRateService),
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.PriceInEur(_currencyService),
+                            BuyPrice = transaction.PriceInEur(_currencyRateService),
 
                             FeesAmount = 0,
                             FeesSymbol = string.Empty,
@@ -227,7 +228,7 @@ public class Revolut2025Service : IRevolut2025Service
 
                             BuyAmount = transaction.Quantity,
                             BuySymbol = transaction.Symbol,
-                            BuyPrice = transaction.PriceInEur(_currencyService),
+                            BuyPrice = transaction.PriceInEur(_currencyRateService),
 
                             SellAmount = 0,
                             SellSymbol = string.Empty,

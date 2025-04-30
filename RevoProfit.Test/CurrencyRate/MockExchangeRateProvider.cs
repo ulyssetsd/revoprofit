@@ -1,14 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 
-namespace RevoProfit.Test.Crypto;
+namespace RevoProfit.Test.CurrencyRate;
 
 public class MockExchangeRateProvider : IExchangeRateProvider
 {
     private readonly decimal _rate;
 
-    public MockExchangeRateProvider(decimal rate = 0.91m)
+    public MockExchangeRateProvider(decimal rate)
     {
         _rate = rate;
     }

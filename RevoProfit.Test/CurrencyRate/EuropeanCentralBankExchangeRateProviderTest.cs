@@ -2,11 +2,11 @@ using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
-using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
 using RevoProfit.Core.Exceptions;
 
-namespace RevoProfit.Test.Crypto;
+namespace RevoProfit.Test.CurrencyRate;
 
 public class EuropeanCentralBankExchangeRateProviderTest
 {

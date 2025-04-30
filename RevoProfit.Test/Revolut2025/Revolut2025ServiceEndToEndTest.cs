@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
 using RevoProfit.Core.Revolut2025.Services;
 
 namespace RevoProfit.Test.Revolut2025;
@@ -19,7 +21,7 @@ public class Revolut2025ServiceEndToEndTest
     {
         _exchangeRateProvider = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
         _revolut2025CsvService = new Revolut2025CsvService(new Revolut2025TransactionMapper());
-        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyService(_exchangeRateProvider)), new CurrencyService(_exchangeRateProvider));
+        _revolut2025Service = new Revolut2025Service(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyRateService(_exchangeRateProvider)), new CurrencyRateService(_exchangeRateProvider));
         await _exchangeRateProvider.InitializeAsync();
     }
 

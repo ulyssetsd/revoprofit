@@ -1,17 +1,19 @@
 ﻿using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 
 namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
     private readonly ICryptoTransactionValidator _cryptoTransactionValidator;
-    private readonly ICurrencyService _currencyService;
+    private readonly ICurrencyRateService _currencyRateService;
 
-    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator, ICurrencyService currencyService)
+    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator, ICurrencyRateService currencyRateService)
     {
         _cryptoTransactionValidator = cryptoTransactionValidator;
-        _currencyService = currencyService;
+        _currencyRateService = currencyRateService;
     }
 
     private const int EuroDecimalsPrecision = 24;
@@ -54,7 +56,7 @@ public class CryptoService : ICryptoService
             fiatFees.Add(new CryptoFiatFee
             {
                 Date = transaction.Date,
-                FeesInEuros = _currencyService.ConvertToEur(transaction.FeesAmount, Currency.USD, DateOnly.FromDateTime(transaction.Date))
+                FeesInEuros = _currencyRateService.ConvertToEur(transaction.FeesAmount, Currency.USD, DateOnly.FromDateTime(transaction.Date))
             });
         }
         else

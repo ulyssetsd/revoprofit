@@ -1,13 +1,13 @@
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 
-namespace RevoProfit.Core.Crypto.Services;
+namespace RevoProfit.Core.CurrencyRate.Services;
 
-public class CurrencyService : ICurrencyService
+public class CurrencyRateService : ICurrencyRateService
 {
     private readonly IExchangeRateProvider _exchangeRateProvider;
-    private const int DecimalPrecision = 2;
 
-    public CurrencyService(IExchangeRateProvider exchangeRateProvider)
+    public CurrencyRateService(IExchangeRateProvider exchangeRateProvider)
     {
         _exchangeRateProvider = exchangeRateProvider;
     }

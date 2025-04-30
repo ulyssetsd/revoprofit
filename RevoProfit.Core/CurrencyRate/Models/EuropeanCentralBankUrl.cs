@@ -1,4 +1,4 @@
-namespace RevoProfit.Core.Crypto.Services;
+namespace RevoProfit.Core.CurrencyRate.Models;
 
 public record EuropeanCentralBankUrl(string Url)
 {

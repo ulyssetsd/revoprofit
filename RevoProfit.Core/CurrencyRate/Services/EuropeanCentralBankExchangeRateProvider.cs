@@ -1,9 +1,10 @@
 using System.Globalization;
 using System.Xml.Linq;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 using RevoProfit.Core.Exceptions;
 
-namespace RevoProfit.Core.Crypto.Services;
+namespace RevoProfit.Core.CurrencyRate.Services;
 
 public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 {

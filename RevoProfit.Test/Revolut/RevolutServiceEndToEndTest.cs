@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
 using RevoProfit.Core.Revolut.Services;
 
 namespace RevoProfit.Test.Revolut;
@@ -16,7 +18,7 @@ public class RevolutServiceEndToEndTest
     public void Setup()
     {
         _revolutCsvService = new RevolutCsvService(new RevolutTransactionMapper());
-        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator()));
+        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyRateService(new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default))));
     }
 
     [Test]

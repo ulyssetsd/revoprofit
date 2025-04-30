@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Services;
+using RevoProfit.Test.CurrencyRate;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -16,11 +16,12 @@ public class CryptoServiceTest
     private int _dateIncrement;
     private const string Bitcoin = "BTC";
     private const string Ethereum = "ETH";
+    private const decimal DefaultEurToAnyRate = 0.91m; // 1 EUR = 0.91 USD
 
     [SetUp]
     public void Setup()
     {
-        _cryptoService = new CryptoService(Mock.Of<ICryptoTransactionValidator>());
+        _cryptoService = new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyRateService(new MockExchangeRateProvider(DefaultEurToAnyRate)));
         _dateIncrement = 0;
     }
 
@@ -305,5 +306,62 @@ public class CryptoServiceTest
                 AmountInEuros = 0,
             },
         });
+    }
+
+    [Test]
+    public void TestCalculDesFraisEnEuros()
+    {
+        var feeSymbol = "EUR";
+        var feeAmount = 10m;
+        IEnumerable<CryptoTransaction> transactions = [
+            Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m) with
+            {
+                FeesAmount = feeAmount,
+                FeesSymbol = feeSymbol,
+                FeesPrice = 1,
+            },
+        ];
+
+        var (_, _, fiatFees) = _cryptoService.ProcessTransactions(transactions);
+
+        fiatFees.Should().BeEquivalentTo(
+        [
+            new CryptoFiatFee()
+            {
+                Date = transactions.ElementAt(1).Date,
+                FeesInEuros = feeAmount,
+            },
+        ]);
+    }
+
+    [Test]
+    public void TestCalculDesFraisEnUSD()
+    {
+        var feeSymbol = "USD";
+        var feeAmount = 0.91m;
+        var expectedEuroAmount = 1m;
+        var transactionDate = DateTime.Today;
+        IEnumerable<CryptoTransaction> transactions = [
+            Btc(CryptoTransactionType.Buy, price: 100, quantity: 1),
+            Btc(CryptoTransactionType.Sell, price: 200, quantity: .5m) with
+            {
+                FeesAmount = feeAmount,
+                FeesSymbol = feeSymbol,
+                FeesPrice = 1,
+                Date = transactionDate,
+            },
+        ];
+
+        var (_, _, fiatFees) = _cryptoService.ProcessTransactions(transactions);
+
+        fiatFees.Should().BeEquivalentTo(
+        [
+            new CryptoFiatFee()
+            {
+                Date = transactions.ElementAt(1).Date,
+                FeesInEuros = expectedEuroAmount,
+            },
+        ]);
     }
 }

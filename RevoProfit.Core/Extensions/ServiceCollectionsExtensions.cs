@@ -6,6 +6,9 @@ using RevoProfit.Core.Revolut2025.Services;
 using RevoProfit.Core.Stock.Services.Interfaces;
 using RevoProfit.Core.Stock.Services;
 using Microsoft.Extensions.DependencyInjection;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 using RevoProfit.Core.Revolut2025.Services.Interfaces;
 
 namespace RevoProfit.Core.Extensions;
@@ -31,6 +34,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRevolut2025CsvService, Revolut2025CsvService>();
         services.AddScoped<IRevolut2025TransactionMapper, Revolut2025TransactionMapper>();
         services.AddScoped<IRevolut2025Service, Revolut2025Service>();
-        services.AddScoped<IRevolut2025TransactionMapper, Revolut2025TransactionMapper>();
+        services.AddScoped<ICurrencyRateService, CurrencyRateService>();
+        services.AddSingleton<IExchangeRateProvider, EuropeanCentralBankExchangeRateProvider>();
+        services.AddSingleton(EuropeanCentralBankUrl.CorsProxy);
     }
 }

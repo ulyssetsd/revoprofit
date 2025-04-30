@@ -61,7 +61,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Statement.
+        ///   Looks up a localized string similar to Account Statementt.
         /// </summary>
         public static string AccountStatement {
             get {
@@ -115,7 +115,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open your Revolut app and go to the &quot;Stocks&quot; section. Click on the &quot;...&quot; button and select &quot;Statement&quot; &gt; &quot;Account Statement&quot;. Choose the Excel format, and choose the dates from June 2017 to {0}..
+        ///   Looks up a localized string similar to Open your Revolut app and go to the &quot;Stocks&quot; section. Click on the &quot;...&quot; button and select &quot;Statement&quot; &gt; &quot;Account Statement&quot;. Choose the Excel format, and choose the dates from oldest date to {0}..
         /// </summary>
         public static string Answer3 {
             get {
@@ -134,6 +134,15 @@ namespace RevoProfit.WebAssembly.Resources {
         public static string Answer4 {
             get {
                 return ResourceManager.GetString("Answer4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For crypto transactions, Revolut does not provide currency conversion rates in their export files. To calculate gains in euros accurately, we use historical exchange rates from the European Central Bank (ECB). The ECB is the central bank for the euro and publishes official daily reference rates for major currencies..
+        /// </summary>
+        public static string Answer5 {
+            get {
+                return ResourceManager.GetString("Answer5", resourceCulture);
             }
         }
         
@@ -174,7 +183,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Waltio Account Statement export file (.csv).
+        ///   Looks up a localized string similar to Your Revolut Crypto Account Statement export file (.csv).
         /// </summary>
         public static string CryptoFile {
             get {
@@ -255,7 +264,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fees paid in € (exclude fees paid in crypto).
+        ///   Looks up a localized string similar to Fees paid (include fees paid in crypto).
         /// </summary>
         public static string FiatFees {
             get {
@@ -327,11 +336,20 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to How to generate a statement of my crypto accounts on Revolut in .csv format?.
         /// </summary>
         public static string Question4 {
             get {
                 return ResourceManager.GetString("Question4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Why do you use European Central Bank exchange rates for crypto transactions?.
+        /// </summary>
+        public static string Question5 {
+            get {
+                return ResourceManager.GetString("Question5", resourceCulture);
             }
         }
         
@@ -408,7 +426,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WaltProfit.
+        ///   Looks up a localized string similar to RevoCrypto.
         /// </summary>
         public static string WaltProfit {
             get {
@@ -417,7 +435,7 @@ namespace RevoProfit.WebAssembly.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculate you crypto gains or loss from your waltio.co export..
+        ///   Looks up a localized string similar to Calculate you crypto trading gains or loss on your Revolut Crypto trading account..
         /// </summary>
         public static string WaltProfitSubtitle {
             get {

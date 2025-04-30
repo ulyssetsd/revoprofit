@@ -130,7 +130,7 @@
     <value>Non, nous ne stockons aucune donnée personnelle, aucune donnée commerciale et n'utilisons pas de cookies.</value>
   </data>
   <data name="Answer3" xml:space="preserve">
-	  <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevés" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de la plus ancienne à {0}.</value>
+    <value>Ouvrez votre application Revolut et accédez à la section "Actions". Cliquez sur le bouton "..." et sélectionnez "Relevés" &gt; "Relevé de compte". Choisissez le format Excel, et choisissez les dates de la plus ancienne à {0}.</value>
   </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>☕ Offrez-moi un café</value>
@@ -139,7 +139,7 @@
     <value>Recharge en espèces</value>
   </data>
   <data name="CryptoFile" xml:space="preserve">
-	  <value>Votre fichier d'exportation "Relevé de compte" Revolut Crypto (.csv)</value>
+    <value>Votre fichier d'exportation "Relevé de compte" Revolut Crypto (.csv)</value>
   </data>
   <data name="CustodyFee" xml:space="preserve">
     <value>Frais de garde</value>
@@ -187,10 +187,10 @@
     <value>Calculez vos gains ou pertes de trading sur votre compte de trading Revolut Stocks.</value>
   </data>
   <data name="Ticker" xml:space="preserve">
-	  <value>Symbole</value>
+    <value>Symbole</value>
   </data>
   <data name="WaltProfitSubtitle" xml:space="preserve">
-	  <value>Calculez vos gains ou pertes de trading crypto sur votre compte de trading Revolut Crypto.</value>
+    <value>Calculez vos gains ou pertes de trading crypto sur votre compte de trading Revolut Crypto.</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Année</value>
@@ -216,17 +216,17 @@
   <data name="GeneralErrorMessage" xml:space="preserve">
     <value>Quelque chose s'est mal passé lors de la lecture du csv</value>
   </data>
-  <data name="AmountInDollars" xml:space="preserve">
-    <value>Montant inséré</value>
-  </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Prix moyen</value>
+  </data>
+  <data name="AmountInDollars" xml:space="preserve">
+    <value>Montant inséré</value>
   </data>
   <data name="StockLefts" xml:space="preserve">
     <value>🚀 Stock restants</value>
   </data>
   <data name="FiatFees" xml:space="preserve">
-    <value>Frais payé en € (exclu frais payé en crypto)</value>
+    <value>Frais payé (inclus frais payé en crypto)</value>
   </data>
   <data name="Answer4" xml:space="preserve">
     <value>Pour générer un relevé de vos comptes crypto sur Revolut, veuillez suivre ces étapes :
@@ -239,5 +239,11 @@ Une fois le relevé généré, vous pouvez le télécharger et le téléverser s
   </data>
   <data name="Question4" xml:space="preserve">
     <value>Comment générer un relevé de mes comptes crypto sur Revolut au format .csv ?</value>
+  </data>
+  <data name="Question5" xml:space="preserve">
+    <value>Pourquoi utilisez-vous les taux de change de la Banque Centrale Européenne pour les transactions crypto ?</value>
+  </data>
+  <data name="Answer5" xml:space="preserve">
+    <value>Pour les transactions crypto, Revolut ne fournit pas les taux de conversion des devises dans leurs fichiers d'exportation. Pour calculer précisément les gains en euros, nous utilisons les taux de change historiques de la Banque Centrale Européenne (BCE). La BCE est la banque centrale de l'euro et publie des taux de référence officiels quotidiens pour les principales devises.</value>
   </data>
 </root>

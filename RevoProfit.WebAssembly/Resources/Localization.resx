@@ -130,7 +130,7 @@
     <value>No, we do not store any personal data, trading data, and do not use cookies.</value>
   </data>
   <data name="Answer3" xml:space="preserve">
-	  <value>Open your Revolut app and go to the "Stocks" section. Click on the "..." button and select "Statement" &gt; "Account Statement". Choose the Excel format, and choose the dates from oldest date to {0}.</value>
+    <value>Open your Revolut app and go to the "Stocks" section. Click on the "..." button and select "Statement" &gt; "Account Statement". Choose the Excel format, and choose the dates from oldest date to {0}.</value>
   </data>
   <data name="BuyMeACoffee" xml:space="preserve">
     <value>☕ Buy me a coffee</value>
@@ -139,7 +139,7 @@
     <value>Cash Top Up</value>
   </data>
   <data name="CryptoFile" xml:space="preserve">
-	  <value>Your Revolut Crypto Account Statement export file (.csv)</value>
+    <value>Your Revolut Crypto Account Statement export file (.csv)</value>
   </data>
   <data name="CustodyFee" xml:space="preserve">
     <value>Custody Fee</value>
@@ -190,10 +190,10 @@
     <value>Ticker</value>
   </data>
   <data name="WaltProfit" xml:space="preserve">
-	  <value>RevoCrypto</value>
+    <value>RevoCrypto</value>
   </data>
   <data name="WaltProfitSubtitle" xml:space="preserve">
-	  <value>Calculate you crypto trading gains or loss on your Revolut Crypto trading account.</value>
+    <value>Calculate you crypto trading gains or loss on your Revolut Crypto trading account.</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Year</value>
@@ -211,7 +211,7 @@
     <value>Gains in €</value>
   </data>
   <data name="RevoProfit" xml:space="preserve">
-	  <value>RevoProfit</value>
+    <value>RevoProfit</value>
   </data>
   <data name="CryptoLefts" xml:space="preserve">
     <value>🪙 Crypto Lefts</value>
@@ -232,10 +232,10 @@
     <value>🚀 Stock Lefts</value>
   </data>
   <data name="FiatFees" xml:space="preserve">
-	  <value>Fees paid in € (exclude fees paid in crypto)</value>
+    <value>Fees paid (include fees paid in crypto)</value>
   </data>
   <data name="Answer4" xml:space="preserve">
-	  <value>To generate a statement of your crypto accounts on Revolut, please follow these steps:
+    <value>To generate a statement of your crypto accounts on Revolut, please follow these steps:
 Launch the Revolut app and navigate to the “Crypto” section.
 Tap on any crypto account and then tap on “Statement”.
 On the Statement page, tap on the accounts filters at the top and select all your crypto accounts.
@@ -244,6 +244,12 @@ Tap on “Generate” and wait for the statement to be ready. If it takes too lo
 Once the statement is generated, you can download it and upload it to this website to calculate your gains.</value>
   </data>
   <data name="Question4" xml:space="preserve">
-	  <value>How to generate a statement of my crypto accounts on Revolut in .csv format?</value>
+    <value>How to generate a statement of my crypto accounts on Revolut in .csv format?</value>
+  </data>
+  <data name="Question5" xml:space="preserve">
+    <value>Why do you use European Central Bank exchange rates for crypto transactions?</value>
+  </data>
+  <data name="Answer5" xml:space="preserve">
+    <value>For crypto transactions, Revolut does not provide currency conversion rates in their export files. To calculate gains in euros accurately, we use historical exchange rates from the European Central Bank (ECB). The ECB is the central bank for the euro and publishes official daily reference rates for major currencies.</value>
   </data>
 </root>

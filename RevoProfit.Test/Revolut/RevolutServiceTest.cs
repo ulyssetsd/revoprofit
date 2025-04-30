@@ -1,10 +1,10 @@
 using System;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services;
-using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services;
 using RevoProfit.Core.Revolut.Models;
 using RevoProfit.Core.Revolut.Services;
 
@@ -18,7 +18,7 @@ public class RevolutServiceTest
     [SetUp]
     public void Setup()
     {
-        _revolutService = new RevolutService(new CryptoService(Mock.Of<ICryptoTransactionValidator>()));
+        _revolutService = new RevolutService(new CryptoService(new CryptoTransactionFluentValidator(), new CurrencyRateService(new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default))));
         _incrementHours = 0;
     }
 

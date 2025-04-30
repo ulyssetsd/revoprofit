@@ -1,18 +1,24 @@
 ﻿using RevoProfit.Core.Crypto.Models;
 using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.CurrencyRate.Models;
+using RevoProfit.Core.CurrencyRate.Services.Interfaces;
 
 namespace RevoProfit.Core.Crypto.Services;
 
 public class CryptoService : ICryptoService
 {
     private readonly ICryptoTransactionValidator _cryptoTransactionValidator;
+    private readonly ICurrencyRateService _currencyRateService;
 
-    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator)
+    public CryptoService(ICryptoTransactionValidator cryptoTransactionValidator, ICurrencyRateService currencyRateService)
     {
         _cryptoTransactionValidator = cryptoTransactionValidator;
+        _currencyRateService = currencyRateService;
     }
 
     private const int EuroDecimalsPrecision = 24;
+    private const string EUR = "EUR";
+    private const string USD = "USD";
 
     private static CryptoAsset GetOrCreate(ICollection<CryptoAsset> cryptos, string symbol)
     {
@@ -30,19 +36,27 @@ public class CryptoService : ICryptoService
         return crypto;
     }
 
-    private static void HandleFees(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
+    private void HandleFees(CryptoTransaction transaction, ICollection<CryptoAsset> cryptos, ICollection<CryptoFiatFee> fiatFees)
     {
         if (transaction.FeesAmount == 0)
         {
             return;
         }
 
-        if (transaction.FeesSymbol == "EUR")
+        if (transaction.FeesSymbol == EUR)
         {
             fiatFees.Add(new CryptoFiatFee
             {
                 Date = transaction.Date,
-                FeesInEuros = transaction.FeesAmount,
+                FeesInEuros = transaction.FeesAmount
+            });
+        }
+        else if (transaction.FeesSymbol == USD)
+        {
+            fiatFees.Add(new CryptoFiatFee
+            {
+                Date = transaction.Date,
+                FeesInEuros = _currencyRateService.ConvertToEur(transaction.FeesAmount, Currency.USD, DateOnly.FromDateTime(transaction.Date))
             });
         }
         else
@@ -72,7 +86,7 @@ public class CryptoService : ICryptoService
             {
                 Year = joinGroupByYear.year,
                 GainsInEuros = joinGroupByYear.sells.Sum(retrait => retrait.GainsInEuros),
-                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros),
+                FeesInEuros = joinGroupByYear.fees.Sum(fee => fee.FeesInEuros)
             });
     }
 
@@ -89,64 +103,64 @@ public class CryptoService : ICryptoService
             switch (transaction.Type)
             {
                 case CryptoTransactionType.Buy:
-                {
-                    HandleFees(transaction, cryptos, fiatFees);
-
-                    var inCrypto = GetOrCreate(cryptos, transaction.BuySymbol);
-                    inCrypto.AmountInEuros += transaction.BuyPrice * transaction.BuyAmount;
-                    inCrypto.Amount += transaction.BuyAmount;
-                    break;
-                }
-                case CryptoTransactionType.Exchange:
-                {
-                    HandleFees(transaction, cryptos, fiatFees);
-
-                    var outCrypto = GetOrCreate(cryptos, transaction.SellSymbol);
-
-                    var outAveragePrice = outCrypto.AmountInEuros / outCrypto.Amount;
-                    var insertedRatio = outAveragePrice / transaction.SellPrice;
-                    var insertedAmount = transaction.SellAmount * insertedRatio;
-                    var insertedAmountInEuros = transaction.SellPrice * insertedAmount;
-
-                    outCrypto.Amount -= transaction.SellAmount;
-                    outCrypto.AmountInEuros -= Math.Round(insertedAmountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
-                    ResetIfEmpty(outCrypto);
-
-                    var cryptoRecu = GetOrCreate(cryptos, transaction.BuySymbol);
-
-                    cryptoRecu.Amount += transaction.BuyAmount;
-                    cryptoRecu.AmountInEuros += Math.Round(insertedAmountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
-                    break;
-                }
-                case CryptoTransactionType.Sell:
-                {
-                    HandleFees(transaction, cryptos, fiatFees);
-
-                    var outCrypto = GetOrCreate(cryptos, transaction.SellSymbol);
-
-                    var outAveragePrice = outCrypto.AmountInEuros / outCrypto.Amount;
-                    var insertedRatio = outAveragePrice / transaction.SellPrice;
-                    var gainsRatio = 1 - insertedRatio;
-
-                    var gains = transaction.SellAmount * gainsRatio;
-                    var gainsInEuros = gains * transaction.SellPrice;
-                    var amountInEuros = transaction.SellAmount * transaction.SellPrice;
-
-                    sells.Add(new CryptoSell
                     {
-                        Date = transaction.Date,
-                        Symbol = transaction.SellSymbol,
-                        Amount = transaction.SellAmount,
-                        AmountInEuros = Math.Round(amountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
-                        GainsInEuros = Math.Round(gainsInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
-                        Price = transaction.SellPrice,
-                    });
+                        HandleFees(transaction, cryptos, fiatFees);
 
-                    outCrypto.Amount -= transaction.SellAmount;
-                    outCrypto.AmountInEuros -= Math.Round(amountInEuros * insertedRatio, EuroDecimalsPrecision, MidpointRounding.ToEven);
-                    ResetIfEmpty(outCrypto);
-                    break;
-                }
+                        var inCrypto = GetOrCreate(cryptos, transaction.BuySymbol);
+                        inCrypto.AmountInEuros += transaction.BuyPrice * transaction.BuyAmount;
+                        inCrypto.Amount += transaction.BuyAmount;
+                        break;
+                    }
+                case CryptoTransactionType.Exchange:
+                    {
+                        HandleFees(transaction, cryptos, fiatFees);
+
+                        var outCrypto = GetOrCreate(cryptos, transaction.SellSymbol);
+
+                        var outAveragePrice = outCrypto.AmountInEuros / outCrypto.Amount;
+                        var insertedRatio = outAveragePrice / transaction.SellPrice;
+                        var insertedAmount = transaction.SellAmount * insertedRatio;
+                        var insertedAmountInEuros = transaction.SellPrice * insertedAmount;
+
+                        outCrypto.Amount -= transaction.SellAmount;
+                        outCrypto.AmountInEuros -= Math.Round(insertedAmountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                        ResetIfEmpty(outCrypto);
+
+                        var cryptoRecu = GetOrCreate(cryptos, transaction.BuySymbol);
+
+                        cryptoRecu.Amount += transaction.BuyAmount;
+                        cryptoRecu.AmountInEuros += Math.Round(insertedAmountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                        break;
+                    }
+                case CryptoTransactionType.Sell:
+                    {
+                        HandleFees(transaction, cryptos, fiatFees);
+
+                        var outCrypto = GetOrCreate(cryptos, transaction.SellSymbol);
+
+                        var outAveragePrice = outCrypto.AmountInEuros / outCrypto.Amount;
+                        var insertedRatio = outAveragePrice / transaction.SellPrice;
+                        var gainsRatio = 1 - insertedRatio;
+
+                        var gains = transaction.SellAmount * gainsRatio;
+                        var gainsInEuros = gains * transaction.SellPrice;
+                        var amountInEuros = transaction.SellAmount * transaction.SellPrice;
+
+                        sells.Add(new CryptoSell
+                        {
+                            Date = transaction.Date,
+                            Symbol = transaction.SellSymbol,
+                            Amount = transaction.SellAmount,
+                            AmountInEuros = Math.Round(amountInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
+                            GainsInEuros = Math.Round(gainsInEuros, EuroDecimalsPrecision, MidpointRounding.ToEven),
+                            Price = transaction.SellPrice,
+                        });
+
+                        outCrypto.Amount -= transaction.SellAmount;
+                        outCrypto.AmountInEuros -= Math.Round(amountInEuros * insertedRatio, EuroDecimalsPrecision, MidpointRounding.ToEven);
+                        ResetIfEmpty(outCrypto);
+                        break;
+                    }
                 case CryptoTransactionType.FeesOnly:
                     HandleFees(transaction, cryptos, fiatFees);
                     break;

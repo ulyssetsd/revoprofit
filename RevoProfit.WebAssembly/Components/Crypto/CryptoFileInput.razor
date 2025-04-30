@@ -1,9 +1,11 @@
 ﻿@using RevoProfit.Core.Crypto.Models
 @using RevoProfit.Core.Crypto.Services
+@using RevoProfit.Core.CurrencyRate.Services.Interfaces
 @inject ICryptoCsvService CryptoCsvService
 @inject ICryptoService CryptoService
 @inject IRevolut2025CsvService RevolutCsvService
 @inject IRevolut2025Service RevolutService
+@inject IExchangeRateProvider ExchangeRateProvider
 @inject ILogger<CryptoFileInput> Logger
 @inject AppState AppState
 @inject IStringLocalizer<Localization> Loc
@@ -58,6 +60,7 @@
 
         try
         {
+            await ExchangeRateProvider.InitializeAsync();
             var transactions = await RevolutCsvService.ReadCsv(RevolutCsvFileStream);
             var (cryptoAssets, cryptoRetraits, cryptoFiatFees) = RevolutService.ProcessTransactions(transactions);
             Logger.LogInformation(LogEvents.GenerateCryptoReports, "Generate crypto reports");

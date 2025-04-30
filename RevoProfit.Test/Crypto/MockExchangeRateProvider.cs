@@ -13,7 +13,7 @@ public class MockExchangeRateProvider : IExchangeRateProvider
         _rate = rate;
     }
 
-    public decimal GetUsdToEurRate(DateOnly date)
+    public decimal GetEurRate(DateOnly date, Currency currency)
     {
         return _rate;
     }

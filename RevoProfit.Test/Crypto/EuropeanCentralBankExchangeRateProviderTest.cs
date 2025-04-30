@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using RevoProfit.Core.Crypto.Services;
+using RevoProfit.Core.Crypto.Services.Interfaces;
+using RevoProfit.Core.Exceptions;
 
 namespace RevoProfit.Test.Crypto;
 
@@ -16,70 +18,62 @@ public class EuropeanCentralBankExchangeRateProviderTest
         _target = new EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl.Default);
         await _target.InitializeAsync();
     }
-    
+
     [Test]
-    public void GetUsdToEurRate_Should_Return_Correct_Rate_For_Current_Date()
+    public void ConvertToEur_Should_Return_Correct_Rate_For_USD()
     {
         // Arrange
-        // Using April 24, 2025 as the test date
         var testDate = new DateOnly(2025, 4, 24);
         
-        // For EUR to USD = 1.1376, the USD to EUR rate is 1/1.1376 = approximately 0.8790
-        // Allow for some floating-point precision issues with a reasonable delta
-        var expectedApproximateRate = 1 / 1.1376m;
-        
         // Act
-        var actualRate = _target.GetUsdToEurRate(testDate);
+        var eurAmount = _target.GetEurRate(testDate, Currency.USD);
         
         // Assert
-        // Since exchange rates can change slightly, we verify it's close to the expected value
-        actualRate.Should().BeApproximately(expectedApproximateRate, 0.01m);
+        // For EUR to USD = 1.1376, 100 USD = 87.90 EUR approximately
+        eurAmount.Should().BeApproximately(87.90m, 0.01m);
     }
-    
+
     [Test]
-    public void GetUsdToEurRate_Should_Use_Most_Recent_Previous_Rate_When_Date_Not_Available()
+    public void ConvertToEur_Should_Use_Most_Recent_Previous_Rate()
     {
         // Arrange
-        // Weekends typically don't have exchange rates published, so test with a Sunday
         var weekendDate = new DateOnly(2025, 4, 27); // Sunday
         var previousFridayDate = new DateOnly(2025, 4, 25); // Friday
-        
+
         // Act
-        var weekendRate = _target.GetUsdToEurRate(weekendDate);
-        var fridayRate = _target.GetUsdToEurRate(previousFridayDate);
+        var weekendRate = _target.GetEurRate(weekendDate, Currency.USD);
+        var fridayRate = _target.GetEurRate(previousFridayDate, Currency.USD);
         
         // Assert
-        // The weekend should use the most recent previous rate (Friday)
         weekendRate.Should().Be(fridayRate);
     }
-    
+
     [Test]
-    public void GetUsdToEurRate_Should_Cache_Results()
+    public void GetEurRate_Should_Return_Correct_Rate_For_GBP()
     {
         // Arrange
         var testDate = new DateOnly(2025, 4, 24);
         
         // Act
-        var firstCall = _target.GetUsdToEurRate(testDate);
-        var secondCall = _target.GetUsdToEurRate(testDate);
+        var eurAmount = _target.GetEurRate(testDate, Currency.GBP);
         
         // Assert
-        // Both calls should return the same value (from cache after first call)
-        secondCall.Should().Be(firstCall);
+        // Should return a reasonable value for GBP conversion
+        eurAmount.Should().BeGreaterThan(0);
+        eurAmount.Should().BeLessThan(1); // GBP is typically stronger than EUR
     }
-    
+
     [Test]
-    public void GetUsdToEurRate_Should_Convert_EUR_To_USD_Rate()
+    public void GetEurRate_Should_Throw_For_Unknown_Currency()
     {
         // Arrange
         var testDate = new DateOnly(2025, 4, 24);
         
         // Act
-        var usdToEurRate = _target.GetUsdToEurRate(testDate);
+        var act = () => _target.GetEurRate(testDate, (Currency)999);
         
         // Assert
-        // EUR to USD rate (1.1376) converted to USD to EUR should be less than 1
-        // USD to EUR = 1 / (EUR to USD)
-        usdToEurRate.Should().BeLessThan(1);
+        act.Should().Throw<ProcessException>()
+           .WithMessage("*Exchange rate not found*");
     }
 }

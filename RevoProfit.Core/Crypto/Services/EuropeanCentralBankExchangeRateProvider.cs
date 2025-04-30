@@ -9,7 +9,7 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly EuropeanCentralBankUrl _europeanCentralBankUrl;
-    private Dictionary<DateOnly, decimal>? _historicalRates;
+    private Dictionary<DateOnly, Dictionary<Currency, decimal>>? _historicalRates;
 
     public EuropeanCentralBankExchangeRateProvider(EuropeanCentralBankUrl europeanCentralBankUrl)
     {
@@ -22,9 +22,9 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
         _historicalRates ??= await GetHistoricalRates();
     }
 
-    private async Task<Dictionary<DateOnly, decimal>> GetHistoricalRates()
+    private async Task<Dictionary<DateOnly, Dictionary<Currency, decimal>>> GetHistoricalRates()
     {
-        Dictionary<DateOnly, decimal> historicalRates = [];
+        var historicalRates = new Dictionary<DateOnly, Dictionary<Currency, decimal>>();
 
         var xmlContent = await _httpClient.GetStringAsync(_europeanCentralBankUrl.Url);
         var xdoc = XDocument.Parse(xmlContent);
@@ -35,33 +35,57 @@ public class EuropeanCentralBankExchangeRateProvider : IExchangeRateProvider
         {
             var dateValue = dailyRateNode.Attribute("time")?.Value;
             if (!DateOnly.TryParse(dateValue, out DateOnly date)) continue;
-            var usdRateElement = dailyRateNode.Elements(ecb + "Cube").FirstOrDefault(r => r.Attribute("currency")?.Value == "USD");
-            var usdRateValue = usdRateElement?.Attribute("rate")?.Value;
-            if (!decimal.TryParse(usdRateValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal eurToUsd)) continue;
-            historicalRates[date] = 1 / eurToUsd;
+
+            var rates = new Dictionary<Currency, decimal>();
+            foreach (var rateElement in dailyRateNode.Elements(ecb + "Cube"))
+            {
+                var currencyStr = rateElement.Attribute("currency")?.Value;
+                var rateValue = rateElement.Attribute("rate")?.Value;
+                
+                if (Enum.TryParse<Currency>(currencyStr, out var currency) && 
+                    decimal.TryParse(rateValue, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal eurToRate))
+                {
+                    rates[currency] = 1 / eurToRate;
+                }
+            }
+
+            if (rates.Count != 0)
+            {
+                historicalRates[date] = rates;
+            }
         }
         
         return historicalRates;
     }
 
-    public decimal GetUsdToEurRate(DateOnly date)
+    public decimal GetEurRate(DateOnly date, Currency currency)
     {
-        if (_historicalRates!.TryGetValue(date, out var rate))
+        var rates = GetRatesForDate(date);
+        if (!rates.TryGetValue(currency, out var rate))
         {
-            return rate;
+            throw new ProcessException($"Exchange rate not found for {currency} to EUR on date {date}");
+        }
+        
+        return rate;
+    }
+
+    private Dictionary<Currency, decimal> GetRatesForDate(DateOnly date)
+    {
+        if (_historicalRates!.TryGetValue(date, out var rates))
+        {
+            return rates;
         }
 
-        // Try to find the closest previous date if the exact date is not available
         var closestDate = _historicalRates.Keys
             .Where(d => d <= date)
             .OrderByDescending(d => d)
             .FirstOrDefault();
 
-        if (closestDate != default && _historicalRates.TryGetValue(closestDate, out var closestRate))
+        if (closestDate != default && _historicalRates.TryGetValue(closestDate, out var closestRates))
         {
-            return closestRate;
+            return closestRates;
         }
 
-        throw new ProcessException($"Exchange rate not found for USD to EUR on date {date} or any previous date");
+        throw new ProcessException($"No exchange rates found for date {date} or any previous date");
     }
 }
